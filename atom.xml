@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://gaoliuhiadi.github.io/blog</id>
+    <id>https://gaoliujiadi.github.io/blog</id>
     <title>LB&apos;bg</title>
-    <updated>2019-11-10T05:40:52.504Z</updated>
+    <updated>2019-11-10T05:53:41.737Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://gaoliuhiadi.github.io/blog"/>
-    <link rel="self" href="https://gaoliuhiadi.github.io/blog/atom.xml"/>
-    <logo>https://gaoliuhiadi.github.io/blog/images/avatar.png</logo>
-    <icon>https://gaoliuhiadi.github.io/blog/favicon.ico</icon>
+    <link rel="alternate" href="https://gaoliujiadi.github.io/blog"/>
+    <link rel="self" href="https://gaoliujiadi.github.io/blog/atom.xml"/>
+    <logo>https://gaoliujiadi.github.io/blog/images/avatar.png</logo>
+    <icon>https://gaoliujiadi.github.io/blog/favicon.ico</icon>
     <rights>All rights reserved 2019, LB&apos;bg</rights>
     <entry>
         <title type="html"><![CDATA[记本次配置博客]]></title>
-        <id>https://gaoliuhiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke</id>
-        <link href="https://gaoliuhiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke">
+        <id>https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke">
         </link>
         <updated>2019-11-10T03:44:47.000Z</updated>
         <content type="html"><![CDATA[<p>test。</p>
