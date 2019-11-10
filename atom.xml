@@ -2,22 +2,13 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gaoliuhiadi.github.io/blog</id>
     <title>GLJG&apos;bg</title>
-    <updated>2019-11-10T04:22:51.940Z</updated>
+    <updated>2019-11-10T05:37:02.099Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gaoliuhiadi.github.io/blog"/>
     <link rel="self" href="https://gaoliuhiadi.github.io/blog/atom.xml"/>
     <logo>https://gaoliuhiadi.github.io/blog/images/avatar.png</logo>
     <icon>https://gaoliuhiadi.github.io/blog/favicon.ico</icon>
     <rights>All rights reserved 2019, GLJG&apos;bg</rights>
-    <entry>
-        <title type="html"><![CDATA[132]]></title>
-        <id>https://gaoliuhiadi.github.io/blog/post/132</id>
-        <link href="https://gaoliuhiadi.github.io/blog/post/132">
-        </link>
-        <updated>2019-11-10T04:07:48.000Z</updated>
-        <content type="html"><![CDATA[<p>空间和你 开uuuu你iolite考虑、‘</p>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[记本次配置博客]]></title>
         <id>https://gaoliuhiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke</id>
