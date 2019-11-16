@@ -1,102 +1,117 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
 
-<title>浅侃“人类的本质是复读机” | LB&#39;bg</title>
-<meta name="description" content="">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573904619009">
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+    浅侃“人类的本质是复读机” | LB&#39;bg
+</title>
+<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573906839650">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://gaoliujiadi.github.io/blog/styles/main.css">
-
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- js -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://gaoliujiadi.github.io/blog/media/js/jquery.sticky-sidebar.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
-  </head>
-  <body>
-    <div id="app" class="main">
+        
+            
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+                <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+                
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://gaoliujiadi.github.io/blog">
-        <img src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573904619009" class="site-logo">
-        <h1 class="site-title">LB&#39;bg</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
+                    
+                            
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+    <div class="nav">
+        <div class="logo">
+            <a href="https://gaoliujiadi.github.io/blog">
+                <img class="avatar" src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650" alt="">
+            </a>
+            <div class="site-title">
+                <h1>
+                    LB&#39;bg
+                </h1>
+            </div>
+        </div>
+        <span class="menu-btn fa fa-align-justify"></span>
+        <div class="menu-container">
+            <ul>
+                
+                    
+                            <li>
+                                <a href="/" class="menu">
+                                    首页
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/archives" class="menu">
+                                    归档
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/tags" class="menu">
+                                    标签
+                                </a>
+                            </li>
+                            
+                                
+            </ul>
+        </div>
     </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
 </div>
 
+<script>
+    $(document).ready(function() {
+        $(".menu-btn").click(function() {
+            $(".menu-container").slideToggle();
+        });
+        $(window).resize(function() {
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">浅侃“人类的本质是复读机”</h2>
-            <div class="post-date">2019-03-24</div>
-            
-            <div class="post-content">
-              <p>众所周知，人类的本质是复读机。<br>
+            if (window.matchMedia('(min-width: 960px)').matches) {
+                $(".menu-container").css('display', 'block')
+            } else {
+                $(".menu-container").css('display', 'none')
+            }
+
+        });
+    });
+</script>
+
+            <div id="main-content" class="post-detail main-container">
+                <!-- left -->
+                <div id="content" class="main-container-left">
+                    <article class="post i-card">
+                        <h2 class="post-title">
+                            浅侃“人类的本质是复读机”
+                        </h2>
+                        <div class="post-info">
+                            <time class="post-time">2019-03-24</time>
+                            
+                                <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-other_4">
+                            #随笔杂感
+                        </a>
+                                
+                        </div>
+                        
+                                <div class="post-content">
+                                    <p>众所周知，人类的本质是复读机。<br>
 自幼时以来，人类便开始复读，例如：“叫妈妈”“妈妈”。从此，人便走上复读机之路。<br>
 之后便开始上学，从老师、课本之中汲取知识，其过程也就是复读的过程。学文科时，通过不断重复，多且繁的知识在一遍遍的复读中去除冗余，完善所需，以求从全损音质逐步变为无损音质；学理科时，也通过不断地使用公式，来输出曾被百千人输出过的结果。<br>
 在这个过程中，我们可以发现，这复读机的复读效率并不怎么样。只有在同一台复读机通过重复复读相同内容的情况下，附以加工，才会使最后结果趋向精确。那么，如果是一台复读机，复读前一台，而又有一台再复读，以此类推，会是怎么样呢？结果显而易见，越到后面，声音质量会越差。于是，便出现了这样的句子：<br>
@@ -116,74 +131,91 @@
 那么人类的本质，大概确是复读机不错了。<br>
 3.24.2019</p>
 
-            </div>
+                                </div>
+                    </article>
+                    <!--  -->
+                    
+                            <div id="disqus_thread"></div>
+                            <div id="gitalk-container"></div>
+                </div>
+                <!-- middle -->
+                <div class="main-container-middle"></div>
+                <!-- right -->
+                <div id="sidebar" class="main-container-right">
+                    
+                                <!-- id-card -->
+                                
+    <div class="id_card i-card">
+        <div class="id_card-avatar" style="background-image: url(https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650)">
+        </div>
+        <h1 class="id_card-title">
+            LB&#39;bg
+        </h1>
+        <h2 class="id_card-description">
             
-              <div class="tag-container">
-                
-                  <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="tag">
-                    随笔杂感
-                  </a>
-                
-              </div>
+        </h2>
+        <!--  -->
+        <div class="id_card-sns">
+            <!-- github -->
             
-            
-
-            
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
-
-          </div>
+                    <!-- twitter -->
+                    
+                            <!-- weibo -->
+                            
+                                    <!-- facebook -->
+                                    
 
         </div>
-      </div>
     </div>
+    
+                                    
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+                </div>
 
-<script type="application/javascript">
 
-AOS.init();
 
-hljs.initHighlightingOnLoad()
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+            </div>
 
+
+            <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
 </script>
 
 
-
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    </div>
     <script>
-
-      var gitalk = new Gitalk({
-        clientID: '1e4b683b5d2047ab4a97',
-        clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
-        repo: 'blog',
-        owner: 'gaoliujiadi',
-        admin: ['gaoliujiadi'],
-        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
+        $('#sidebar').stickySidebar({
+            topSpacing: 80,
+            // bottomSpacing: 60
+        });
     </script>
-  
+    
+        
+            <script>
+    window.onload = function() {
+        var gitalk = new Gitalk({
+            clientID: '1e4b683b5d2047ab4a97',
+            clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
+            repo: 'blog',
+            owner: 'gaoliujiadi',
+            admin: ['gaoliujiadi'],
+            id: (location.pathname).substring(0, 49), // Ensure uniqueness and length less than 50
+            distractionFreeMode: false // Facebook-like distraction free mode
+        })
 
-  
+        gitalk.render('gitalk-container')
+    }
+</script>
+                
 
+                    
+                                
+</body>
 
-
-
-  </body>
 </html>

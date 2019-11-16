@@ -1,198 +1,183 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
 
-<title>文章归档 | LB&#39;bg</title>
-<meta name="description" content="">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573904619009">
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+    LB&#39;bg
+</title>
+<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573906839650">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://gaoliujiadi.github.io/blog/styles/main.css">
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- js -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://gaoliujiadi.github.io/blog/media/js/jquery.sticky-sidebar.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
-  </head>
-  <body>
-    <div id="app" class="main">
+</head>
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://gaoliujiadi.github.io/blog">
-        <img src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573904619009" class="site-logo">
-        <h1 class="site-title">LB&#39;bg</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
-</div>
-
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          
-
-          <h2 class="archives-title">文章归档</h2>
-          <div class="archives-container">
-            
-              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2019</h2>
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke">
-                      <h2 class="post-title">
-                        记本次搭建博客
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
-                      <h2 class="post-title">
-                        读《狂人日记》有感
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi">
-                      <h2 class="post-title">
-                        清风不识字
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/fen-shu-ling">
-                      <h2 class="post-title">
-                        焚书令
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">
-                      <h2 class="post-title">
-                        娜塔莎的悲壮
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">
-                      <h2 class="post-title">
-                        五四！五四！
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-                
-                  <article class="post">
-                    <a href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
-                      <h2 class="post-title">
-                        浅侃“人类的本质是复读机”
-                      </h2>
-                    </a>
-                  </article>
-                
-              
-            
-          </div>
-
-          <div class="pagination-container">
-  
-  
-</div>
-
+<body>
+    <div class="main">
+        <div class="header">
+    <div class="nav">
+        <div class="logo">
+            <a href="https://gaoliujiadi.github.io/blog">
+                <img class="avatar" src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650" alt="">
+            </a>
+            <div class="site-title">
+                <h1>
+                    LB&#39;bg
+                </h1>
+            </div>
         </div>
-      </div>
+        <span class="menu-btn fa fa-align-justify"></span>
+        <div class="menu-container">
+            <ul>
+                
+                    
+                            <li>
+                                <a href="/" class="menu">
+                                    首页
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/archives" class="menu">
+                                    归档
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/tags" class="menu">
+                                    标签
+                                </a>
+                            </li>
+                            
+                                
+            </ul>
+        </div>
     </div>
+</div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".menu-btn").click(function() {
+            $(".menu-container").slideToggle();
+        });
+        $(window).resize(function() {
 
-<script type="application/javascript">
+            if (window.matchMedia('(min-width: 960px)').matches) {
+                $(".menu-container").css('display', 'block')
+            } else {
+                $(".menu-container").css('display', 'none')
+            }
 
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+        });
+    });
 </script>
 
+            
 
+    <div class="archives-container main-container">
+        <ul class="timeline">
+            
+                <li>
+                    <h3 class="year">
+                        2019
+                    </h3>
+                    <ul class="year-wrapper">
+                        
+                            
+                                <li>
+                                    <span class="date">2019-11-10</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke">
+                                        <span>记本次搭建博客</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-10-20</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
+                                        <span>读《狂人日记》有感</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-07-22</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi">
+                                        <span>清风不识字</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-06-16</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/fen-shu-ling">
+                                        <span>焚书令</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-05-25</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">
+                                        <span>娜塔莎的悲壮</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-05-03</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">
+                                        <span>五四！五四！</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                            
+                                <li>
+                                    <span class="date">2019-03-24</span>
+                                    <a class="title" href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
+                                        <span>浅侃“人类的本质是复读机”</span>
+                                    </a>
+                                </li>
+                                
+                                    
+                    </ul>
 
+                </li>
+                
+        </ul>
+    </div>
 
-  </body>
+                
+
+                    <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</body>
+
 </html>

@@ -1,181 +1,343 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
 
-<title>随笔杂感 | LB&#39;bg</title>
-<meta name="description" content="">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573904619009">
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+    随笔杂感 | LB&#39;bg
+</title>
+<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573906839650">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://gaoliujiadi.github.io/blog/styles/main.css">
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- js -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://gaoliujiadi.github.io/blog/media/js/jquery.sticky-sidebar.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
-  </head>
-  <body>
-    <div id="app" class="main">
+</head>
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://gaoliujiadi.github.io/blog">
-        <img src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573904619009" class="site-logo">
-        <h1 class="site-title">LB&#39;bg</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
-</div>
-
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: 随笔杂感</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
-                  <h2 class="post-title">读《狂人日记》有感</h2>
-                </a>
-                <div class="post-date">
-                  2019-10-20
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">
-                  <h2 class="post-title">娜塔莎的悲壮</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-25
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">
-                  <h2 class="post-title">五四！五四！</h2>
-                </a>
-                <div class="post-date">
-                  2019-05-03
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
-                  <h2 class="post-title">浅侃“人类的本质是复读机”</h2>
-                </a>
-                <div class="post-date">
-                  2019-03-24
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
-
-          <div class="pagination-container">
-  
-  
-</div>
-
+<body>
+    <div class="main">
+        <div class="header">
+    <div class="nav">
+        <div class="logo">
+            <a href="https://gaoliujiadi.github.io/blog">
+                <img class="avatar" src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650" alt="">
+            </a>
+            <div class="site-title">
+                <h1>
+                    LB&#39;bg
+                </h1>
+            </div>
         </div>
-      </div>
+        <span class="menu-btn fa fa-align-justify"></span>
+        <div class="menu-container">
+            <ul>
+                
+                    
+                            <li>
+                                <a href="/" class="menu">
+                                    首页
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/archives" class="menu">
+                                    归档
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/tags" class="menu">
+                                    标签
+                                </a>
+                            </li>
+                            
+                                
+            </ul>
+        </div>
     </div>
+</div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".menu-btn").click(function() {
+            $(".menu-container").slideToggle();
+        });
+        $(window).resize(function() {
 
-<script type="application/javascript">
+            if (window.matchMedia('(min-width: 960px)').matches) {
+                $(".menu-container").css('display', 'block')
+            } else {
+                $(".menu-container").css('display', 'none')
+            }
 
-AOS.init();
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+        });
+    });
 </script>
 
+            <div id="main-content" class="post-container main-container">
+                <div id="content" class="main-container-left">
+                    
+    <div class="i-card">
+        <b>标签：#
+        随笔杂感</b>
+    </div>
+    
+        
+            <article class="post i-card">
+                <h2 class="post-title">
+                    <a href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
+                        读《狂人日记》有感
+                    </a>
+                </h2>
+                <div class="post-info">
+                    <time class="post-time">2019-10-20</time>
+                    
+                        <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-primary">
+            #随笔杂感
+        </a>
+                        
+                </div>
+                <div class="post-article">
+                    
+                            <div class="post-content">
+                                
+                                        <div class="post-content-content">
+                                            ——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！
+上文是《狂人日记》中最出名的段落之一，第一次看到这段文字的时候，我被震惊了。初看惊艳，再细细品，更有一种不一样的感觉。当时的我只知道这话是鲁迅说的，却不太了解其他的。于是，我准备去寻找原文出处。
+老实说，“鲁迅”这个名词，在当时的我心中快接近妖魔化了。试问哪个中学生不对鲁迅的大名心有余悸过？但我还是找来了《狂人日记》拜读。
+先是囫囵吞枣地通读了一遍，了解了大概，但仍是让人不寒而栗。一是，在这个社会里，人吃人；二是，这种人吃人竟然没有人认为不对，唯一认识到的人竟是主角———狂人。
+狂人，狂人，说他狂也不狂，不然何以说出“凡事总须研究，才会明白。”这种话来；说他不狂也不尽然，不然何以有“那赵家的狗，何以看我两眼呢？”此类话。
+然而他究竟是不狂的，在他许多似乎前言不搭后语的日记之中，我们能看到旧社会家族制度和封建礼教对人的迫害、对人性的摧残。
+是在吃人！
+人，吃人。这便是封建礼教的本质。然而无论是书中的“正常人”或是现实中的常人，都对此毫无异议。仿佛生来就是这样的。
+“一定是他娘老子先教的”！
+不然，怎么有人生来就会吃人呢？
+不然，怎么有人生来就会用封建礼教约束人、教服人、吃掉人呢？
+若是不服，不跟着一起，就是疯子！“预备下一个疯子的名目罩上我。将来吃了，不但太平无事，怕还会有人见情。佃户说的大家吃了一个恶人，正是这方法。这是他们的老谱！”于是乎，狂人便理所应当地，成为了狂人。
+而那些受过迫害的人呢？“他们——也有给知县打枷过的，也有给绅士掌过嘴的，也有衙役占了他妻子的，也有老子娘被债主逼死的”。然后他们就起来迫害其他人，比如——狂人。然后，“唇边还抹着人油，而且心里满装着吃人的意思”地，说：“这是从来如此……”
+于是，这个猛士，被迫害但不屈服的猛士，发问道：“从来如此，便对么？”
+“我不同你讲这些道理；总之你不该说，你说便是你错！”
+狂人在努力地抗争，他仍然是拥有希望的，他将希望寄托于新生，发出呐喊：“没有吃过人的孩子，或者还有？
+救救孩子……“
+然而我竟也不知道到了现在，吃人的事情也仍是轮番上演。愚昧的受害者与加害者，打着传统、正义、正常的旗号，敲锣打鼓。各各摩拳擦掌，准备好了文明人的餐具，意欲吃人。
+时间永是流逝，街市依旧太平
+#10.20.2019
+
+                                        </div>
+                                        
+                                            <a class="btn btn-text" href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">Read More ~</a>
+                            </div>
+                </div>
+            </article>
+            
+            <article class="post i-card">
+                <h2 class="post-title">
+                    <a href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">
+                        娜塔莎的悲壮
+                    </a>
+                </h2>
+                <div class="post-info">
+                    <time class="post-time">2019-05-25</time>
+                    
+                        <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-other_1">
+            #随笔杂感
+        </a>
+                        
+                </div>
+                <div class="post-article">
+                    
+                            <div class="post-content">
+                                
+                                        <div class="post-content-content">
+                                            娜塔莎·罗曼诺夫（Natasha Romanoff），黑寡妇，初代复仇者之一，前苏联特工。
+你可以将诡计之神洛基骗过，可以将被心灵宝石控制的鹰眼唤醒，可以将处在狂暴状态的浩克安抚。
+总是会有人质疑，黑寡妇和鹰眼两个凡人，怎么能当超级英雄呢？鹰眼，好歹还有射箭的特长，弹无虚发。而娜塔莎，似乎只是特工，也没有其它超能力，怎么会是超级英雄。你也许不应该在复联之中。
+有人说，娜塔莎是其它几位复仇者之间的桥梁，你是那个能将他们联系起来的蛛网。是啊，你将复联当成了家，将其它的复仇者当成了家人。其它复仇者们也爱复联，是将复联的朋友们看成亲人，而娜塔莎是看成了家人。
+托尼有小辣椒和小蜘蛛，史蒂夫有佩姬和巴基，索尔有父母与洛基，鹰眼妻儿双全……而你只有他们。
+那个响指后的五年后，有要归园田居的，有自暴自弃的，而你一直不放弃，固执地寻求能让失去的人回来的方法，努力聚起可用的力量，于是到最后：“For the last five years I have been to do one thing, get to right here. That’s all it’s been about. Bringing everybody back. Let me go. It is OK.”(“过去五年我一直在做一件事，那就是来到这里。这就是我存在的意义所在。把所有人都就回来。让我去吧，没关系的。”)
+说了一分钟后见的你，是唯一那个无法再见的……
+“如果娜塔莎有家人，那就是我们。”队长说。
+娜塔莎为了这个家，殚精竭虑，甚至牺牲了自己。你在为了灵魂宝石的那一跳的过程中在想什么呢？是不是在庆幸克林顿没有跳下去，他还有老婆孩子；是不是再欣慰灵魂宝石能拿到，失去的人还能再回来。
+而自己，孑然一身了无牵挂，正是去换来灵魂宝石的最佳人选。 于是，你义无反顾地冲了下去，正如出发前说的：“不惜一切代价。”但这个代价最多也只能是你。
+“假如我不曾见过光明，我本可以忍受黑暗。”——狄金森
+于是，曾在黑暗中的罗曼诺夫特工为了你的光明——复联这个家，为了让鹰眼的家庭完整，为了让所有人回来，你选择了自己的永不回来。
+你害怕吗？当骨头因撞击断裂，当内脏因撞击而破。那是怎么样的苦痛啊，你向来是惯于忍受苦楚的，这一次也是。
+娜塔莎·罗曼诺夫也有一颗温暖的心啊。
+然而，到了最后，或为了独立电影电影的造势或因为更重要的斯塔克先生，漫威到了《END GAME》的最后也没有为你准备葬礼。
+我先知道了你是怎么死的，然后才了解到你是怎么来的。
+娜塔莎！娜塔莎!
+你还有很多人爱着的，不仅是复联大家庭，还有其它很多很多的人啊。
+You are not alone,too.
+I love you three thousand.
+5.25.2019
+
+                                        </div>
+                                        
+                                            <a class="btn btn-text" href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">Read More ~</a>
+                            </div>
+                </div>
+            </article>
+            
+            <article class="post i-card">
+                <h2 class="post-title">
+                    <a href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">
+                        五四！五四！
+                    </a>
+                </h2>
+                <div class="post-info">
+                    <time class="post-time">2019-05-03</time>
+                    
+                        <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-info">
+            #随笔杂感
+        </a>
+                        
+                </div>
+                <div class="post-article">
+                    
+                            <div class="post-content">
+                                
+                                        <div class="post-content-content">
+                                            愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光，就令萤火一般，也可以在黑暗里发一点光，不必等候炬火。此后如竟没有炬火：我便是唯一的光。
+——鲁迅《热风·随感录四十一》
+时间匆匆流逝，不知不觉中我们竟迎来了“五四”的一百周年。
+当年，我们在巴黎和会中失利，屈辱接受条约。消息传回，举国哗然，在校学生愤而罢课，商人罢市工人罢工。最后，北洋政府放人，领土主权回收。正是“五四”开启了新民主主义革命。
+如此热血，如此慷慨，我辈当以之为楷模！遇深林则辟平地，遇旷野则栽树木，遇沙漠则掘井泉。“青年要保持初生牛犊不怕虎、越是艰险越向前的刚健勇毅，勇立时代潮头，争做时代先锋。”要拆了这屋顶，毁了那铁屋。 [1]我以为不必在意流言蜚语，只管撸起袖子干！
+“大胆地说话，勇敢地进行，忘掉了一切利害，推开了古人，将自己的真心的话发表出来。”这是鲁迅先生在《无声的中国》中所言，胸怀爱国之心的我们自然要勇敢地呐喊出所思所想。而最怕的，便是沉默，“沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。”【2】我们要敢想、敢说、敢发声，最重要的便是说出真话，说出自己的心里话。习近平总书记在这次“在纪念五四运动100周年大会上的讲话”中提到：“我们要关注青年所思、所忧、所盼。”这不仅是劝告长辈关心青年，更是鼓励青年表达自己！
+君不见，“五四”中多少先贤站出来发声，多少学生自发游行。他们在争取领土主权，在表达自己拳拳爱国之心，在为了祖国而奋斗！因为他们的一腔热血，当时的中国再黑暗也有希望，伸手不见五指中迸发出的微小火光最终会带来光明，将无声的中国变为有声的中国。
+奔走，发声，只盼能救中国。尽管最后资本主义让他们失望了，悲切地说：“我觉得革命以前，我是做奴隶；革命以后不多久，就受了奴隶的骗，变成他们的奴隶了。我觉得有许多民国国民而是民国的敌人。”【3】 但我想历史决不会重演，只要我们坚定对马克思主义的信仰、对中国特色社会主义的信念、对中华民族伟大复兴中国梦的信心，就一定能将“五四”的精神传承并发扬光大。
+路漫漫其修远兮，吾将上下而求索！【4】
+【1】“遇深林则辟平地，遇旷野则栽树木，遇沙漠则掘井泉！”化用《华盖集·导师》中“你们所多的是生力，遇见深林，可以辟成平地的，遇见旷野，可以栽种树木，遇见沙漠，可以开掘井泉的。”；“青年要保持初生牛犊不怕虎、越是艰险越向前的刚健勇毅，勇立时代潮头，争做时代先锋。”语出习近平“在纪念五四运动100周年大会上的讲话”；“要拆了这屋顶，毁了那铁屋。”化用《无声的中国》中“中国人的性情是总喜欢调和，折中的。譬如你说，这屋子太暗，须在这里开一个窗，大家一定不允许的。但如果你主张拆掉屋顶，他们就会来调和，愿意开窗了。”及《呐喊·自序》中“假如一间铁屋子，是绝无窗户而万难破毁的，里面有许多熟睡的人们，不久都要闷死了，然而是从昏睡入死灭，并不感到就死的悲哀。现在你大嚷起来，惊起了较为清醒的几个人，使这不幸的少数者来受无可挽救的临终的苦楚，你倒以为对得起他们么？……然而几个人既然起来，你不能说决没有毁坏这铁屋的希望。”
+【2】“沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。”语出《纪念刘和珍君》。
+【3】“我觉得革命以前，我是做奴隶；革命以后不多久，就受了奴隶的骗，变成他们的奴隶了。我觉得有许多民国国民而是民国的敌人。”语出《华盖集·忽然想到四》。
+【4】“路漫漫其修远兮，吾将上下而求索！”语出《离骚》。
+5.3.2019
+
+                                        </div>
+                                        
+                                            <a class="btn btn-text" href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">Read More ~</a>
+                            </div>
+                </div>
+            </article>
+            
+            <article class="post i-card">
+                <h2 class="post-title">
+                    <a href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
+                        浅侃“人类的本质是复读机”
+                    </a>
+                </h2>
+                <div class="post-info">
+                    <time class="post-time">2019-03-24</time>
+                    
+                        <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-other_2">
+            #随笔杂感
+        </a>
+                        
+                </div>
+                <div class="post-article">
+                    
+                            <div class="post-content">
+                                
+                                        <div class="post-content-content">
+                                            众所周知，人类的本质是复读机。
+自幼时以来，人类便开始复读，例如：“叫妈妈”“妈妈”。从此，人便走上复读机之路。
+之后便开始上学，从老师、课本之中汲取知识，其过程也就是复读的过程。学文科时，通过不断重复，多且繁的知识在一遍遍的复读中去除冗余，完善所需，以求从全损音质逐步变为无损音质；学理科时，也通过不断地使用公式，来输出曾被百千人输出过的结果。
+在这个过程中，我们可以发现，这复读机的复读效率并不怎么样。只有在同一台复读机通过重复复读相同内容的情况下，附以加工，才会使最后结果趋向精确。那么，如果是一台复读机，复读前一台，而又有一台再复读，以此类推，会是怎么样呢？结果显而易见，越到后面，声音质量会越差。于是，便出现了这样的句子：
+“人类的本质是复读机。”
+“人类的木质是复读机。”
+“人米的木质是夏读机。”
+“人米勺十质足夏卖几。”
+某位不愿意透露姓名的明代思想家教育家李贽曾在作品《题孔子像于芝佛院》中写道：“以孔子有是言也……儒先亿度而言之，父师沿袭而诵之，小子聋而听之。万口一词，不可破也；千年一律，不自知也。”
+这复读得越多，那么音质则会更涣散，所能发散的也就更广泛，也能传播得越广泛。这所谓的流言便也就出来了。
+流言之力，是能使粪便增光，蛆虫成圣的。——鲁迅
+或许有人会质疑，这也不过只能证明人类与复读机有些许相同之处，何来本质。
+伟大的马克思先生曾说过：“人的本质不是单个人所固有的抽象物,在其现实性上,它是一切社会关系的总和。”、“观念的东西不外是移入人的头脑并在人的头脑中改造过的物质的东西而已。”
+人，一开始是类人猿。那么是什么把人和类人猿分开了呢？复读，不断地复读，并且能储存下来，能转换格式，再重新输出结果，让其它复读机在进行复读。这便有了社会关系。而所谓的观念者，不就是被储存下来的文件？
+鲁迅先生也有说过相似的话：“天才们无论怎样说大话，归根结蒂，还是不能凭空创造。描神画鬼，毫无对证，本可以专靠了神思，所谓“天马行空”似的挥写了，然而他们写出来的，也不过是三只眼，长颈子，就是在常见的人体上，增加了眼睛一只，增长了颈子二三尺而已。”
+此不外乎复读机者？
+就是上文引用名人名言，不也是复读？
+那么人类的本质，大概确是复读机不错了。
+3.24.2019
+
+                                        </div>
+                                        
+                                            <a class="btn btn-text" href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">Read More ~</a>
+                            </div>
+                </div>
+            </article>
+            
+                <!-- 翻页 -->
+                
+                </div>
+                <!--  -->
+                <div class="main-container-middle"></div>
+                <!--  -->
+                <div id="sidebar" class="main-container-right">
+
+                    <!-- 个人信息 -->
+                    
+    <div class="id_card i-card">
+        <div class="id_card-avatar" style="background-image: url(https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650)">
+        </div>
+        <h1 class="id_card-title">
+            LB&#39;bg
+        </h1>
+        <h2 class="id_card-description">
+            
+        </h2>
+        <!--  -->
+        <div class="id_card-sns">
+            <!-- github -->
+            
+                    <!-- twitter -->
+                    
+                            <!-- weibo -->
+                            
+                                    <!-- facebook -->
+                                    
+
+        </div>
+    </div>
+    
+
+                        <!-- 公告栏 -->
+                        
+
+                </div>
+            </div>
 
 
 
-  </body>
+            <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+    <script>
+        $('#sidebar').stickySidebar({
+            topSpacing: 80,
+            // bottomSpacing: 60
+        });
+    </script>
+</body>
+
 </html>

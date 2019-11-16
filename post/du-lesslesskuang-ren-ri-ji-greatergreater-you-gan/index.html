@@ -1,102 +1,117 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
 
-<title>读《狂人日记》有感 | LB&#39;bg</title>
-<meta name="description" content="">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573904619009">
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+    读《狂人日记》有感 | LB&#39;bg
+</title>
+<link rel="shortcut icon" href="https://gaoliujiadi.github.io/blog/favicon.ico?v=1573906839650">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://gaoliujiadi.github.io/blog/styles/main.css">
-
-
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
-
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- js -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://gaoliujiadi.github.io/blog/media/js/jquery.sticky-sidebar.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
 
 
-  </head>
-  <body>
-    <div id="app" class="main">
+        
+            
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+                <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+                
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://gaoliujiadi.github.io/blog">
-        <img src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573904619009" class="site-logo">
-        <h1 class="site-title">LB&#39;bg</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
+                    
+                            
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+    <div class="nav">
+        <div class="logo">
+            <a href="https://gaoliujiadi.github.io/blog">
+                <img class="avatar" src="https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650" alt="">
+            </a>
+            <div class="site-title">
+                <h1>
+                    LB&#39;bg
+                </h1>
+            </div>
+        </div>
+        <span class="menu-btn fa fa-align-justify"></span>
+        <div class="menu-container">
+            <ul>
+                
+                    
+                            <li>
+                                <a href="/" class="menu">
+                                    首页
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/archives" class="menu">
+                                    归档
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/tags" class="menu">
+                                    标签
+                                </a>
+                            </li>
+                            
+                                
+            </ul>
+        </div>
     </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-    </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
-    </div>
-  </div>
 </div>
 
+<script>
+    $(document).ready(function() {
+        $(".menu-btn").click(function() {
+            $(".menu-container").slideToggle();
+        });
+        $(window).resize(function() {
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">读《狂人日记》有感</h2>
-            <div class="post-date">2019-10-20</div>
-            
-            <div class="post-content">
-              <p>——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！<br>
+            if (window.matchMedia('(min-width: 960px)').matches) {
+                $(".menu-container").css('display', 'block')
+            } else {
+                $(".menu-container").css('display', 'none')
+            }
+
+        });
+    });
+</script>
+
+            <div id="main-content" class="post-detail main-container">
+                <!-- left -->
+                <div id="content" class="main-container-left">
+                    <article class="post i-card">
+                        <h2 class="post-title">
+                            读《狂人日记》有感
+                        </h2>
+                        <div class="post-info">
+                            <time class="post-time">2019-10-20</time>
+                            
+                                <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="post-tag i-tag
+                            i-tag-banana">
+                            #随笔杂感
+                        </a>
+                                
+                        </div>
+                        
+                                <div class="post-content">
+                                    <p>——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！<br>
 上文是《狂人日记》中最出名的段落之一，第一次看到这段文字的时候，我被震惊了。初看惊艳，再细细品，更有一种不一样的感觉。当时的我只知道这话是鲁迅说的，却不太了解其他的。于是，我准备去寻找原文出处。<br>
 老实说，“鲁迅”这个名词，在当时的我心中快接近妖魔化了。试问哪个中学生不对鲁迅的大名心有余悸过？但我还是找来了《狂人日记》拜读。<br>
 先是囫囵吞枣地通读了一遍，了解了大概，但仍是让人不寒而栗。一是，在这个社会里，人吃人；二是，这种人吃人竟然没有人认为不对，唯一认识到的人竟是主角———狂人。<br>
@@ -117,83 +132,100 @@
 时间永是流逝，街市依旧太平<br>
 #10.20.2019</p>
 
-            </div>
+                                </div>
+                    </article>
+                    <!--  -->
+                    
+                        <div class="next-post">
+                            <div class="next">下一篇</div>
+                            <a href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi">
+                                <h3 class="post-title">
+                                    清风不识字
+                                </h3>
+                            </a>
+                        </div>
+                        
+                            <div id="disqus_thread"></div>
+                            <div id="gitalk-container"></div>
+                </div>
+                <!-- middle -->
+                <div class="main-container-middle"></div>
+                <!-- right -->
+                <div id="sidebar" class="main-container-right">
+                    
+                                <!-- id-card -->
+                                
+    <div class="id_card i-card">
+        <div class="id_card-avatar" style="background-image: url(https://gaoliujiadi.github.io/blog/images/avatar.png?v=1573906839650)">
+        </div>
+        <h1 class="id_card-title">
+            LB&#39;bg
+        </h1>
+        <h2 class="id_card-description">
             
-              <div class="tag-container">
-                
-                  <a href="https://gaoliujiadi.github.io/blog/tag/SBZG" class="tag">
-                    随笔杂感
-                  </a>
-                
-              </div>
+        </h2>
+        <!--  -->
+        <div class="id_card-sns">
+            <!-- github -->
             
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi">
-                  <h3 class="post-title">
-                    清风不识字
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-              
-                <div id="gitalk-container" data-aos="fade-in"></div>
-              
-
-              
-            
-
-          </div>
+                    <!-- twitter -->
+                    
+                            <!-- weibo -->
+                            
+                                    <!-- facebook -->
+                                    
 
         </div>
-      </div>
     </div>
+    
+                                    
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+                </div>
 
-<script type="application/javascript">
 
-AOS.init();
 
-hljs.initHighlightingOnLoad()
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+            </div>
 
+
+            <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://gaoliujiadi.github.io/blog/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
 </script>
 
 
-
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    </div>
     <script>
-
-      var gitalk = new Gitalk({
-        clientID: '1e4b683b5d2047ab4a97',
-        clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
-        repo: 'blog',
-        owner: 'gaoliujiadi',
-        admin: ['gaoliujiadi'],
-        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
+        $('#sidebar').stickySidebar({
+            topSpacing: 80,
+            // bottomSpacing: 60
+        });
     </script>
-  
+    
+        
+            <script>
+    window.onload = function() {
+        var gitalk = new Gitalk({
+            clientID: '1e4b683b5d2047ab4a97',
+            clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
+            repo: 'blog',
+            owner: 'gaoliujiadi',
+            admin: ['gaoliujiadi'],
+            id: (location.pathname).substring(0, 49), // Ensure uniqueness and length less than 50
+            distractionFreeMode: false // Facebook-like distraction free mode
+        })
 
-  
+        gitalk.render('gitalk-container')
+    }
+</script>
+                
 
+                    
+                                
+</body>
 
-
-
-  </body>
 </html>
