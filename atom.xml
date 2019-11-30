@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://gaoliujiadi.github.io/blog</id>
-    <title>LB&apos;bg</title>
-    <updated>2019-11-16T12:20:41.904Z</updated>
+    <id>https://gaoliujiadi.github.io/blog/</id>
+    <title>履冰&apos;blog</title>
+    <updated>2019-11-30T14:35:45.721Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://gaoliujiadi.github.io/blog"/>
-    <link rel="self" href="https://gaoliujiadi.github.io/blog/atom.xml"/>
-    <logo>https://gaoliujiadi.github.io/blog/images/avatar.png</logo>
-    <icon>https://gaoliujiadi.github.io/blog/favicon.ico</icon>
-    <rights>All rights reserved 2019, LB&apos;bg</rights>
-    <entry>
-        <title type="html"><![CDATA[记本次搭建博客]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke">
-        </link>
-        <updated>2019-11-10T03:44:47.000Z</updated>
-        <content type="html"><![CDATA[<p>经过曲折，我终于把个人博客给搭建起来了——尽管很粗糙。<br>
-但是，好爽啊！</p>
-<ul>
-<li>此篇文章开始有博客，此前的是未搭建前写的。<br>
-先存着，回头再补（我也不知道什么时候</li>
-</ul>
-]]></content>
-    </entry>
+    <link rel="alternate" href="https://gaoliujiadi.github.io/blog/"/>
+    <link rel="self" href="https://gaoliujiadi.github.io/blog//atom.xml"/>
+    <subtitle>如履薄冰，如临深渊。</subtitle>
+    <logo>https://gaoliujiadi.github.io/blog//images/avatar.png</logo>
+    <icon>https://gaoliujiadi.github.io/blog//favicon.ico</icon>
+    <rights>All rights reserved 2019, 履冰&apos;blog</rights>
     <entry>
         <title type="html"><![CDATA[读《狂人日记》有感]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
+        <id>https://gaoliujiadi.github.io/blog//post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan">
         </link>
         <updated>2019-10-20T10:23:11.000Z</updated>
         <content type="html"><![CDATA[<p>——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！<br>
@@ -53,8 +40,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[清风不识字]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi">
+        <id>https://gaoliujiadi.github.io/blog//post/qing-feng-bu-shi-zi</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/qing-feng-bu-shi-zi">
         </link>
         <updated>2019-07-22T06:25:05.000Z</updated>
         <content type="html"><![CDATA[<p>这时候是乾隆爷的天下。可谓是四海升平，万民归矣。乾隆爷的百姓中，总有那么一些人爱到酒馆里边儿，听听那说书的讲故事。<br>
@@ -91,8 +78,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[焚书令]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/fen-shu-ling</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/fen-shu-ling">
+        <id>https://gaoliujiadi.github.io/blog//post/fen-shu-ling</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/fen-shu-ling">
         </link>
         <updated>2019-06-16T08:26:40.000Z</updated>
         <content type="html"><![CDATA[<p>嬴政看着底下，群臣坐在两列各自交谈或者对饮。他对这副景况很满意，战乱不休的七国在自己的手上统一多年，自己就是这个天下唯一的皇帝，他就忍不住地高兴。于是他站了起来，对着臣子们朗声地笑：“好！朕敬各位一杯！”<br>
@@ -117,8 +104,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[娜塔莎的悲壮]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang">
+        <id>https://gaoliujiadi.github.io/blog//post/nuo-ta-sha-de-bei-zhuang</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/nuo-ta-sha-de-bei-zhuang">
         </link>
         <updated>2019-05-25T06:24:14.000Z</updated>
         <content type="html"><![CDATA[<p>娜塔莎·罗曼诺夫（Natasha Romanoff），黑寡妇，初代复仇者之一，前苏联特工。<br>
@@ -146,8 +133,8 @@ I love you three thousand.</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[五四！五四！]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/wu-si-wu-si</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si">
+        <id>https://gaoliujiadi.github.io/blog//post/wu-si-wu-si</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/wu-si-wu-si">
         </link>
         <updated>2019-05-03T06:22:31.000Z</updated>
         <content type="html"><![CDATA[<p>愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光，就令萤火一般，也可以在黑暗里发一点光，不必等候炬火。此后如竟没有炬火：我便是唯一的光。<br>
@@ -168,8 +155,8 @@ I love you three thousand.</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[浅侃“人类的本质是复读机”]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
+        <id>https://gaoliujiadi.github.io/blog//post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji">
         </link>
         <updated>2019-03-24T06:16:33.000Z</updated>
         <content type="html"><![CDATA[<p>众所周知，人类的本质是复读机。<br>
