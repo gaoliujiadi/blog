@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://gaoliujiadi.github.io/blog/</id>
     <title>履冰&apos;blog</title>
-    <updated>2019-11-30T14:35:45.721Z</updated>
+    <updated>2019-12-01T07:02:36.776Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://gaoliujiadi.github.io/blog/"/>
     <link rel="self" href="https://gaoliujiadi.github.io/blog//atom.xml"/>
@@ -10,6 +10,43 @@
     <logo>https://gaoliujiadi.github.io/blog//images/avatar.png</logo>
     <icon>https://gaoliujiadi.github.io/blog//favicon.ico</icon>
     <rights>All rights reserved 2019, 履冰&apos;blog</rights>
+    <entry>
+        <title type="html"><![CDATA[爱，家庭，生活]]></title>
+        <id>https://gaoliujiadi.github.io/blog//post/guan-yu-jie-ji</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/guan-yu-jie-ji">
+        </link>
+        <updated>2019-11-30T14:49:33.000Z</updated>
+        <content type="html"><![CDATA[<p>——观《天堂的孩子》有感<br>
+戛然而止。这是我看完这部电影的第一感受。<br>
+我迫切地想知道接下来，那双鞋子的事——到底，妹妹能否拥有一双鞋，哥哥的鞋子已经破了那该怎么办。<br>
+然而，终究是鱼塘里的脚轻轻摆动，十数个金鱼游窜过来，在脚边围绕。很神奇的是，我的心被这部伊朗的电影抚平了。<br>
+这部电影所描写的，我想，不仅仅是一个丢了鞋子的事。哥哥与妹妹之间的情感令我动容，妹妹与盲人孩子间的友谊充满善意，哥哥与爸爸间的互动......这一切都能体现出一个普通的底层伊朗家庭的样子。<br>
+也许，这就是由爱联结起来的，家，的样子吧。我心生感慨，就算没有鞋子，但依然有家人。<br>
+但接下来的一个镜头却让我心生感慨。爸爸决定带哥哥去富人区当园丁，与之前的贫民区画风不同，这里高楼大厦遍地都是，各家都是小别墅，洁白美丽。<br>
+他们当园丁的那家富人，很友好，哥哥也与其中的小孩玩耍了起来。整个过程仿佛在天堂一般，孩子互相玩耍的样子好似文艺复兴的油画一般。<br>
+一瞬间，我感受到了阶级间的差距。<br>
+伊朗，这个政教合一的国家——片子许多的地方都有出现伊斯兰教的身影。<br>
+阶级贫富的差距仿佛极难追赶。父子俩在富人家的一次工作所得到的钱已经能使父亲对未来充满了幻想，在此之前的整个家庭却一直处于负债状况，这笔钱不仅能还掉欠的房租还能为兄妹各买一双新鞋子——而这不过是给富人做了一次工作所得的。<br>
+多么悲哀啊，这笔钱花掉之后呢，这家人又要继续回到之前的负债状态，父亲赚来的钱只能勉强度日。这样的贫富差距好似天埑。<br>
+更别说，片中出现的其他更艰难的人——比如那个盲人。<br>
+尽管如此，主角一家也仍是洋溢着一股幸福之感，不可谓不让人羡慕。<br>
+他们之间的爱，可以克服一切阻难。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[记本次搭建博客]]></title>
+        <id>https://gaoliujiadi.github.io/blog//post/ji-ben-ci-pei-zhi-bo-ke</id>
+        <link href="https://gaoliujiadi.github.io/blog//post/ji-ben-ci-pei-zhi-bo-ke">
+        </link>
+        <updated>2019-11-10T03:44:47.000Z</updated>
+        <content type="html"><![CDATA[<p>经过曲折，我终于把个人博客给搭建起来了——尽管很粗糙。<br>
+但是，好爽啊！</p>
+<ul>
+<li>此篇文章开始有博客，此前的是未搭建前写的。<br>
+先存着，回头再补（我也不知道什么时候</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[读《狂人日记》有感]]></title>
         <id>https://gaoliujiadi.github.io/blog//post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan</id>
