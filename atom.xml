@@ -1,0 +1,4456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://gaoliujiadi.github.io/blog/</id>
+    <title>履冰&apos;blog</title>
+    <updated>2020-03-17T04:45:06.285Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://gaoliujiadi.github.io/blog/"/>
+    <link rel="self" href="https://gaoliujiadi.github.io/blog/atom.xml"/>
+    <subtitle>如履薄冰，如临深渊。</subtitle>
+    <logo>https://gaoliujiadi.github.io/blog/images/avatar.png</logo>
+    <icon>https://gaoliujiadi.github.io/blog/favicon.ico</icon>
+    <rights>All rights reserved 2020, 履冰&apos;blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Python-scrapy学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/">
+        </link>
+        <updated>2020-03-06T13:37:51.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="scrapy爬虫框架结构">Scrapy爬虫框架结构</h2>
+<p>Scrapy不是一个函数功能库，而是一个爬虫框架。</p>
+<ul>
+<li>
+<p>分布式，“5+2”结构</p>
+<figure data-type="image" tabindex="1"><img src="WS10-Scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6.jpg" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>数据流的三个路径</p>
+<p>一、</p>
+<ul>
+<li>Engine从Spider处获得爬取请求(Request)</li>
+<li>Engine将爬取请求转发给Scheduler,用于调度</li>
+</ul>
+<p>二、</p>
+<ul>
+<li>Engine从Scheduler处获得下一个要爬取的请求</li>
+<li>Engine将爬取请求通过中间件发送给Downloader</li>
+<li>爬取网页后，Downloader形成响应(Response)通过中间件发给Engine</li>
+<li>Engine将收到的响应通过中间件发送给Spider处理</li>
+</ul>
+<p>三、</p>
+<ul>
+<li>Spider处理响应后产生爬取项(scraped Item)和新的爬取请求(Requests)给Engine</li>
+<li>Engine将爬取项发送给Item Pipeline(框架出口)</li>
+<li>Engine将爬取请求发送给Scheduler</li>
+</ul>
+<p>数据流的出入口</p>
+<ul>
+<li>Engine控制各模块数据流，不间断从Scheduler处获得爬取请求，直至请求为空</li>
+<li>框架入口：Spider的初始爬取请求</li>
+<li>框架出口：Item Pipeline</li>
+</ul>
+</li>
+<li>
+<p>用户编写(配置)：Spiders、Item Pipelines</p>
+</li>
+<li>
+<p>已有实现：Engine、Downloader、Scheduler</p>
+</li>
+</ul>
+<h2 id="scrapy爬虫框架解析">Scrapy爬虫框架解析</h2>
+<ul>
+<li>
+<p>Engine(不需要用户修改)</p>
+<ul>
+<li>控制所有模块之间的数据流</li>
+<li>根据条件触发事件</li>
+</ul>
+</li>
+<li>
+<p>Downloader(不需要用户修改)</p>
+<ul>
+<li>根据请求下载网页</li>
+</ul>
+</li>
+<li>
+<p>Scheduler(不需要用户修改)</p>
+<ul>
+<li>对所有爬取请求进行调度管理</li>
+</ul>
+</li>
+<li>
+<p>Sownloader Middleware(用户可以编写配置代码)</p>
+<ul>
+<li>目的：实施Engine、Scheduler和Downloader之间进行用户可配置的控制</li>
+<li>功能：修改、丢弃、新增请求或响应</li>
+</ul>
+</li>
+<li>
+<p>Spider(需要用户编写配置代码)</p>
+<ul>
+<li>解析Downloader返回的响应(Response)</li>
+<li>产生爬取项(scraped  item)</li>
+<li>产生额外的爬取请求(Request)</li>
+</ul>
+</li>
+<li>
+<p>Item Pipelines(需要用户编写配置代码)</p>
+<ul>
+<li>以流水线方式处理Spider产生的爬取项</li>
+<li>由一组操作顺序组成，类似流水线，每个操作是一个Item Pipeline类型</li>
+<li>可能操作包括：清理、检验和查重爬取项中的HTML数据、将数据存储到数据库</li>
+</ul>
+</li>
+<li>
+<p>Spider Middleware(用户可以编写配置代码)</p>
+<ul>
+<li>目的：对请求和爬取项的再处理</li>
+<li>功能：修改、丢弃、新增请求或爬取项</li>
+</ul>
+</li>
+</ul>
+<h2 id="scrapy爬虫常用命令">Scrapy爬虫常用命令</h2>
+<p><em>Scrapy使用命令行</em></p>
+<p><code>&gt;scrapy &lt;command&gt; [options] [args]</code></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>startproject</strong></td>
+<td>创建一个新工程</td>
+<td><code>scrapy startproject &lt;name&gt; [dir]</code></td>
+</tr>
+<tr>
+<td><strong>genspider</strong></td>
+<td>创建一个爬虫</td>
+<td><code>scrapy genspidr [options] &lt;name&gt; &lt;domain&gt;</code></td>
+</tr>
+<tr>
+<td>settings</td>
+<td>获得爬虫配置信息</td>
+<td><code>scrapy settings [options]</code></td>
+</tr>
+<tr>
+<td><strong>crawl</strong></td>
+<td>运行一个爬虫</td>
+<td><code>scrapy crawl &lt;spidr&gt;</code></td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出工程中所以爬虫</td>
+<td><code>scrapy list</code></td>
+</tr>
+<tr>
+<td>shell</td>
+<td>启动URL调试命令行</td>
+<td><code>scrapy shell [url]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="scrapy爬虫基本使用">Scrapy爬虫基本使用</h2>
+<h3 id="实例">实例</h3>
+<p>地址：<code>http://python123.io/ws/demo.html</code></p>
+<h4 id="步骤一">步骤一</h4>
+<p>建立一个Scrapy爬虫工程，选取一个目录，然后执行命令：</p>
+<p><code>scrapy startproject python123demo</code></p>
+<ul>
+<li>生成的工程目录：
+<ul>
+<li><code>python123demo/</code>	--&gt;	外层目录
+<ul>
+<li><code>scrapy.cfg</code>	--&gt;	部署Scrapy爬虫的配置文件
+<ul>
+<li><code>python123demo/</code>	--&gt;	Scrapy框架的用户自定义Python代码</li>
+<li><code>_init_.py</code>	--&gt;	初始化脚本</li>
+<li><code>items.py</code>	--&gt;	Items代码模板（继承类）</li>
+<li><code>middlewares.py</code>	--&gt;	Middlewares代码模板（继承类）</li>
+<li><code>pipelines.py</code>	--&gt;	Pipelines代码模板（继承类）</li>
+<li><code>settings.py</code>	--&gt;	Scrapy爬虫的配置文件</li>
+<li><code>spiders/</code>	--&gt;	Spiders代码模板目录（继承类）
+<ul>
+<li><code>_init_.py</code>	--&gt;	初始文件，无需修改</li>
+<li><code>_pycache_/</code>	--&gt;	缓存目录，无需修改</li>
+</ul>
+</li>
+<li><code>_pycache_/</code>	--&gt;	缓存目录，无需修改</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="步骤二">步骤二</h4>
+<p>在工程中产生一个Scrapy爬虫，进入工程目录，然后执行命令：</p>
+<p><code>scrapy genspider demo python123.io</code></p>
+<ul>
+<li>
+<p>该命令作用：</p>
+<ul>
+<li>生成一个名称为demo的spider</li>
+<li>在spiders目录下增加代码文件demo.py(<em>该命令仅用于生成demo.py，该文件也可以手工生成</em>)</li>
+</ul>
+</li>
+<li>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import scrapy
+
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+    allowed_domains = ['python123.io']
+    start_urls = ['http://python123.io/']
+
+    def parse(self, response):#parse()用于处理响应，解析内容形成字典，发现新的URL爬取请求
+        pass
+
+</code></pre>
+</li>
+</ul>
+<h4 id="步骤三">步骤三</h4>
+<p>配置产生的spider爬虫</p>
+<p>配置：</p>
+<ul>
+<li>
+<p>初始URL地址</p>
+</li>
+<li>
+<p>获取页面后的解析方式</p>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import scrapy
+
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+#    allowed_domains = ['python123.io']#可选
+    start_urls = ['http://python123.io/ws/demo.html']
+
+    def parse(self, response):
+        fname = response.url.split('/')[-1]
+        with open(fname,'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s.'% fname)
+        pass
+
+</code></pre>
+</li>
+</ul>
+<h4 id="步骤四">步骤四</h4>
+<p>运行爬虫，获取网页，在命令行下，执行命令：</p>
+<p><code>scrapy crawl demo</code></p>
+<p>demo爬虫被执行，捕获页面存储在demo.html</p>
+<h4 id="demopy代码完整版本"><code>demo.py</code>代码完整版本</h4>
+<pre><code class="language-python">import scrapy
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+#    allowed_domains = ['python123.io']#可选
+    urls = [
+        'http://python123.io/ws/demo.html'
+    		]
+    for url in urls:
+        yield scrapy.Request(url=url,callback=self.parse)
+        #yield关键词
+
+    def parse(self, response):
+        fname = response.url.split('/')[-1]
+        with open(fname,'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s.'% fname)
+</code></pre>
+<h2 id="生成器">生成器</h2>
+<ul>
+<li>
+<p>包含yield语句的函数是一个生成器</p>
+</li>
+<li>
+<p>生成器每次产生一个值（yield语句），函数被冻结，被唤醒后再产生一个值</p>
+</li>
+<li>
+<p>生成器是一个不断产生值的函数</p>
+</li>
+</ul>
+<h3 id="实例求一组数的平方值">实例：求一组数的平方值</h3>
+<ul>
+<li>
+<p>生成器：</p>
+<pre><code class="language-python">&gt;&gt;&gt; def gen(n):
+	for i in range(n):
+		yield i**2
+
+		
+&gt;&gt;&gt; for i in gen(5):
+	print(i,' ',end=&quot;&quot;)
+
+	
+0  1  4  9  16 
+</code></pre>
+</li>
+<li>
+<p>普通：</p>
+<pre><code class="language-python">&gt;&gt;&gt; def square(n):
+	ls = [i**2 for i in range(n)]
+	return ls
+
+&gt;&gt;&gt; for i in square(5):
+	print(i,' ',end='')
+
+	
+0  1  4  9  16 
+</code></pre>
+</li>
+<li>
+<p>生成器相比一次列出所有内容的优势：</p>
+<ul>
+<li>更节省存储空间</li>
+<li>响应更迅速</li>
+<li>使用更灵活</li>
+</ul>
+</li>
+</ul>
+<h2 id="scrapy爬虫的数据类型">Scrapy爬虫的数据类型</h2>
+<ul>
+<li>
+<p>Request类</p>
+<p><code>class scrapy.http.Requests()</code></p>
+<p>Request对象表示一个HTTP请求由Spider生成，由Downloader执行</p>
+<table>
+<thead>
+<tr>
+<th>属性或方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.url</code></td>
+<td>Request对应的请求URL地址</td>
+</tr>
+<tr>
+<td><code>.method</code></td>
+<td>对应的请求方法，'GET' 'POST'等</td>
+</tr>
+<tr>
+<td><code>.headers</code></td>
+<td>字典类型风格的请求头</td>
+</tr>
+<tr>
+<td><code>.body</code></td>
+<td>请求内容主体，字符串类型</td>
+</tr>
+<tr>
+<td><code>.meta</code></td>
+<td>用户添加的扩展信息，在Scrapy内部模块间传递信息使用</td>
+</tr>
+<tr>
+<td><code>.copy()</code></td>
+<td>复制该请求</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Response类</p>
+<p><code>class scrapy.http.Response()</code></p>
+<p>Response对象表示一个HTTP响应由Downloader生成，由Spider处理</p>
+<table>
+<thead>
+<tr>
+<th>属性或方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.url</code></td>
+<td>Response对应的URL地址</td>
+</tr>
+<tr>
+<td><code>.status</code></td>
+<td>HTTP状态码，默认是200</td>
+</tr>
+<tr>
+<td><code>.header</code></td>
+<td>Response对应的头部信息</td>
+</tr>
+<tr>
+<td><code>.body</code></td>
+<td>Response对应的内容信息，字符串类型</td>
+</tr>
+<tr>
+<td><code>.flags</code></td>
+<td>一组标记</td>
+</tr>
+<tr>
+<td><code>.request</code></td>
+<td>产生Response类型对应的Request对象</td>
+</tr>
+<tr>
+<td><code>.copy()</code></td>
+<td>复制该响应</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Item类</p>
+<p><code>class scrapy.item.Item()</code></p>
+<p>Item对象表示一个从HTML页面中提取的信息内容由Spider生成，由Item Pipeline处Item类似字典类型，可以按照字典类型操作</p>
+</li>
+</ul>
+<h2 id="scrapy爬虫提取信息的方法">Scrapy爬虫提取信息的方法</h2>
+<p>Scrapy爬虫支持多种HTML信息提取方法：</p>
+<ul>
+<li>Beautiful Soup</li>
+<li>lxml</li>
+<li>re</li>
+<li>XPath Selector</li>
+<li><strong>CSS Selector</strong>
+<ul>
+<li><code>&lt;HTML&gt;.css('a::attr(href)').extract()</code><em>'a'为标签名称，'href'为标签属性</em></li>
+</ul>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python3爬取晋江非VIP章节]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/">
+        </link>
+        <updated>2020-03-02T23:53:05.000Z</updated>
+        <content type="html"><![CDATA[<p>思路是这样的：<br>
+先将小说文章基本界面爬下来，获得文章的标题与链接，并输出字典。<br>
+再将一些基本信息比如书名、作者、文案等，但因为水平不够，爬下的文案必须是纯文本的。<br>
+接下来我本想通过爬下来的链接进入每一章并获得正文，但主站的设计使我很难完美的爬下不同格式的任意一本书。于是我将选择从手机端入手，成功获取正文内容。<br>
+在将上述内容加以排版，写入同目录下。</p>
+<pre><code class="language-python">#CrawJjwxc.py
+
+import requests
+import re
+from bs4 import BeautifulSoup
+import bs4
+
+def getHTMLText(url):#获取网页文本
+    kv = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+    r = requests.get(url,headers = kv,timeout = 30)
+    r.raise_for_status()
+    r.encoding = 'GBK'
+    return r.text
+
+def getTitleAndLink(htmlText):#从起始网页获取标题和链接，输出字典
+    soup = BeautifulSoup(htmlText,'html.parser')
+    TitleAndLinkHTML = soup.find_all('a',itemprop = 'url')
+    TitleAndLink = {}
+    for i in TitleAndLinkHTML:
+        try:
+            title = i.string
+            link = i.attrs['href']
+            TitleAndLink[i.string] = link
+        except:
+            continue
+    return TitleAndLink
+
+def getAuthor(htmlText):#从起始网页获得作者
+    soup = BeautifulSoup(htmlText,'html.parser')
+    author = soup.find('span',itemprop = 'author').string
+    return author
+
+def getName(htmlText):#从起始网页获得作品名
+    soup = BeautifulSoup(htmlText,'html.parser')
+    name = soup.find('span',itemprop = 'articleSection').string
+    print(name)
+    return name
+
+def getNovelIntro(htmlText):#从起始网页获得简介     #这种方式可以得到简单无格式的文案
+    soup = BeautifulSoup(htmlText,'html.parser')
+    novelIntro = soup.find('div',id ='novelintro').format_string
+    novelIntro1 = str(novelIntro)[87:-7]#兼容性很差，但我搞不定
+    novelIntroList = novelIntro1.split('&lt;br/&gt;')
+    novelIntro = '\n'.join(novelIntroList)
+    return novelIntro
+
+def getNovelText(htmlText):#正文
+    try:
+        soup = BeautifulSoup(htmlText,'html.parser')
+        rudeText = soup.find('li',style = &quot;line-height: 25.2px&quot;)
+        realText = str(rudeText)[34:-5]
+        realtextlist = realText.split('&lt;br/&gt;\u3000\u3000')
+        text = '\n'.join(realtextlist)
+        text = text + '\n\n'
+        text = text + getAuthorTalk(htmlText) + '\n'
+        #print(text)
+        return text
+    except:
+        pass
+
+def getAuthorTalk(htmlText):#作者有话说
+    soup = BeautifulSoup(htmlText,'html.parser')
+    rudeText = str(soup.find('li',style = &quot;font-size: 12px; color: #009900;&quot;))[59:-5]
+    realtextlist = rudeText.split('&lt;br/&gt;')
+    text = '\n'.join(realtextlist)
+    return text
+
+def writeIntoFile(title,text,path):#将文章写入文件
+    with open(path,'a',encoding='utf-8') as f:
+        f.write(title + text)
+    return &quot;&quot;
+
+def main():#主函数，将多个章节写入
+    id = input('输入作品id：')
+    startURL = 'http://www.jjwxc.net/onebook.php?novelid=' + id
+    startText = getHTMLText(startURL)
+    author = getAuthor(startText)
+    name = getName(startText)
+    novelIntro = getNovelIntro(startText)
+    path = '《' + name + '》' + '_' + author + '.txt'
+    writeIntoFile('《' + name + '》' + '\n','作者：' + author + '\n\n\n',path)
+    #writeIntoFile('文案：\n',novelIntro + '\n\n\n',path)
+    TitleAndLink = getTitleAndLink(startText)
+    link = list(TitleAndLink.values())
+    number = len(link)
+    print('非VIP章数：' + str(number))
+    count = 0
+    for i in range(number):
+        i = i + 1
+        chapterLink = &quot;https://m.jjwxc.net/book2/&quot; + id + '/' + str(i)
+        chapterHTML = getHTMLText(chapterLink)
+        text = getNovelText(chapterHTML)
+        title = str(list(TitleAndLink.keys())[count])
+        count = count + 1
+        writeIntoFile(title + '\n\n',text,path)
+        print(&quot;\r已下章数：{}&quot;.format(i),end=&quot;&quot;)
+    print('\ndone')
+
+main()
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-Re库入门]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/zheng-ze-ru-men/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/zheng-ze-ru-men/">
+        </link>
+        <updated>2020-02-29T11:11:07.000Z</updated>
+        <content type="html"><![CDATA[<p>regular expression, regex, RE</p>
+<p>最主要应用在字符串匹配中</p>
+<h2 id="正则表达式的语法">正则表达式的语法</h2>
+<p>正则表达式语法由字符和操作符构成</p>
+<ul>
+<li>
+<p>正则表达式的常用操作符</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>说明</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>表示任何单个字符</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[ ]</code></td>
+<td>字符集，对单个字符给出取值范围</td>
+<td><code>[abc]</code>表示a、b、c，[a‐z]表示a到z单个字符</td>
+</tr>
+<tr>
+<td><code>[^ ]</code></td>
+<td>非字符集，对单个字符给出排除范</td>
+<td><code>[^abc]</code>表示非a或b或c的单个字符</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>前一个字符0次或无限次扩展</td>
+<td><code>abc*</code>表示ab、abc、abcc、abccc等</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>前一个字符1次或无限次扩展</td>
+<td><code>abc+</code>表示abc、abcc、abccc等</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>前一个字符0次或1次扩展</td>
+<td><code>abc?</code> 表示ab、abc</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>左右表达式任意一个</td>
+<td><code>abc|def</code>表示abc、def</td>
+</tr>
+<tr>
+<td><code>{m}</code></td>
+<td>扩展前一个字符m次</td>
+<td><code>ab{2}c</code>表示abbc</td>
+</tr>
+<tr>
+<td><code>{m,n}</code></td>
+<td>扩展前一个字符m至n次（含n）</td>
+<td><code>ab{1,2}c</code>表示abc、abbc</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>匹配字符串开头</td>
+<td><code>^abc</code>表示abc且在一个字符串的开头</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>匹配字符串结尾</td>
+<td><code>abc$</code>表示abc且在一个字符串的结尾</td>
+</tr>
+<tr>
+<td><code>( )</code></td>
+<td>分组标记，内部只能使用<code>|</code>操作符</td>
+<td><code>(abc)</code>表示abc，<code>(abc|def)</code>表示abc或def</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>数字，等价于<code>[0‐9]</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>单词字符，等价于<code>[A‐Za‐z0‐9_]</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>语法实例</p>
+<table>
+<thead>
+<tr>
+<th>正则表达式</th>
+<th>对应字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>P(Y|YT|YTH|YTHO)?N</code></td>
+<td>'PN'、'PYN'、'PYTN'、'PYTHN'、'PYTNON'</td>
+</tr>
+<tr>
+<td><code>PYTHON+</code></td>
+<td>'PYTHON'、'PYTHONN'、'PYTHONNN' …</td>
+</tr>
+<tr>
+<td><code>PY[TH]ON</code></td>
+<td>'PYTON'、'PYHON'</td>
+</tr>
+<tr>
+<td><code>PY[^TH]ON</code></td>
+<td>'PYON'、'PYaON'、'PYbON'、'PYcON'…</td>
+</tr>
+<tr>
+<td><code>PY{:3}N</code></td>
+<td>'PN'、'PYN'、'PYYN'、'PYYYN'…</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>匹配IP地址的正则表达式</p>
+<p>IP地址字符串形式的正则表达式（IP地址分4段，每段0‐255）</p>
+<ul>
+<li>如<code>\d+.\d+.\d+.\d+</code>或<code>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}</code></li>
+<li>精确写法：
+<ul>
+<li>0 - 99:<code>[1-9]?\d</code></li>
+<li>100 - 199:<code>1\d{2}</code></li>
+<li>200 - 249:<code>2[0-4]\d</code></li>
+<li>250 - 255:<code>25[0-5]</code><br>
+<code>(([1-9]?\d|1\d{2}|2[0-4]\d|25[0-5]).){3}([1-9]?\d|1\d{2}|2[0-4]\d|25[0-5])</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="经典正则表达式实例">经典正则表达式实例</h3>
+<table>
+<thead>
+<tr>
+<th>正则表达式</th>
+<th>对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^[A-Za-z]+&amp;</code></td>
+<td>由26个字母组成的字符串</td>
+</tr>
+<tr>
+<td><code>^[A-Za-z-9]+&amp;</code></td>
+<td>由26个字母和数字组成的字符串</td>
+</tr>
+<tr>
+<td><code>^-?\d+&amp;</code></td>
+<td>整数形式的字符串</td>
+</tr>
+<tr>
+<td><code>[0-9]*[1-9][0-9]*&amp;</code></td>
+<td>正整数形式的字符串</td>
+</tr>
+<tr>
+<td><code>[1-9]\d{5}</code></td>
+<td>中国境内邮政编码，6位</td>
+</tr>
+<tr>
+<td><code>[\u4e00-\u9fa5]</code></td>
+<td>匹配中文字符</td>
+</tr>
+<tr>
+<td><code>\d{3}-\d{8}|\d{4}-\d{7}</code></td>
+<td>国内电话号码，010-68913536</td>
+</tr>
+</tbody>
+</table>
+<h2 id="re库的基本使用">Re库的基本使用</h2>
+<p><code>import re</code></p>
+<ul>
+<li>
+<p>re库采用raw string类型表示正则表达式，表示为：<code>r'text'</code></p>
+<ul>
+<li>例如：<code>r'[1-9]\d{5}'</code>、<code>r'\d{3}-\d{8}|\d{4}-\d{7}'</code></li>
+</ul>
+</li>
+<li>
+<p>re库也可以采用string类型表示正则表达式，但更繁琐</p>
+<ul>
+<li>例如：<code>'[1‐9]\\d{5}'</code>、<code>'\\d{3}‐\\d{8}|\\d{4}‐\\d{7}'</code></li>
+</ul>
+</li>
+<li>
+<p>建议：当正则表达式包含转义符时，使用raw string</p>
+</li>
+</ul>
+<h3 id="re库主要功能函数">Re库主要功能函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>re.search()</code></td>
+<td>在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象</td>
+</tr>
+<tr>
+<td><code>re.match()</code></td>
+<td>从一个字符串的开始位置起匹配正则表达式，返回match对象</td>
+</tr>
+<tr>
+<td><code>re.findall()</code></td>
+<td>搜索字符串，以列表类型返回全部能匹配的子串</td>
+</tr>
+<tr>
+<td><code>re.split()</code></td>
+<td>将一个字符串按照正则表达式匹配结果进行分割，返回列表类型</td>
+</tr>
+<tr>
+<td><code>re.finditer()</code></td>
+<td>搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象</td>
+</tr>
+<tr>
+<td><code>re.sub</code></td>
+<td>在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>re.search(pattern,string,flag=0)</code></p>
+<ul>
+<li>
+<p>pattern：正则表达式的字符串或原生字符串表示</p>
+</li>
+<li>
+<p>string：待匹配字符串</p>
+</li>
+<li>
+<p>flags：正则表达式使用时的控制标记</p>
+<table>
+<thead>
+<tr>
+<th>常用标记</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flags=re.I</code><br/><code>flag=re.IGNORECASE</code></td>
+<td>忽略正则表达式的大小写，<code>[A‐Z]</code>能够匹配小写字符</td>
+</tr>
+<tr>
+<td><code>re.M</code><br/><code>re.MULTILINE</code></td>
+<td>正则表达式中的<code>^</code>操作符能够将给定字符串的每行当作匹配开始</td>
+</tr>
+<tr>
+<td><code>re.S</code><br/><code>re.DOTALL</code></td>
+<td>正则表达式中的<code>.</code>操作符能够匹配所有字符，默认匹配除换行外的所有字符</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<pre><code class="language-PYTHON">&gt;&gt;&gt; import re
+&gt;&gt;&gt; match = re.search(r'[1-9]\d{5}','BIT 100081')
+&gt;&gt;&gt; if match:
+	print(match.group(0))
+
+100081
+</code></pre>
+</li>
+<li>
+<p><code>re.match(mattern,string,flags=0)</code></p>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串表示</li>
+<li>string：待匹配字符串</li>
+<li>flags：正则表达式使用时的控制标记</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; match = re.match(r'[1-9]\d{5}','BIT 100081')
+&gt;&gt;&gt; if match:
+	match.group(0)
+
+    
+&gt;&gt;&gt; match.group(0)
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#12&gt;&quot;, line 1, in &lt;module&gt;
+    match.group(0)
+AttributeError: 'NoneType' object has no attribute 'group'
+    
+&gt;&gt;&gt; match = re.match(r'[1-9]\d{5}','100081 BIT')
+&gt;&gt;&gt; if match:
+	match.group(0)
+
+'100081'
+</code></pre>
+</li>
+<li>
+<p><code>re.findall(pattern,string,flags=0)</code></p>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串</li>
+<li>string：待匹配字符串</li>
+<li>flags：正则表达式使用时的控制标记</li>
+</ul>
+<pre><code class="language-python">import re
+&gt;&gt;&gt; ls = re.findall(r'[1-9]\d{5}','BIT100081 TSU100084')
+&gt;&gt;&gt; ls
+['100081', '100084']
+</code></pre>
+</li>
+<li>
+<p><code>re.split(pattern,string,maxsplit=0,flags=0)</code></p>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串表示</li>
+<li>string：待匹配字符串</li>
+<li>maxsplit：最大分割数，剩余部分作为最后一个元素输出</li>
+<li>flags：正则表达式使用时的控制标记</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; re.split(r'[1-9]\d{5}','BIT100081 TSU100084')
+['BIT', ' TSU', '']
+&gt;&gt;&gt; re.split(r'[1-9]\d{5}','BIT100081 TSU100084',maxsplit=1)
+['BIT', ' TSU100084']
+</code></pre>
+</li>
+<li>
+<p><code>re.finditer(pattern,string,flags=0)</code></p>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串表示</li>
+<li>string：待匹配字符串</li>
+<li>flags：正则表达式使用时的控制标记</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; for m in re.finditer(r'[1-9]\d{5}','BIT100081 TSU100084'):
+	if m:
+		print(m.group(0))
+	
+100081
+100084
+</code></pre>
+</li>
+<li>
+<p><code>re.sub(pattern,repl,string,count=0,flag-0)</code></p>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串表示</li>
+<li>repl：替换匹配字符串的字符串</li>
+<li>string：待匹配字符串</li>
+<li>count：匹配的最大替换数</li>
+<li>flags：正则表达式使用时的控制标记</li>
+</ul>
+<pre><code class="language-python">import re
+&gt;&gt;&gt; re.sub(r'[1-9]\d{5}',':zipcode','BIT100081 TSU100084')
+'BIT:zipcode TSU:zipcode'
+</code></pre>
+</li>
+</ul>
+<h3 id="re库的另一种等价用法">Re库的另一种等价用法</h3>
+<ul>
+<li>
+<p>函数式用法：一次性操作</p>
+<pre><code class="language-python">&gt;&gt;&gt; rst = re.search(r'[1‐9]\d{5}', 'BIT 100081')
+</code></pre>
+<p><em>等价于</em></p>
+</li>
+<li>
+<p>面向对象用法：编译后的多次操作</p>
+<pre><code class="language-python">&gt;&gt;&gt; pat = re.compile(r'[1‐9]\d{5}')
+&gt;&gt;&gt; rst = pat.search('BIT 100081')
+</code></pre>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://gaoliujiadi.github.io/blog//post-images/1582974773100.png" alt="" loading="lazy"></figure>
+<h5 id="regex-recompilepatternflags0"><code>regex = re.compile(pattern,flags=0)</code></h5>
+<ul>
+<li>pattern：正则表达式的字符串或原生字符串表示</li>
+<li>flags : 正则表达式使用时的控制标记</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>regex.search()</code></td>
+<td>在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象</td>
+</tr>
+<tr>
+<td><code>regex.match()</code></td>
+<td>从一个字符串的开始位置起匹配正则表达式，返回match对象</td>
+</tr>
+<tr>
+<td><code>regex.findall()</code></td>
+<td>搜索字符串，以列表类型返回全部能匹配的子串</td>
+</tr>
+<tr>
+<td><code>regex.split()</code></td>
+<td>将一个字符串按照正则表达式匹配结果进行分割，返回列表类型</td>
+</tr>
+<tr>
+<td><code>regex.finditer()</code></td>
+<td>搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象</td>
+</tr>
+<tr>
+<td><code>regex.sub()</code></td>
+<td>在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="re库的match对象">Re库的Match对象</h2>
+<p>Match对象是一次匹配的结果，包含匹配的很多信息</p>
+<h3 id="属性">属性</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.string</code></td>
+<td>待匹配的文本</td>
+</tr>
+<tr>
+<td><code>.re</code></td>
+<td>匹配时使用的patter对象（正则表达式）</td>
+</tr>
+<tr>
+<td><code>.pos</code></td>
+<td>正则表达式搜索文本的开始位置</td>
+</tr>
+<tr>
+<td><code>.endpos</code></td>
+<td>正则表达式搜索文本的结束位置</td>
+</tr>
+</tbody>
+</table>
+<h3 id="方法">方法</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.group(0)</code><em>除了0还有其他参数</em></td>
+<td>获得匹配后的字符串</td>
+</tr>
+<tr>
+<td><code>.start()</code></td>
+<td>匹配字符串在原始字符串的开始位置</td>
+</tr>
+<tr>
+<td><code>.end()</code></td>
+<td>匹配字符串在原始字符串的结束位置</td>
+</tr>
+<tr>
+<td><code>.span()</code></td>
+<td>返回<code>(.start(), .end())</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="实例">实例</h3>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; m = re.search(r'[1-9]\d{5}','BIT100081 TSU100084')
+&gt;&gt;&gt; m.string
+'BIT100081 TSU100084'
+&gt;&gt;&gt; m.re
+re.compile('[1-9]\\d{5}')
+&gt;&gt;&gt; m.pos
+0
+&gt;&gt;&gt; m.endpos
+19
+&gt;&gt;&gt; m.group(0)
+'100081'
+&gt;&gt;&gt; m.start()
+3
+&gt;&gt;&gt; m.end()
+9
+&gt;&gt;&gt; m.span()
+(3, 9)
+</code></pre>
+<h2 id="re库的贪婪匹配和最小匹配">Re库的贪婪匹配和最小匹配</h2>
+<ul>
+<li>
+<p><strong>Re库默认采用贪婪匹配，即输出匹配最长的子串</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; match = re.search(r'PY.*N','PYANBNCNDN')
+&gt;&gt;&gt; match.group(0)
+'PYANBNCNDN'
+</code></pre>
+</li>
+<li>
+<p>若要输出最小匹配：</p>
+<pre><code class="language-python">&gt;&gt;&gt; match = re.search(r'PY.*?N','PYANBNCNDN')
+&gt;&gt;&gt; match.group(0)
+'PYAN'
+</code></pre>
+</li>
+</ul>
+<h3 id="最小匹配操作符">最小匹配操作符</h3>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*?</code></td>
+<td>前一个字符0次或无限次扩展，最小匹配</td>
+</tr>
+<tr>
+<td>`+?</td>
+<td>前一个字符1次或无限次扩展，最小匹配</td>
+</tr>
+<tr>
+<td><code>??</code></td>
+<td>前一个字符0次或1次扩展，最小匹配</td>
+</tr>
+<tr>
+<td><code>{m,n}</code></td>
+<td>扩展前一个字符m至n次（含n），最小匹配</td>
+</tr>
+</tbody>
+</table>
+<p><em>只要长度输出可能不同的，都可以通过在操作符后增加<code>?</code>变成最小匹配</em></p>
+<p>Github上的教程<br>
+https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-beautiful soup库入门]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/">
+        </link>
+        <updated>2020-02-27T14:38:34.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<p>演示HTML页面地址：http://python123.io/ws/demo.html</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;http://python123.io/ws/demo.html&quot;)
+&gt;&gt;&gt; r.text
+'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href=&quot;http://www.icourse163.org/course/BIT-268001&quot; class=&quot;py1&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; class=&quot;py2&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'
+&gt;&gt;&gt; demo = r.text
+&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; print(soup.prettify())
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;title&gt;
+   This is a python demo page
+  &lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;p class=&quot;title&quot;&gt;
+   &lt;b&gt;
+    The demo python introduces several python courses.
+   &lt;/b&gt;
+  &lt;/p&gt;
+  &lt;p class=&quot;course&quot;&gt;
+   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+    Basic Python
+   &lt;/a&gt;
+   and
+   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;
+    Advanced Python
+   &lt;/a&gt;
+   .
+  &lt;/p&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</li>
+<li>
+<p><strong><code>from bs4 import BeautifulSoup</code></strong></p>
+<p><code>soup = BeautifulSoup('&lt;p&gt;data&lt;/p&gt;',html.parser)</code></p>
+</li>
+</ul>
+<h2 id="beautiful-soup库的基本元素">Beautiful Soup库的基本元素</h2>
+<h3 id="beautiful-soup类">Beautiful Soup类</h3>
+<ul>
+<li>BeautifulSoup对应一个HTML/XML文档的全部内容</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(&quot;&lt;html&gt;data&lt;/html&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup2 = BeautifulSoup(open(&quot;F://program//spider//demo.html&quot;),&quot;html.parser&quot;)
+</code></pre>
+<h3 id="beautifulsoup类的基本元素">BeautifulSoup类的基本元素</h3>
+<table>
+<thead>
+<tr>
+<th>基本元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tag</td>
+<td>标签，最基本的信息组织单元，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>标签的名字，<code>&lt;p&gt;…&lt;/p&gt;</code>的名字是'p'，格式：<code>&lt;tag&gt;.name</code></td>
+</tr>
+<tr>
+<td>Attributes</td>
+<td>标签的属性，字典形式组织，格式：<code>&lt;tag&gt;.attrs</code></td>
+</tr>
+<tr>
+<td>NavigableString</td>
+<td>标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：<code>&lt;tag&gt;.string</code></td>
+</tr>
+<tr>
+<td>Comment</td>
+<td>标签内字符串的注释部分，一种特殊的Comment类型</td>
+</tr>
+</tbody>
+</table>
+<h4 id="tag标签">Tag标签</h4>
+<p>标签，最基本的信息组织单元，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</p>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.title
+&lt;title&gt;This is a python demo page&lt;/title&gt;
+&gt;&gt;&gt; tag = soup.a
+&gt;&gt;&gt; tag
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+</code></pre>
+<ul>
+<li>任何存在于HTML语法中的标签都可以用<code>soup.&lt;tag&gt;</code>访问获得<br>
+当HTML文档中存在多个相同<tag>对应内容时，<code>soup.&lt;tag&gt;</code>返回第一个</li>
+</ul>
+<h4 id="tag的name">Tag的name</h4>
+<p>标签的名字，<code>&lt;p&gt;…&lt;/p&gt;</code>的名字是'p'，格式：<code>&lt;tag&gt;.name</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.a.name
+'a'
+&gt;&gt;&gt; soup.a.parent.name
+'p'
+&gt;&gt;&gt; soup.a.parent.parent.name
+'body'
+</code></pre>
+<ul>
+<li>每个<code>&lt;tag&gt;</code>都有自己的名字，通过<code>&lt;tag&gt;.name</code>获取，字符串类型</li>
+</ul>
+<h4 id="tag的attrs">Tag的attrs</h4>
+<p>标签的属性，字典形式组织，格式：<code>&lt;tag&gt;.attrs</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; tag = soup.a
+&gt;&gt;&gt; tag.attrs
+{'href': 'http://www.icourse163.org/course/BIT-268001', 'class': ['py1'], 'id': 'link1'}
+&gt;&gt;&gt; tag.attrs['class']
+['py1']
+&gt;&gt;&gt; tag.attrs['href']
+'http://www.icourse163.org/course/BIT-268001'
+&gt;&gt;&gt; type(tag.attrs)
+&lt;class 'dict'&gt;
+&gt;&gt;&gt; type(tag)
+&lt;class 'bs4.element.Tag'&gt;
+</code></pre>
+<ul>
+<li>一个<code>&lt;tag&gt;</code>可以有0或多个属性，字典类型</li>
+</ul>
+<h4 id="tag的navigablestring">Tag的NavigableString</h4>
+<p>标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：<code>&lt;tag&gt;.string</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.a
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+&gt;&gt;&gt; soup.a.string
+'Basic Python'
+&gt;&gt;&gt; soup.p
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&gt;&gt;&gt; soup.p.string
+'The demo python introduces several python courses.'
+&gt;&gt;&gt; type(soup.p.string)
+&lt;class 'bs4.element.NavigableString'&gt;
+</code></pre>
+<ul>
+<li>NavigableString可以跨越多个层次</li>
+</ul>
+<h4 id="tag的comment">Tag的Comment</h4>
+<p>标签内字符串的注释部分，一种特殊的Comment类型</p>
+<pre><code class="language-python">&gt;&gt;&gt; newsoup = BeautifulSoup(&quot;&lt;b&gt;&lt;!--This is a comment--&gt;&lt;/b&gt;&lt;p&gt;This is not a comment&lt;/p&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; newsoup.b.string
+'This is a comment'
+&gt;&gt;&gt; type(newsoup.b.string)
+&lt;class 'bs4.element.Comment'&gt;#注释
+&gt;&gt;&gt; newsoup.p.string
+'This is not a comment'
+&gt;&gt;&gt; type(newsoup.p.string)
+&lt;class 'bs4.element.NavigableString'&gt;#非注释
+</code></pre>
+<ul>
+<li>Comment是一种特殊类型</li>
+</ul>
+<h3 id="beautiful-soup库解析器">Beautiful Soup库解析器</h3>
+<table>
+<thead>
+<tr>
+<th>解析器</th>
+<th>使用方法</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bs4的HTML解析器</td>
+<td><code>BeautifulSoup(mk,'html.parser')</code></td>
+<td>安装bs4库</td>
+</tr>
+<tr>
+<td>lxml的HTML解析器</td>
+<td><code>BeautifulSoup(mk,'lxml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr>
+<td>lxml的XML解析器</td>
+<td><code>BeautifulSoup(mk,'xml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr>
+<td>html5lib的解析器</td>
+<td><code>BeautifulSoup(mk,'html5lib')</code></td>
+<td><code>pip install html5lib</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="基于bs4库的html内容遍历方法">基于bs4库的HTML内容遍历方法</h2>
+<h3 id="标签树的下行遍历">标签树的下行遍历</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.contents</code></td>
+<td>子节点的列表，将<code>&lt;tag&gt;</code>所有儿子节点存入列表</td>
+</tr>
+<tr>
+<td><code>.children</code></td>
+<td>子节点的迭代类型，与.contents类似，用于循环遍历儿子节点</td>
+</tr>
+<tr>
+<td><code>.descendants</code></td>
+<td>子孙节点的迭代类型，包含所有子孙节点，用于循环遍历</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>contents</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.head
+&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&gt;&gt;&gt; soup.head.contents
+[&lt;title&gt;This is a python demo page&lt;/title&gt;]
+&gt;&gt;&gt; soup.body.contents
+['\n', &lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;, '\n', &lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;, '\n']
+&gt;&gt;&gt; len(soup.body.contents)
+5
+&gt;&gt;&gt; soup.body.contents[1]
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&gt;&gt;&gt; 
+</code></pre>
+</li>
+<li>
+<p><code>.children</code>（遍历儿子节点）</p>
+<pre><code class="language-python">&gt;&gt;&gt; for child in soup.body.children:
+	print(child)
+
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+</li>
+<li>
+<p><code>.descendants</code>（遍历子孙节点）</p>
+<pre><code class="language-python">&gt;&gt;&gt; for child in soup.body.descendants:
+	print(child)
+
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;
+The demo python introduces several python courses.
+
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+Basic Python
+ and 
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+Advanced Python
+.
+</code></pre>
+</li>
+</ul>
+<h3 id="标签树的上行遍历">标签树的上行遍历</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.parent</code></td>
+<td>节点的父亲标签</td>
+</tr>
+<tr>
+<td><code>.parents</code></td>
+<td>节点先辈标签的迭代类型，用于循环遍历先辈节点</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>.parent</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.title.parent
+&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&gt;&gt;&gt; soup.html.parent
+&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+&gt;&gt;&gt; soup.parent
+</code></pre>
+</li>
+<li>
+<p><code>.parents</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; for parent in soup.a.parents:
+	if parent is None:
+		print(parent)
+	else:
+		print(parent.name)
+		
+p
+body
+html
+[document]
+</code></pre>
+<ul>
+<li>遍历所有先辈节点，包括soup本身，所以要区别判断</li>
+</ul>
+</li>
+</ul>
+<h3 id="标签树的平行遍历">标签树的平行遍历</h3>
+<p>平行遍历发生在同一个父节点下的各节点间</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.next_sibling</code></td>
+<td>返回按照HTML文本顺序的下一个平行节点标签</td>
+</tr>
+<tr>
+<td><code>.previous_sibling</code></td>
+<td>返回按照HTML文本顺序的上一个平行节点标签</td>
+</tr>
+<tr>
+<td><code>.next_siblings</code></td>
+<td>迭代类型，返回按照HTML文本顺序的后续所有平行节点标签</td>
+</tr>
+<tr>
+<td><code>.previous_siblings</code></td>
+<td>迭代类型，返回按照HTML文本顺序的前续所有平行节点标签</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>.next_sibling</code>&amp;<code>.previous_sibling</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.a.next_sibling
+' and '
+&gt;&gt;&gt; soup.a.next_sibling.next_sibling
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+&gt;&gt;&gt; soup.a.previous_sibling
+'Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n'
+&gt;&gt;&gt; soup.a.previous_sibling.previous_sibling
+&gt;&gt;&gt; soup.a.parent
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+</li>
+<li>
+<p><code>.next_siblings</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; for sibling in soup.a.next_siblings:
+	print(sibling)
+
+	
+ and 
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+.
+</code></pre>
+</li>
+<li>
+<p><code>.previous_siblings</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; for sibling in soup.a.previous_siblings:
+	print(sibling)
+
+	
+Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+</code></pre>
+</li>
+</ul>
+<h2 id="美化">美化</h2>
+<h3 id="bs4库的prettify方法">bs4库的prettify()方法</h3>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;http://python123.io/ws/demo.html&quot;)
+&gt;&gt;&gt; demo = r.text
+&gt;&gt;&gt; demo
+'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href=&quot;http://www.icourse163.org/course/BIT-268001&quot; class=&quot;py1&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; class=&quot;py2&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'
+&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.prettify()
+'&lt;html&gt;\n &lt;head&gt;\n  &lt;title&gt;\n   This is a python demo page\n  &lt;/title&gt;\n &lt;/head&gt;\n &lt;body&gt;\n  &lt;p class=&quot;title&quot;&gt;\n   &lt;b&gt;\n    The demo python introduces several python courses.\n   &lt;/b&gt;\n  &lt;/p&gt;\n  &lt;p class=&quot;course&quot;&gt;\n   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\n   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;\n    Basic Python\n   &lt;/a&gt;\n   and\n   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;\n    Advanced Python\n   &lt;/a&gt;\n   .\n  &lt;/p&gt;\n &lt;/body&gt;\n&lt;/html&gt;'
+&gt;&gt;&gt; print(soup.prettify())
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;title&gt;
+   This is a python demo page
+  &lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;p class=&quot;title&quot;&gt;
+   &lt;b&gt;
+    The demo python introduces several python courses.
+   &lt;/b&gt;
+  &lt;/p&gt;
+  &lt;p class=&quot;course&quot;&gt;
+   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+    Basic Python
+   &lt;/a&gt;
+   and
+   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;
+    Advanced Python
+   &lt;/a&gt;
+   .
+  &lt;/p&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li>
+<p>prettify()可用于标签，方法：<code>&lt;tag&gt;.prettify()</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; print(soup.a.prettify())
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+ Basic Python
+&lt;/a&gt;
+</code></pre>
+</li>
+</ul>
+<h3 id="bs4库的编码">bs4库的编码</h3>
+<ul>
+<li>
+<p>bs4库将任何HTML输入都变成utf‐8编码<br>
+Python 3.x默认支持编码是utf‐8,解析无障碍</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(&quot;&lt;p&gt;中文&lt;/p&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.p.string
+'中文'
+&gt;&gt;&gt; print(soup.p.prettify())
+&lt;p&gt;
+ 中文
+&lt;/p&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="基于bs4库的html内容查找方法">基于bs4库的HTML内容查找方法</h2>
+<p><b><code>&lt;&gt;.find_all(name, attrs, recursive, string, **kwargs)</code></b></p>
+<p>返回一个<strong>列表</strong>类型，存储查找的结果</p>
+<ul>
+<li>
+<p>name:对标签名称的检索字符串</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('a')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+&gt;&gt;&gt; soup.find_all(['a','b'])
+[&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;, &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+</code></pre>
+<ul>
+<li>
+<p>若标签名称为&quot;True&quot;，将显示所有标签信息:</p>
+<pre><code class="language-python">&gt;&gt;&gt; for tag in soup.find_all(True):
+	print(tag.name)
+
+html
+head
+title
+body
+p
+b
+p
+a
+a
+</code></pre>
+</li>
+<li>
+<p>若只想搜索有&quot;b&quot;的标签，用正则表达式库:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; for tag in soup.find_all(re.compile('b')):
+	print(tag.name)
+	
+body
+b
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>attrs:对标签属性值的检索字符串，可标注属性检索</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('p','course')
+[&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;]
+&gt;&gt;&gt; soup.find_all(id='link1')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;]
+</code></pre>
+</li>
+<li>
+<p>recursive:是否对子孙全部检索，默认True</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('a')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+&gt;&gt;&gt; soup.find_all('a',recursive=False)
+[]
+</code></pre>
+</li>
+<li>
+<p>string:&lt;&gt;…&lt;/&gt;中字符串区域的检索字符串</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all(string='Basic Python')
+['Basic Python']
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; soup.find_all(string=re.compile('python'))
+['This is a python demo page', 'The demo python introduces several python courses.']
+</code></pre>
+</li>
+</ul>
+<p><em><code>&lt;tag&gt;(..)</code>等价于<code>&lt;tag&gt;.find_all(..)</code><br>
+<code>soup(..)</code>等价于<code>soup.find_all(..)</code></em></p>
+<h3 id="扩展方法">扩展方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find()</code></td>
+<td>搜索且只返回一个结果，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_parents()</code></td>
+<td>在先辈节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_parent()</code></td>
+<td>在先辈节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_next_siblings()</code></td>
+<td>在后续平行节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_next_sibling()</code></td>
+<td>在后续平行节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_previous_siblings()</code></td>
+<td>在前序平行节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_previous_sibling()</code></td>
+<td>在前序平行节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-requests库5个实例]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/">
+        </link>
+        <updated>2020-02-26T13:46:20.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="实例1京东商品页面的爬取">实例1：京东商品页面的爬取</h2>
+<ul>
+<li>
+<p>https://item.jd.com/2967929.html</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;https://item.jd.com/2967929.html&quot;)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.encoding
+'gbk'
+&gt;&gt;&gt; r.text[:1000]
+'&lt;!DOCTYPE HTML&gt;\n&lt;html lang=&quot;zh-CN&quot;&gt;\n&lt;head&gt;\n    &lt;!-- shouji --&gt;\n    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gbk&quot; /&gt;\n    &lt;title&gt;【华为荣耀8】荣耀8 4GB+64GB 全网通4G手机 魅海蓝【行情 报价 价格 评测】-京东&lt;/title&gt;\n    &lt;meta name=&quot;keywords&quot; content=&quot;HUAWEI荣耀8,华为荣耀8,华为荣耀8报价,HUAWEI荣耀8报价&quot;/&gt;\n    &lt;meta name=&quot;description&quot; content=&quot;【华为荣耀8】京东JD.COM提供华为荣耀8正品行货，并包括HUAWEI荣耀8网购指南，以及华为荣耀8图片、荣耀8参数、荣耀8评论、荣耀8心得、荣耀8技巧等信息，网购华为荣耀8上京东,放心又轻松&quot; /&gt;\n    &lt;meta name=&quot;format-detection&quot; content=&quot;telephone=no&quot;&gt;\n    &lt;meta http-equiv=&quot;mobile-agent&quot; content=&quot;format=xhtml; url=//item.m.jd.com/product/2967929.html&quot;&gt;\n    &lt;meta http-equiv=&quot;mobile-agent&quot; content=&quot;format=html5; url=//item.m.jd.com/product/2967929.html&quot;&gt;\n    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge&quot;&gt;\n    &lt;link rel=&quot;canonical&quot; href=&quot;//item.jd.com/2967929.html&quot;/&gt;\n        &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//misc.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//static.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//img10.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns'
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+url = &quot;https://item.jd.com/2967929.html&quot;
+try:
+    r = requests.get(url)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[:1000])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例2亚马逊商品页面的爬取">实例2：亚马逊商品页面的爬取</h2>
+<ul>
+<li>
+<p>https://www.amazon.cn/gp/product/B01M8L5Z3Y</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;)
+&gt;&gt;&gt; r.status_code
+503
+&gt;&gt;&gt; r.encoding
+'ISO-8859-1'
+&gt;&gt;&gt; r.encoding = r.apparent_encoding
+&gt;&gt;&gt; r.text[2000:4000]
+'     &lt;i class=&quot;a-icon a-icon-alert&quot;&gt;&lt;/i&gt;\n                &lt;h4&gt;请输入您在下方看到的字符&lt;/h4&gt;\n                &lt;p class=&quot;a-last&quot;&gt;抱歉，我们只是想确认一下当前访问者并非自动程序。为了达到最佳效果，请确保您浏览器上的 Cookie 已启用。&lt;/p&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n\n            &lt;div class=&quot;a-section&quot;&gt;\n\n                &lt;div class=&quot;a-box a-color-offset-background&quot;&gt;\n                    &lt;div class=&quot;a-box-inner a-padding-extra-large&quot;&gt;\n\n                        &lt;form method=&quot;get&quot; action=&quot;/errors/validateCaptcha&quot; name=&quot;&quot;&gt;\n                            &lt;input type=hidden name=&quot;amzn&quot; value=&quot;NXqI635zDoDHEcNtYuDg/A==&quot; /&gt;&lt;input type=hidden name=&quot;amzn-r&quot; value=&quot;&amp;#047;gp&amp;#047;product&amp;#047;B01M8L5Z3Y&quot; /&gt;\n                            &lt;div class=&quot;a-row a-spacing-large&quot;&gt;\n                                &lt;div class=&quot;a-box&quot;&gt;\n                                    &lt;div class=&quot;a-box-inner&quot;&gt;\n                                        &lt;h4&gt;请输入您在这个图片中看到的字符：&lt;/h4&gt;\n                                        &lt;div class=&quot;a-row a-text-center&quot;&gt;\n                                            &lt;img src=&quot;https://images-na.ssl-images-amazon.com/captcha/kwizfixk/Captcha_rowfabxzxk.jpg&quot;&gt;\n                                        &lt;/div&gt;\n                                        &lt;div class=&quot;a-row a-spacing-base&quot;&gt;\n                                            &lt;div class=&quot;a-row&quot;&gt;\n                                                &lt;div class=&quot;a-column a-span6&quot;&gt;\n                                                    &lt;label for=&quot;captchacharacters&quot;&gt;输入字符&lt;/label&gt;\n                                                &lt;/div&gt;\n                                                &lt;div class=&quot;a-column a-span6 a-span-last a-text-right&quot;&gt;\n                                                    &lt;a onclick=&quot;window.location.reload()&quot;&gt;换一张图&lt;/a&gt;\n                                                &lt;/div&gt;\n                                            &lt;/div&gt;\n                                            &lt;input autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; id=&quot;captchacharacters&quot; name=&quot;field-keywords&quot; class=&quot;a-span12&quot; autocapitalize=&quot;off&quot; autoc'
+&gt;&gt;&gt; r.request.headers
+{'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+&gt;&gt;&gt; kv = {'User-Agent':'Mozilla/5.0'}
+&gt;&gt;&gt; url = &quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;
+&gt;&gt;&gt; r = requests.get(url,headers = kv)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.request.headers
+{'User-Agent': 'Mozilla/5.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+&gt;&gt;&gt; r.encoding = r.apparent_encoding
+&gt;&gt;&gt; r.text[5000:8000]
+'mall a-size-mini&quot;&gt;\n            &lt;a href=&quot;https://www.amazon.cn/gp/help/customer/display.html/ref=footer_claim?ie=UTF8&amp;nodeId=200347160&quot;&gt;使用条件&lt;/a&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;a href=&quot;https://www.amazon.cn/gp/help/customer/display.html/ref=footer_privacy?ie=UTF8&amp;nodeId=200347130&quot;&gt;隐私声明&lt;/a&gt;\n        &lt;/div&gt;\n\n        &lt;div class=&quot;a-text-center a-size-mini a-color-secondary&quot;&gt;\n          &amp;copy; 1996-2015, Amazon.com, Inc. or its affiliates\n          &lt;script&gt;\n           if (true === true) {\n             document.write(\'&lt;img src=&quot;https://fls-cn.amaz\'+\'on.cn/\'+\'1/oc-csi/1/OP/requestId=K1C54EGF6KEV9G4R3MCY&amp;js=1&quot; /&gt;\');\n           };\n          &lt;/script&gt;\n          &lt;noscript&gt;\n            &lt;img src=&quot;https://fls-cn.amazon.cn/1/oc-csi/1/OP/requestId=K1C54EGF6KEV9G4R3MCY&amp;js=0&quot; /&gt;\n          &lt;/noscript&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;script&gt;\n    if (true === true) {\n        var elem = document.createElement(&quot;script&quot;);\n        elem.src = &quot;https://images-cn.ssl-images-amazon.com/images/G/01/csminstrumentation/csm-captcha-instrumentation.min._V&quot; + (+ new Date()) + &quot;_.js&quot;;\n        document.getElementsByTagName(\'head\')[0].appendChild(elem);\n    }\n    &lt;/script&gt;\n&lt;/body&gt;&lt;/html&gt;\n'
+</code></pre>
+</li>
+<li>
+<p>全代码</p>
+<pre><code class="language-python">import requests
+url = &quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;
+try:
+    kv = {'User-Agent':'Mozilla/5.0'}
+    r= requests.get(url,headers=kv)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[5000:8000])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例3百度360搜索关键字提交">实例3：百度/360搜索关键字提交</h2>
+<ul>
+<li>
+<p>百度:http://www.baidu.com</p>
+<ul>
+<li>
+<p>关键词提交接口:http://www.baidu.com/s?wd=keyword</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; url = &quot;https://baidu.com/s&quot;
+&gt;&gt;&gt; kv = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+&gt;&gt;&gt; r = requests.get(url,params={'wd':'python'},headers=kv)
+&gt;&gt;&gt; r.request.url
+'https://www.baidu.com/s?wd=python'
+&gt;&gt;&gt; len(r.text)
+442673
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+keyword = &quot;python&quot;
+try:
+    kv = {'wd':keyword}
+    header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+    r = requests.get(&quot;https://www.baidu.com/s&quot;,params=kv,headers=header)
+    print(r.request.url)
+    r.raise_for_status()
+    print(len(r.text))
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+<p><strong>算了我太菜了，百度总是出现“百度安全验证”，我搞不定，以后再说吧</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>360:http://www.so.com</p>
+<ul>
+<li>
+<p>关键词提交接口:http://www.so.com/s?q=keyword</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; kv = {'q':'python'}
+&gt;&gt;&gt; r = requests.get(&quot;https://www.so.com/s&quot;,params=kv)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.request.url
+'https://www.so.com/s?q=python'
+&gt;&gt;&gt; len(r.text)
+306321
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+keyword = &quot;python&quot;
+try:
+    kv = {'q':keyword}
+    r = requests.get(&quot;https://www.so.com/s&quot;,params=kv)
+    print(r.request.url)
+    r.raise_for_status()
+    print(len(r.text))
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实例4网络图片的爬取和存储">实例4：网络图片的爬取和存储</h2>
+<ul>
+<li>
+<p>图片地址:http://image.ngchina.com.cn/userpic/108164/2020/02201212391081641822.jpeg</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; path = &quot;F://photo//national_geographic//test.jpg&quot;
+&gt;&gt;&gt; url = &quot;http://image.ngchina.com.cn/userpic/108164/2020/02201212391081641822.jpeg&quot;
+&gt;&gt;&gt; r = requests.get(url)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; with open(path,'wb') as f:
+	f.write(r.content)
+984200
+&gt;&gt;&gt; f.close()
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+import os
+url = &quot;http://image.ngchina.com.cn/userpic/99679/2019/0615110031996794986.jpeg&quot;
+root = &quot;F://photo//scenery//&quot;
+path = root + url.split('/')[-1]
+try:
+    if not os.path.exists(root):
+        os.mkdir(root)
+    if not os.path.exists(path):
+        r = requests.get(url)
+        with open(path,'wb') as f:
+            f.write(r.content)
+            f.close()
+            print(&quot;文件保存成功&quot;)
+    else:
+        print(&quot;文件已存在&quot;)
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例5ip地址归属地的自动查询">实例5：IP地址归属地的自动查询</h2>
+<ul>
+<li>
+<p>http://m.ip138.com/ip.asp?ip=ipaddress</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+&gt;&gt;&gt; url = &quot;http://m.ip138.com/ip.asp?ip=&quot;
+&gt;&gt;&gt; r = requests.get(url+'202.204.80.112',headers=header)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.text[-500:]
+'alue=&quot;查询&quot; class=&quot;form-btn&quot; /&gt;\r\n\t\t\t\t\t&lt;/form&gt;\r\n\t\t\t\t&lt;/div&gt;\r\n\t\t\t\t&lt;div class=&quot;query-hd&quot;&gt;ip138.com IP查询(搜索IP地址的地理位置)&lt;/div&gt;\r\n\t\t\t\t&lt;h1 class=&quot;query&quot;&gt;您查询的IP：202.204.80.112&lt;/h1&gt;&lt;p class=&quot;result&quot;&gt;本站主数据：北京市海淀区 北京理工大学 教育网&lt;/p&gt;&lt;p class=&quot;result&quot;&gt;参考数据一：北京理工大学 网络中心&lt;/p&gt;\r\n\r\n\t\t\t&lt;/div&gt;\r\n\t\t&lt;/div&gt;\r\n\r\n\t\t&lt;div class=&quot;footer&quot;&gt;\r\n\t\t\t&lt;a href=&quot;http://www.miitbeian.gov.cn/&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;沪ICP备10013467号-1&lt;/a&gt;\r\n\t\t&lt;/div&gt;\r\n\t&lt;/div&gt;\r\n\r\n\t&lt;script type=&quot;text/javascript&quot; src=&quot;/script/common.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;\r\n&lt;/html&gt;\r\n'
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+url = &quot;http://m.ip138.com/ip.asp?ip=&quot;
+try:
+    r = requests.get(url+&quot;202.204.80.112&quot;,headers=header)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[-500:])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-requests库入门]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-requests-ku-ru-men/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-ru-men/">
+        </link>
+        <updated>2020-02-25T15:08:52.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="http协议">HTTP协议</h2>
+<p><strong>HTTP，Hypertext Transfer Protocol，超文本传输协议</strong></p>
+<ul>
+<li>
+<p>HTTP是一个基于“请求与响应”模式的、无状态的应用层协议</p>
+</li>
+<li>
+<p>HTTP协议采用URL作为定位网络资源的标识，URL格式如下：</p>
+<p><code>http://host[:port][path]</code></p>
+<ul>
+<li>host: 合法的Internet主机域名或IP地址</li>
+<li>port: 端口号，缺省端口为80</li>
+<li>path: 请求资源的路径</li>
+</ul>
+</li>
+<li>
+<p>方法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GET</td>
+<td>请求获取URL位置的资源</td>
+</tr>
+<tr>
+<td style="text-align:center">HEAD</td>
+<td>HEAD 请求获取URL位置资源的响应消息报告，即获得该资源的头部信息</td>
+</tr>
+<tr>
+<td style="text-align:center">POST</td>
+<td>POST 请求向URL位置的资源后附加新的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">PUT</td>
+<td>PUT 请求向URL位置存储一个资源，覆盖原URL位置的资源</td>
+</tr>
+<tr>
+<td style="text-align:center">PATCH</td>
+<td>PATCH 请求局部更新URL位置的资源，即改变该处资源的部分内容</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td>DELETE 请求删除URL位置存储的资源</td>
+</tr>
+</tbody>
+</table>
+ <div class="mermaid">
+     graph LR
+     PC --URL-->cloud
+     PC --"PUT POST PATCH DELETE"-->cloud
+     cloud --"GET HEAD"-->PC
+</div>
+</li>
+</ul>
+<h3 id="patch和put的区别"><em>PATCH和PUT的区别</em></h3>
+<p>假设URL位置有一组数据UserInfo，包括UserID、UserName等20个字段<br>
+需求：用户修改了UserName，其他不变</p>
+<ul>
+<li>采用PATCH，仅向URL提交UserName的局部更新请求</li>
+<li>采用PUT，必须将所有20个字段一并提交到URL，未提交字段被删除</li>
+</ul>
+<p>PATCH的最主要好处：节省网络带宽</p>
+<h2 id="requests库的2个重要对象">requests库的2个重要对象</h2>
+<p><code>r = requests.get(url)</code></p>
+<ul>
+<li><strong><code>r</code>为Response对象:包含爬虫返回的内容</strong></li>
+<li>request对象:请求数据的载体</li>
+</ul>
+<h3 id="response对象的属性">response对象的属性</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>r.status_code</code></td>
+<td>HTTP请求的返回状态，200表示连接成功，404表示失败</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>r.text</code></td>
+<td>HTTP响应内容的字符串形式，即，url对应的页面内容</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>r.encoding</code></td>
+<td>从HTTP header中猜测的响应内容编码方式</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>r.apparent_encoding</code></td>
+<td>从内容中分析出的响应内容编码方式（备选编码方式）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>r.content</code></td>
+<td>HTTP响应内容的二进制形式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="requests库7个主要方法">requests库7个主要方法</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>requests.request()</code></td>
+<td>构造一个请求，支撑以下各方法的基础方法</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.get()</code></td>
+<td>获取HTML网页的主要方法，对应于HTTP的GET</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.head()</code></td>
+<td>获取HTML网页头信息的方法，对应于HTTP的HEAD</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.post()</code></td>
+<td>向HTML网页提交POST请求的方法，对应于HTTP的POST</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.put()</code></td>
+<td>向HTML网页提交PUT请求的方法，对应于HTTP的PUT</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.patch()</code></td>
+<td>向HTML网页提交局部修改请求，对应于HTTP的PATCH</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.delete()</code></td>
+<td>requests.delete() 向HTML页面提交删除请求，对应于HTTP的DELETE</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>requests.request(method, url, **kwargs)</code></p>
+<ul>
+<li>
+<p>method : 请求方式，对应get/put/post等7种</p>
+<pre><code class="language-python">r = requests.request('GET', url, **kwargs)
+r = requests.request('HEAD', url, **kwargs)
+r = requests.request('POST', url, **kwargs)
+r = requests.request('PUT', url, **kwargs)
+r = requests.request('PATCH', url, **kwargs)
+r = requests.request('delete', url, **kwargs)
+r = requests.request('OPTIONS', url, **kwargs)
+</code></pre>
+</li>
+<li>
+<p>url : 拟获取页面的url链接</p>
+</li>
+<li>
+<p>**kwargs: 控制访问的参数，共13个</p>
+<ul>
+<li>
+<p>params : 字典或字节序列，作为参数增加到url中</p>
+<pre><code class="language-python">&gt;&gt;&gt; kv = {'key1': 'value1', 'key2': 'value2'}
+&gt;&gt;&gt; r = requests.request('GET', 'http://python123.io/ws', params=kv)
+&gt;&gt;&gt; print(r.url)
+http://python123.io/ws?key1=value1&amp;key2=value2
+</code></pre>
+</li>
+<li>
+<p>data : 字典、字节序列或文件对象，作为Request的内容</p>
+<pre><code class="language-python">&gt;&gt;&gt; kv = {'key1': 'value1', 'key2': 'value2'}
+&gt;&gt;&gt; r = requests.request('POST', 'http://python123.io/ws', data=kv)
+&gt;&gt;&gt; body = '主体内容'
+&gt;&gt;&gt; r = requests.request('POST', 'http://python123.io/ws', data=body)
+</code></pre>
+</li>
+<li>
+<p>json : JSON格式的数据，作为Request的内容</p>
+<pre><code class="language-python">&gt;&gt;&gt; kv = {'key1': 'value1'}
+&gt;&gt;&gt; r = requests.request('POST', 'http://python123.io/ws', json=kv)
+</code></pre>
+</li>
+<li>
+<p>headers : 字典，HTTP定制头</p>
+<pre><code class="language-python">&gt;&gt;&gt; hd = {'user‐agent': 'Chrome/10'}
+&gt;&gt;&gt; r = requests.request('POST', 'http://python123.io/ws', headers=hd)
+</code></pre>
+</li>
+<li>
+<p>cookies : 字典或CookieJar，Request中的cookie</p>
+</li>
+<li>
+<p>auth : 元组，支持HTTP认证功能</p>
+</li>
+<li>
+<p>files : 字典类型，传输文件</p>
+<pre><code class="language-python">&gt;&gt;&gt; fs = {'file': open('data.xls', 'rb')}
+&gt;&gt;&gt; r = requests.request('POST', 'http://python123.io/ws', files=fs)
+</code></pre>
+</li>
+<li>
+<p>timeout : 设定超时时间，秒为单位</p>
+<pre><code class="language-python">&gt;&gt;&gt; r = requests.request('GET', 'http://www.baidu.com', timeout=10)
+</code></pre>
+</li>
+<li>
+<p>proxies : 字典类型，设定访问代理服务器，可以增加登录认证</p>
+<pre><code class="language-python">&gt;&gt;&gt; pxs = { 'http': 'http://user:pass@10.10.10.1:1234','https': 'https://10.10.10.1:4321' }
+&gt;&gt;&gt; r = requests.request('GET', 'http://www.baidu.com', proxies=pxs)
+</code></pre>
+</li>
+<li>
+<p>allow_redirects : True/False，默认为True，重定向开关</p>
+</li>
+<li>
+<p>stream : True/False，默认为True，获取内容立即下载开关</p>
+</li>
+<li>
+<p>verify : True/False，默认为True，认证SSL证书开关</p>
+</li>
+<li>
+<p>cert : 本地SSL证书路径</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>requests.get(url, params=None, **kwargs)</code></p>
+<ul>
+<li>
+<p>url : 拟获取页面的url链接</p>
+</li>
+<li>
+<p>params : url中的额外参数，字典或字节流格式，可选</p>
+</li>
+<li>
+<p>**kwargs: 12个控制访问的参数</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>requests.head(url, **kwargs)</code></p>
+<ul>
+<li>
+<p>url : 拟获取页面的url链接</p>
+</li>
+<li>
+<p>**kwargs: 12个控制访问的参数</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>requests.post(url, data=None, json=None, **kwargs)</code></p>
+<ul>
+<li>url : 拟更新页面的url链接</li>
+<li>data : 字典、字节序列或文件，Request的内容</li>
+<li>json : JSON格式的数据，Request的内容</li>
+<li>**kwargs: 12个控制访问的参数</li>
+</ul>
+</li>
+<li>
+<p><code>requests.put(url, data=None, **kwargs)</code></p>
+<ul>
+<li>url : 拟更新页面的url链接</li>
+<li>data : 字典、字节序列或文件，Request的内容</li>
+<li>**kwargs: 12个控制访问的参数</li>
+</ul>
+</li>
+<li>
+<p><code>requests.patch(url, data=None, **kwargs)</code></p>
+<ul>
+<li>url : 拟更新页面的url链接</li>
+<li>data : 字典、字节序列或文件，Request的内容</li>
+<li>**kwargs: 12个控制访问的参数</li>
+</ul>
+</li>
+<li>
+<p><code>requests.delete(url, **kwargs)</code></p>
+<ul>
+<li>url : 拟删除页面的url链接</li>
+<li>**kwargs: 12个控制访问的参数</li>
+</ul>
+</li>
+</ul>
+<h2 id="通用代码框架">通用代码框架</h2>
+<h3 id="requests库的异常">requests库的异常</h3>
+<ul>
+<li>
+<p><code>r.raise_for_status()</code>:如果不是200，则产生异常requests.HTTPError</p>
+<p><em>在方法内部判断r.status_code是否等于200，不需要增加额外的if语句，该语句便于利用try‐except进行异常处理</em></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">异常</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>requests.ConnectionError</code></td>
+<td>网络连接错误异常，如DNS查询失败、拒绝连接等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.HTTPError</code></td>
+<td>HTTP错误异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.URLRequired</code></td>
+<td>URL缺失异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.TooManyRedirects</code></td>
+<td>超过最大重定向次数，产生重定向异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.ConnectTimeout</code></td>
+<td>连接远程服务器超时异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>requests.Timeout</code></td>
+<td>请求URL超时，产生超时异常</td>
+</tr>
+</tbody>
+</table>
+<h3 id="爬取网页的通用代码框架">爬取网页的通用代码框架</h3>
+<pre><code class="language-python">import requests
+
+def getHTMLText(url):
+    try:
+        r = requests.get(url,timeout=30)
+        r.raise_for_status()#若状态不是200，引发HTTPError异常
+        r.encoding = r.apparent_encoding
+        return r.text
+    except:
+        return &quot;产生异常&quot;
+
+if _name_ == &quot;_main_&quot;:
+    url = &quot;http://www.baidu.com&quot;
+    print(getHTMLText(url))
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-os库初学]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/os-ku-chu-xue/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/os-ku-chu-xue/">
+        </link>
+        <updated>2020-02-22T13:51:21.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>os库是Python标准库，包含几百个函数</li>
+<li>常用路径操作、进程管理、环境参数等几类</li>
+</ul>
+<h2 id="路径操作">路径操作</h2>
+<ul>
+<li>
+<p>os.path子库，处理文件路径及信息</p>
+<p><code>import os.path</code>或<code>import os.path as op</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>os.path.abspath(path)</code></td>
+<td>返回path在当前系统中的绝对路径<br/><code>&gt;&gt;&gt;os.path.abspath(&quot;file.txt&quot;)</code><br/><code>'C:\\Users\\Tian Song\\Python36-32\\file.txt'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.normpath(path)</code></td>
+<td>归一化path的表示形式，统一用\分隔路径<br/><code>&gt;&gt;&gt;os.path.normpath(&quot;D://PYE//file.txt&quot;)</code><br/><code>'D:\\PYE\\file.txt'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.relpath(path)</code></td>
+<td>返回当前程序与文件之间的相对路径(relativepath)<br/><code>&gt;&gt;&gt;os.path.relpath(&quot;C://PYE//file.txt&quot;)</code><br/><code>'..\\..\\..\\..\\..\\..\\..\\PYE\\file.txt'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.dirname(path)</code></td>
+<td>返回path中的目录名称<br/><code>&gt;&gt;&gt;os.path.dirname(&quot;D://PYE//file.txt&quot;)</code><br/><code>'D://PYE'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.basename(path)</code></td>
+<td>返回path中最后的文件名称<br/><code>&gt;&gt;&gt;os.path.basename(&quot;D://PYE//file.txt&quot;)</code><br/><code>'file.txt'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.join(path,*paths)</code></td>
+<td>组合path与paths，返回一个路径字符串<br/><code>&gt;&gt;&gt;os.path.join(&quot;D:/&quot;,&quot;PYE/file.txt&quot;)</code><br/><code>'D:/PYE/file.txt'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.exists(path)</code></td>
+<td>判断path对应文件或目录是否存在，返回True或False<br/><code>&gt;&gt;&gt;os.path.exists(&quot;D://PYE//file.txt&quot;)</code><br/><code>False</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.isfile(path)</code></td>
+<td>判断path所对应是否为已存在的文件，返回True或False<br/><code>&gt;&gt;&gt;os.path.isfile(&quot;D://PYE//file.txt&quot;)</code><br/><code>True</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.isdir(path)</code></td>
+<td>判断path所对应是否为已存在的目录，返回True或False<br/><code>&gt;&gt;&gt;os.path.isdir(&quot;D://PYE//file.txt&quot;)</code><br/><code>False</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.getatime(path)</code></td>
+<td>返回path对应文件或目录上一次的访问时间<br/><code>&gt;&gt;&gt;os.path.getatime(&quot;D:/PYE/file.txt&quot;)</code><br/><code>1518356633.7551725</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.getmtime(path)</code></td>
+<td>返回path对应文件或目录最近一次的修改时间<br/><code>&gt;&gt;&gt;os.path.getmtime(&quot;D:/PYE/file.txt&quot;)</code><br/><code>1518356633.7551725</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.getctime(path)</code></td>
+<td>返回path对应文件或目录的创建时间<br/><code>&gt;&gt;time.ctime(os.path.getctime(&quot;D:/PYE/file.txt&quot;))</code><br/><code>'Sun Feb 11 21:43:53 2018'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.path.getsize(path)</code></td>
+<td>返回path对应文件的大小，以字节为单位<br/><code>&gt;&gt;&gt;os.path.getsize(&quot;D:/PYE/file.txt&quot;)</code><br/><code>180768</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="进程管理">进程管理</h2>
+<ul>
+<li>
+<p>启动系统中其他程序</p>
+<p><code>os.system(command)</code></p>
+<pre><code class="language-python">import os
+os.system(&quot;C:\\Windows\\System32\\calc.exe&quot;)
+&gt;&gt;&gt;
+0
+#打开“计算器”，成功则返回“0”
+</code></pre>
+</li>
+</ul>
+<h2 id="环境参数">环境参数</h2>
+<ul>
+<li>
+<p>获得系统软硬件信息等环境参数</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>os.chdir(path)</code></td>
+<td>修改当前程序操作的路径<br/><code>&gt;&gt;&gt;os.chdir(&quot;D:&quot;)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.getcwd()</code></td>
+<td>返回程序的当前路径<br/><code>&gt;&gt;&gt;os.getcwd()</code><br/><code>'D:\\'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.getlogin()</code></td>
+<td>获得当前系统登录用户名称<br/><code>&gt;&gt;&gt;os.getlogin()</code><br/><code>'Tian Song'</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.cpu_count()</code></td>
+<td>获得当前系统的CPU数量<br/><code>&gt;&gt;&gt;os.cpu_count()</code><br/><code>8</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>os.urandom(n)</code></td>
+<td>获得n个字节长度的随机字符串，通常用于加解密运算<br/><code>&gt;&gt;&gt;os.urandom(10)</code><br/><code>b'7\xbe\xf2!\xc1=\x01gL\xb3'</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-wordcloud库]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-wordcloud-ku/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-wordcloud-ku/">
+        </link>
+        <updated>2020-02-15T07:55:05.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="基本使用">基本使用</h2>
+<ul>
+<li>wordcloud.WordCloud()代表一个文本对应的词云</li>
+<li>可以根据文本中词语出现的频率等参数绘制词云</li>
+<li>词云的绘制形状、尺寸和颜色都可以设定</li>
+</ul>
+<h2 id="常规方法">常规方法</h2>
+<p><code>w = wordcloud.WordCloud()</code></p>
+<ul>
+<li>
+<p>以WordCloud对象为基础</p>
+</li>
+<li>
+<p>配置参数、加载文本、输出文件</p>
+<p>|         方法          | 描述                                                         |<br>
+| :-------------------: | ------------------------------------------------------------ |<br>
+|   <code>w.generate(txt)</code>   | 向WordCloud对象w中加载文本txt<br/><code>&gt;&gt;&gt;w.generate(&quot;Python and WordCloud&quot;)</code> |<br>
+| <code>w.to_file(filename)</code> | 将词云输出为图像文件，.png或.jpg格式<br/><code>&gt;&gt;&gt;w.to_file(&quot;outfile.png&quot;)</code> |</p>
+<pre><code class="language-python">import wordcloud
+c = wordcloud.WordCloud()		#配置对象参数
+c.generate(&quot;wordcloudby Python&quot;)#加载词云文本
+c.to_file(&quot;pywordcloud.png&quot;)	#输出词云文件
+</code></pre>
+</li>
+</ul>
+<h3 id="配置对象参数">配置对象参数</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>width</code></td>
+<td>指定词云对象生成图片的宽度，默认400像素<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(width=600)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>height</code></td>
+<td>指定词云对象生成图片的高度，默认200像素<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(height=400)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>min_font_size</code></td>
+<td>指定词云中字体的最小字号，默认4号<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(min_font_size=10)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>max_font_size</code></td>
+<td>指定词云中字体的最大字号，根据高度自动调节<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(max_font_size=20)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>font_step</code></td>
+<td>指定词云中字体字号的步进间隔，默认为1<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(font_step=2)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>font_path</code></td>
+<td>指定字体文件的路径，默认None<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(font_path=&quot;msyh.ttc&quot;)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>max_words</code></td>
+<td>指定词云显示的最大单词数量，默认200<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(max_words=20)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>stop_words</code></td>
+<td>指定词云的排除词列表，即不显示的单词列表<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(stop_words={&quot;Python&quot;})</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>mask</code></td>
+<td>指定词云形状，默认为长方形，需要引用imread()函数<br/><code>&gt;&gt;&gt;from scipy.miscimport imread&lt;br/&gt;``&gt;&gt;&gt;mk=imread(&quot;pic.png&quot;)</code><br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(mask=mk)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>background_color</code></td>
+<td>指定词云图片的背景颜色，默认为黑色<br/><code>&gt;&gt;&gt;w=wordcloud.WordCloud(background_color=&quot;white&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python关于文件的学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-guan-yu-wen-jian-de-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-guan-yu-wen-jian-de-xue-xi/">
+        </link>
+        <updated>2020-02-15T06:51:35.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="文件的打开">文件的打开</h2>
+<p><code>&lt;变量名&gt;=open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">'r'</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td style="text-align:center">'w'</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td style="text-align:center">'x'</td>
+<td>创建写模式，文件不存在则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td style="text-align:center">'a'</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td style="text-align:center">'b'</td>
+<td>二进制文件模式</td>
+</tr>
+<tr>
+<td style="text-align:center">'t'</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td style="text-align:center">'+'</td>
+<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">f = open(&quot;f.txt&quot;)		#文本形式、只读模式、默认值
+f = open(&quot;f.txt&quot;, &quot;rt&quot;)	#文本形式、只读模式、同默认值
+f = open(&quot;f.txt&quot;, &quot;w&quot;)	#文本形式、覆盖写模式
+f = open(&quot;f.txt&quot;, &quot;a+&quot;)	#文本形式、追加写模式+ 读文件
+f = open(&quot;f.txt&quot;, &quot;x&quot;)	#文本形式、创建写模式
+f = open(&quot;f.txt&quot;, &quot;b&quot;)	#二进制形式、只读模式
+f = open(&quot;f.txt&quot;, &quot;wb&quot;)	#二进制形式、覆盖写模式
+</code></pre>
+<h2 id="文件内容的读取">文件内容的读取</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度<br/><code>&gt;&gt;&gt;s = f.read(2)</code><br/><code>中国</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度<br/><code>&gt;&gt;&gt;s = f.readline()</code><br/><code>中国是一个伟大的国家！</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表<br/>如果给出参数，读入前hint行<br/><code>&gt;&gt;&gt;s = f.readlines()</code><br/><code>['中国是一个伟大的国家！']</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件的全文本操作">文件的全文本操作</h3>
+<ul>
+<li>
+<pre><code class="language-python">#一次读入，统一处理
+fname = input(&quot;请输入要打开的文件名称:&quot;)
+fo= open(fname,&quot;r&quot;)
+txt = fo.read()
+#对全文txt进行处理
+fo.close()
+</code></pre>
+</li>
+<li>
+<pre><code class="language-python">#按数量读入，逐步处理
+fname = input(&quot;请输入要打开的文件名称:&quot;)
+fo = open(fname,&quot;r&quot;)
+txt = fo.read(2)
+while txt != &quot;&quot;:
+#对txt进行处理
+txt = fo.read(2)
+fo.close()
+</code></pre>
+</li>
+</ul>
+<h3 id="文件的逐行操作">文件的逐行操作</h3>
+<ul>
+<li>
+<pre><code class="language-python">#一次读入，分行处理
+fname= input(&quot;请输入要打开的文件名称:&quot;)
+fo= open(fname,&quot;r&quot;)
+for line in fo.readlines():
+print(line)
+fo.close()
+</code></pre>
+</li>
+<li>
+<pre><code class="language-python">#分行读入，逐行处理
+fname = input(&quot;请输入要打开的文件名称:&quot;)
+fo = open(fname,&quot;r&quot;)
+for line in fo:
+print(line)
+fo.close()
+</code></pre>
+</li>
+</ul>
+<h2 id="数据的文件写入">数据的文件写入</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.write(s)</code></td>
+<td>向文件写入一个字符串或字节流<br/><code>&gt;&gt;&gt;f.write(&quot;中国是一个伟大的国家!&quot;)</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.writelines(lines)</code></td>
+<td>将一个元素全为字符串的列表写入文件<br/><code>&gt;&gt;&gt;ls = [&quot;中国&quot;,&quot;法国&quot;,&quot;美国&quot;]</code><br/><code>&gt;&gt;&gt;f.writelines(ls)</code><br/><code>中国法国美国</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;f&gt;.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset含义如下：<br/>0 –文件开头；1 –当前位置；2 –文件结尾<br/><code>&gt;&gt;&gt;f.seek(0) #回到文件开头</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>没有任何输出</p>
+<pre><code class="language-python">#写入一个字符串列表
+fo= open(&quot;output.txt&quot;,&quot;w+&quot;)
+ls = [&quot;中国&quot;,&quot;法国&quot;,&quot;美国&quot;]
+fo.writelines(ls)
+for line in fo:
+    print(line)
+fo.close()
+</code></pre>
+</li>
+<li>
+<p>输出</p>
+<pre><code class="language-python">#写入一个字符串列表
+fo= open(&quot;output.txt&quot;,&quot;w+&quot;)
+ls = [&quot;中国&quot;,&quot;法国&quot;,&quot;美国&quot;]
+fo.writelines(ls)
+fo.seek(0)
+for line in fo:
+    print(line)
+fo.close()
+</code></pre>
+</li>
+</ul>
+<h2 id="文件的关闭">文件的关闭</h2>
+<p><code>&lt;变量名&gt;.close()</code></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[局外观]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/ju-wai-guan/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/ju-wai-guan/">
+        </link>
+        <updated>2020-02-07T09:04:29.000Z</updated>
+        <content type="html"><![CDATA[<p>古人云：“不识庐山真面目，只缘身在此山中。”</p>
+<p>题目说：“如果你一直向上看，你就觉得自己在下面；如果你一直向下看，你就觉得自己在上面。”</p>
+<p>身处的位置决定了各人的视角。</p>
+<p>譬如罢，有一位登山者，他站在山脚准备攀登。登山者遥望山顶，他已经做好了充足的准备。此刻，他在向上看。登山者艰辛地向上爬，汗流浃背。爬到一半，登山者觉得有些累了，他向下望去，到山脚的路很长，是他辛辛苦苦爬上来的，登山者顿觉自豪，认为自己爬得已经够多了；再向上看，他与山顶之间的路也同样很长，遥遥无期，日已过午，他不知何时才能与山顶相见，浑身突然抖擞了起来，向山顶迈去。终于，千辛万苦到了山顶，登山者叉腰站在上面，抹一把汗，向下望去，风景尽收眼底，不住吟诗一句：“不畏浮云遮望眼，自缘身在最高层。”</p>
+<p>在这个故事中我们可以发现，当登山者在山脚时，他只需向上看，而不必在意下边，毕竟山脚在“山”这个整体之中是最底下的一部分；而在山腰时，登山者已经爬过了许多，同样也还有很多路没有触及，所以他既需要向下看增加信心，也需要向上看增强动力；那么，在山顶之时，登山者便只需放眼望，看山下风景如画，山中小路蜿蜒，满是他的汗水。</p>
+<p>于是我们得出一个结论：无论是向上看或是向下看，都有其应有的用处或其独特的视角。</p>
+<p>然而，有一点需注意到，无论是向上看亦或是向下看，都是在山中。</p>
+<p>再譬如罢， 这位登山者实际上在做一份视频，他的上方实际上有一个回旋着的无人机在航拍。为了做出效果，这个无人机时而盘旋在登山者的头上时而飞到更远的地方去。于是在后期，我们可以清楚的看到登山者相对于整座山的位置。</p>
+<p>这，恰恰又是另外一番视角。</p>
+<p>正如俗语所言：“旁观者迷，当局者清。”</p>
+<p>在登山者的位置上，我们似乎局限地向上或向下看；可若是在无人机的位置上，却是一览无遗，无论在前遥不可及的山顶还是在后踏过千万遍的路途。</p>
+<p>所以，为何不像无人机一般，跳出来，如旁观者看。</p>
+<p>识得庐山真面目，不应处于此山中。</p>
+<p><em>2020.2.7</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使命]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/shi-ming/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/shi-ming/">
+        </link>
+        <updated>2020-01-30T08:35:33.000Z</updated>
+        <content type="html"><![CDATA[<p>而创造这中国历史上未曾有过的第三样时代，则是现在的青年的使命！</p>
+<p align="right">——《灯下漫笔》鲁迅</p>
+<p>使命，是什么？</p>
+<p>在百度百科中，有那么两种解释：一是指奉命出行，奉命办事的人；二是指应尽的重大责任。在当代的语境下，则明显是后者。</p>
+<p>应尽的重大责任。</p>
+<p>这令我想到了在这段时间与病毒作斗争的医生们。</p>
+<p>2020一开年就遭遇了病毒的侵袭，可谓措手不及。从一开始的不重视到后来极度严重，不过短短十几二十天的时间，病毒的传染性可见一斑。从病情初发，全国各地的医护人员便陆陆续续地赶赴战场。</p>
+<p>正值春节，我不知道有多少医护人员放下手中的团圆饭，整理战服，以生命为背，奔赴一线。面对着医疗物资紧缺，病人态度不佳，上级领导层面欺上瞒下等一系列恶劣环境，他们依然站在病床前，身着好几天都无法更换的防护服，与病魔作斗争。</p>
+<p>他们，一直坚守着使命。</p>
+<p>鲁迅先生曾有这么一篇文章讲到，中国历史，直截了当地说只有两个时代：“一、想做奴隶而不得的时代；二、暂时做稳了奴隶的时代。”</p>
+<p>一针见血。</p>
+<p>先生的话未尽，又说：“但是，无须反顾，因为前面还有道路在。而创造这中国历史上未曾有过的第三样时代，则是现在的青年的使命！”</p>
+<p>青年的使命可谓重矣。</p>
+<p>使命是什么，是：应尽的重大责任。</p>
+<p>责任者，义务也，我辈之不可推卸也。</p>
+<p>先生曾言：“ 你们所多的是生力，遇见深林，可以辟成平地的，遇见旷野，可以栽种树木的，遇见沙漠，可以开掘井泉的。问什么荆棘塞途的老路，寻什么乌烟瘴气的鸟导师！”</p>
+<p>先生对青年的勉励不可谓不振聋发聩。青年时期大抵是一个人在一生中最为热血沸腾的时期，也正是对社会做贡献的黄金时期之一。正处于这一时期的我们亦应”能做事的做事，能发声的发声。有一分热，发一分光“。</p>
+<p>江泽民同志曾在中国共产党第十五次全国代表大会上的报告中提出了“两个一百年”的奋斗目标：到建党一百年时，使国民经济更加发展，各项制度更加完善；到世纪中叶建国一百年时，基本实现现代化，建成富强民主文明的社会主义国家。</p>
+<p>我想，当代青年的使命，大抵是——为建成社会主义国家，这一“中国历史上未曾有过的第三样时代”而奋斗；为人类都受正当的幸福而奋斗。</p>
+<p>我们举起投枪！</p>
+<p><em>2020.1.30</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python组合数据学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-zu-he-shu-ju-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-zu-he-shu-ju-xue-xi/">
+        </link>
+        <updated>2020-01-26T14:11:23.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="集合">集合</h2>
+<h3 id="定义">定义</h3>
+<ul>
+<li>
+<p>集合是多个元素的<strong>无序</strong>组合</p>
+<ul>
+<li>集合类型与数学中的集合概念一致</li>
+<li>集合元素之间无序，每个元素唯一，不存在相同元素</li>
+<li>集合元素不可更改，不能是可变数据类型</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>集合用大括号 {} 表示，元素间用逗号分隔</li>
+<li>建立集合类型用 {} 或 set()</li>
+<li>建立空集合类型，必须使用set()</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; A = {&quot;python&quot;, 123, (&quot;python&quot;,123)} #使用{}建立集合
+{123, 'python', ('python', 123)}
+&gt;&gt;&gt; B = set(&quot;pypy123&quot;) #使用set()建立集合
+{'1', 'p', '2', '3', 'y'}
+&gt;&gt;&gt; C = {&quot;python&quot;, 123, &quot;python&quot;,123}
+{'python', 123}
+</code></pre>
+<h3 id="操作符">操作符</h3>
+<ul>
+<li>
+<p>操作符</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作符及应用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>S | T</code></td>
+<td>并，返回一个新集合，包括在集合S和T中的所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S - T</code></td>
+<td>差，返回一个新集合，包括在集合S但不在T中的元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S &amp; T</code></td>
+<td>交，返回一个新集合，包括同时在集合S和T中的元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S ^ T</code></td>
+<td>补，返回一个新集合，包括集合S和T中的非相同元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S &lt;= T</code> 或 <code>S &lt; T</code></td>
+<td>返回True/False，判断S和T的子集关系</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S &gt;= T</code>或 <code>S &gt; T</code></td>
+<td>返回True/False，判断S和T的包含关系</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>增强操作符</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作符及应用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>S |= T</code></td>
+<td>并，更新集合S，包括在集合S和T中的所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S -= T</code></td>
+<td>差，更新集合S，包括在集合S但不在T中的元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S &amp;= T</code></td>
+<td>交，更新集合S，包括同时在集合S和T中的元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S ^= T</code></td>
+<td>补，更新集合S，包括集合S和T中的非相同元素</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; A = {&quot;p&quot;,&quot;y&quot; , 123}
+&gt;&gt;&gt; B = set(&quot;pypy123&quot;)
+&gt;&gt;&gt; A-B
+{123}
+&gt;&gt;&gt; B-A
+{'3', '1', '2'}
+&gt;&gt;&gt; A&amp;B
+{'p', 'y'}
+&gt;&gt;&gt; A|B
+{'1', 'p', '2', 'y', '3', 123}
+&gt;&gt;&gt; A^B
+{'2', 123, '3', '1'}
+</code></pre>
+</li>
+</ul>
+<h3 id="处理方法">处理方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作函数或方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>S.add(x)</code></td>
+<td>如果x不在集合S中，将x增加到S</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S.discard(x)</code></td>
+<td>移除S中元素x，如果x不在集合S中，不报错</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S.remove(x)</code></td>
+<td>移除S中元素x，如果x不在集合S中，产生KeyError异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S.clear()</code></td>
+<td>移除S中所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S.pop()</code></td>
+<td>随机返回S的一个元素，更新S，若S为空产生KeyError异常</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>S.copy()</code></td>
+<td>返回集合S的一个副本</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>len(S)</code></td>
+<td>返回集合S的元素个数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x in S</code></td>
+<td>判断S中元素x，x在集合S中，返回True，否则返回False</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x not in S</code></td>
+<td>判断S中元素x，x不在集合S中，返回True，否则返回False</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>set(x)</code></td>
+<td>将其他类型变量x转变为集合类型</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; A = {&quot;p&quot;,&quot;y&quot; , 123}
+&gt;&gt;&gt; for item in A:
+print(item, end=&quot;&quot;)
+p123y
+&gt;&gt;&gt; A
+{'p', 123, 'y'}
+&gt;&gt;&gt; try:
+		while True:
+			print(A.pop(), end=&quot;&quot;))
+	except:
+		pass
+p123y
+&gt;&gt;&gt; A
+set()
+</code></pre>
+<h3 id="应用场景">应用场景</h3>
+<ul>
+<li>
+<p>包含关系比较</p>
+<pre><code class="language-python">&gt;&gt;&gt; &quot;p&quot; in {&quot;p&quot;,&quot;y&quot; , 123}
+True
+&gt;&gt;&gt; {&quot;p&quot;,&quot;y&quot;} &gt;= {&quot;p&quot;,&quot;y&quot; , 123}
+False
+</code></pre>
+</li>
+<li>
+<p>数据去重</p>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;p&quot;,&quot;p&quot;,&quot;y&quot;,&quot;y&quot;, 123]
+&gt;&gt;&gt; s = set(ls) # 利用了集合无重复元素的特点
+{'p', 'y', 123}
+&gt;&gt;&gt; lt = list(s) # 还可以将集合转换为列表
+['p', 'y', 123]
+</code></pre>
+</li>
+<li>
+<p>集合使用{}和set()函数创建</p>
+</li>
+<li>
+<p>集合间操作：交(&amp;)、并(|)、差(-)、补(^)、比较(&gt;=&lt;)</p>
+</li>
+<li>
+<p>集合类型方法：.add()、.discard()、.pop()等</p>
+</li>
+<li>
+<p>集合类型主要应用于：包含关系比较、数据去重</p>
+</li>
+</ul>
+<h2 id="序列">序列</h2>
+<h3 id="定义-2">定义</h3>
+<ul>
+<li>
+<p>序列是具有<strong>先后关系</strong>的一组元素</p>
+<ul>
+<li>序列是一维元素向量，元素类型可以不同</li>
+<li>类似数学元素序列： s<sub>0</sub>, s<sub>1</sub>, … , s<sub>n-1</sub></li>
+<li>元素间由序号引导，通过下标访问序列的特定元素</li>
+</ul>
+</li>
+<li>
+<p>序列是一个基类类型</p>
+<ul>
+<li>字符串</li>
+<li>元组</li>
+<li>列表</li>
+</ul>
+</li>
+</ul>
+<h3 id="操作符-2">操作符</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作符及应用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>x in s</code></td>
+<td>如果x是序列s的元素，返回True，否则返回False</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x not in s</code></td>
+<td>如果x是序列s的元素，返回False，否则返回True</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x not in s</code></td>
+<td>连接两个序列s和t</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>s*n</code> 或 <code>n*s</code></td>
+<td>将序列s复制n次</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>s[i]</code></td>
+<td>索引，返回s中的第i个元素，i是序列的序号</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>s[i: j]</code> 或 <code>s[i: j: k]</code></td>
+<td>切片，返回序列s中第i到j以k为步长的元素子序列</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;python&quot;, 123,&quot;.io&quot;]
+&gt;&gt;&gt; ls[::-1]
+['.io', 123, 'python']
+&gt;&gt;&gt; s = &quot;python123.io&quot;
+&gt;&gt;&gt; s[::-1]
+'oi.321nohtyp'
+</code></pre>
+<h3 id="函数和方法">函数和方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数和方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">len(s)</td>
+<td>返回序列s的长度，即元素个数</td>
+</tr>
+<tr>
+<td style="text-align:center">min(s)</td>
+<td>返回序列s的最小元素，s中元素需要可比较</td>
+</tr>
+<tr>
+<td style="text-align:center">max(s)</td>
+<td>返回序列s的最大元素，s中元素需要可比较</td>
+</tr>
+<tr>
+<td style="text-align:center">s.index(x) 或 s.index(x, i, j)</td>
+<td>返回序列s从i开始到j位置中第一次出现元素x的位置</td>
+</tr>
+<tr>
+<td style="text-align:center">s.count(x)</td>
+<td>返回序列s中出现x的总次数</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;python&quot;, 123, &quot;.io&quot;]
+&gt;&gt;&gt; len(ls)
+3
+&gt;&gt;&gt; s = &quot;python123.io&quot;
+&gt;&gt;&gt; max(s)
+'y'
+</code></pre>
+<h3 id="元组">元组</h3>
+<ul>
+<li>
+<p>元组是序列类型的一种扩展</p>
+<ul>
+<li>
+<p>元组是一种序列类型，一旦创建就不能被修改</p>
+</li>
+<li>
+<p>使用小括号 () 或 tuple() 创建，元素间用逗号 , 分隔</p>
+</li>
+<li>
+<p>可以使用或不使用小括号</p>
+<pre><code class="language-python">&gt;&gt;&gt; creature = &quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;,&quot;human&quot;
+&gt;&gt;&gt; creature
+('cat', 'dog', 'tiger', 'human')
+&gt;&gt;&gt; color = (0x001100, &quot;blue&quot;, creature)
+&gt;&gt;&gt; color
+(4352, 'blue', ('cat', 'dog', 'tiger', 'human'))
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>元组继承序列类型的全部通用操作</p>
+<ul>
+<li>
+<p>元组继承了序列类型的全部通用操作</p>
+</li>
+<li>
+<p>元组因为创建后不能修改，因此没有特殊操作</p>
+</li>
+<li>
+<p>使用或不使用小括号</p>
+<pre><code class="language-python">&gt;&gt;&gt; creature = &quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;,&quot;human&quot;
+&gt;&gt;&gt; creature[::-1]
+('human', 'tiger', 'dog', 'cat')
+&gt;&gt;&gt; color = (0x001100, &quot;blue&quot;, creature)
+&gt;&gt;&gt; color[-1][2]
+'tiger'
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="列表">列表</h3>
+<h4 id="定义-3">定义</h4>
+<ul>
+<li>列表是序列类型的一种扩展，十分常用
+<ul>
+<li>
+<p>列表是一种序列类型，创建后可以随意被修改</p>
+</li>
+<li>
+<p>使用方括号 [] 或list() 创建，元素间用逗号 , 分隔</p>
+</li>
+<li>
+<p>列表中各元素类型可以不同，无长度限制</p>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;, 1024]
+&gt;&gt;&gt; ls
+['cat', 'dog', 'tiger', 1024]
+&gt;&gt;&gt; lt = ls
+&gt;&gt;&gt; lt
+['cat', 'dog', 'tiger', 1024] 
+#方括号 [] 真正创建一个列表，赋值仅传递引用
+</code></pre>
+<div class="mermaid">
+graph LR
+	id1["ls"] -->id2["['cat', 'dog', 'tiger', 1024]"]
+	id3["lt"] -->id2
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="函数和方法-2">函数和方法</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>ls[i] = x</code></td>
+<td>替换列表ls第i元素为x</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls[i: j: k] = lt</code></td>
+<td>用列表lt替换ls切片后所对应元素子列表</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>del ls[i]</code></td>
+<td>删除列表ls中第i元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>del ls[i: j: k]</code></td>
+<td>删除列表ls中第i到第j以k为步长的元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls += lt</code></td>
+<td>更新列表ls，将列表lt元素增加到列表ls中</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls *= n</code></td>
+<td>更新列表ls，其元素重复n次</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;, 1024]
+&gt;&gt;&gt; ls[1:2] = [1, 2, 3, 4]
+['cat', 1, 2, 3, 4, 'tiger', 1024]
+&gt;&gt;&gt; del ls[::3]
+[1, 2, 4, 'tiger']
+&gt;&gt;&gt; ls*2
+[1, 2, 4, 'tiger', 1, 2, 4, 'tiger']
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>ls.append(x)</code></td>
+<td>在列表ls最后增加一个元素x</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.clear()</code></td>
+<td>删除列表ls中所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.copy()</code></td>
+<td>生成一个新列表，赋值ls中所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.insert(i,x)</code></td>
+<td>在列表ls的第i位置增加元素x</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.pop(i)</code></td>
+<td>将列表ls中第i位置元素取出并删除该元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.remove(x)</code></td>
+<td>将列表ls中出现的第一个元素x删除</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ls.reverse()</code></td>
+<td>将列表ls中的元素反转</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;, 1024]
+&gt;&gt;&gt; ls.append(1234)
+['cat', 'dog', 'tiger', 1024, 1234]
+&gt;&gt;&gt; ls.insert(3, &quot;human&quot;)
+['cat', 'dog', 'tiger', 'human', 1024, 1234]
+&gt;&gt;&gt; ls.reverse()
+[1234, 1024, 'human', 'tiger', 'dog', 'cat']
+</code></pre>
+<h3 id="应用场景-2">应用场景</h3>
+<ul>
+<li>
+<p>数据表示：元组和列表</p>
+<ul>
+<li>元组用于元素不改变的应用场景，更多用于固定搭配场景</li>
+<li>于元素不改变的应用场景，更多用于固定搭配场景</li>
+<li>最主要作用：表示一组有序数据，进而操作它们</li>
+</ul>
+</li>
+<li>
+<p>元素遍历</p>
+<pre><code class="language-python">for item in ls :
+	&lt;语句块&gt;
+    
+for item in tp :
+	&lt;语句块&gt;
+</code></pre>
+</li>
+<li>
+<p>数据保护</p>
+<ul>
+<li>
+<p>如果不希望数据被程序所改变，转换成元组类型</p>
+<pre><code class="language-python">&gt;&gt;&gt; ls = [&quot;cat&quot;,&quot;dog&quot;,&quot;tiger&quot;, 1024]
+&gt;&gt;&gt; lt = tuple(ls)
+&gt;&gt;&gt; lt
+('cat', 'dog', 'tiger', 1024)
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>序列是基类类型，扩展类型包括：字符串、元组和列表</p>
+</li>
+<li>
+<p>元组用()和tuple()创建，列表用[]和set()创建</p>
+</li>
+<li>
+<p>元组操作与序列操作基本相同</p>
+</li>
+<li>
+<p>列表操作在序列操作基础上，增加了更多的灵活性</p>
+</li>
+</ul>
+<h2 id="字典">字典</h2>
+<h3 id="映射">映射</h3>
+<ul>
+<li>是一种键(索引)和值(数据)的对应
+<ul>
+<li>键值对：键是数据索引的扩展</li>
+<li>字典是键值对的集合，键值对之间无序</li>
+<li>采用大括号{}和dict()创建，键值对用冒号: 表示</li>
+</ul>
+<pre><code class="language-python">{&lt;键1&gt;:&lt;值1&gt;, &lt;键2&gt;:&lt;值2&gt;, … , &lt;键n&gt;:&lt;值n&gt;}
+</code></pre>
+</li>
+</ul>
+<h3 id="用法">用法</h3>
+<ul>
+<li>
+<p>通过键获得值</p>
+<ul>
+<li>[ ]用来向字典变量中索引或增加元素
+<ul>
+<li><em><code>{}</code>生成空字典，<code>set()</code>生成空集合</em></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-python">&lt;字典变量&gt; = {&lt;键1&gt;:&lt;值1&gt;, … , &lt;键n&gt;:&lt;值n&gt;}
+&lt;值&gt; = &lt;字典变量&gt;[&lt;键&gt;]
+&lt;字典变量&gt;[&lt;键&gt;] = &lt;值&gt; 
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; d = {&quot;中国&quot;:&quot;北京&quot;, &quot;美国&quot;:&quot;华盛顿&quot;, &quot;法国&quot;:&quot;巴黎&quot;}
+&gt;&gt;&gt; d{'中国': '北京', '美国': '华盛顿', '法国': '巴黎'}
+&gt;&gt;&gt; d[&quot;中国&quot;]
+'北京'
+&gt;&gt;&gt; de = {} ; type(de)	#type(x)返回变量x的类型
+&lt;class 'dict'&gt;
+</code></pre>
+</li>
+</ul>
+<h3 id="函数和方法-3">函数和方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数或方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>del d[k]</code></td>
+<td>删除字典d中键k对应的数据值</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>del d[k]</code></td>
+<td>判断键k是否在字典d中，如果在返回True，否则False</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.keys()</code></td>
+<td>返回字典d中所有的键信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.values()</code></td>
+<td>返回字典d中所有的值信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.items()</code></td>
+<td>返回字典d中所有的键值对信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.get(k,&lt;default&gt;)</code></td>
+<td>键k存在，则返回相应值，不在则返回值</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.pop(k, &lt;default&gt;)</code></td>
+<td>键k存在，则取出相应值，不在则返回值</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.popitem()</code></td>
+<td>随机从字典d中取出一个键值对，以元组形式返回</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d.clear()</code></td>
+<td>删除所有的键值对</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>len(d)</code></td>
+<td>返回字典d中元素的个数</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt; d = {&quot;中国&quot;:&quot;北京&quot;, &quot;美国&quot;:&quot;华盛顿&quot;, &quot;法国&quot;:&quot;巴黎&quot;}
+&gt;&gt;&gt; &quot;中国&quot; in d
+True
+&gt;&gt;&gt; d.keys()
+dict_keys(['中国', '美国', '法国'])
+&gt;&gt;&gt; d.values()
+dict_values(['北京', '华盛顿', '巴黎'])
+&gt;&gt;&gt; d = {&quot;中国&quot;:&quot;北京&quot;, &quot;美国&quot;:&quot;华盛顿&quot;, &quot;法国&quot;:&quot;巴黎&quot;}
+&gt;&gt;&gt; d.get(&quot;中国&quot;,&quot;伊斯兰堡&quot;)
+'北京'
+&gt;&gt;&gt; d.get(&quot;巴基斯坦&quot;,&quot;伊斯兰堡&quot;)
+'伊斯兰堡'
+&gt;&gt;&gt; d.popitem()
+('美国', '华盛顿')
+</code></pre>
+<h3 id="应用场景-3">应用场景</h3>
+<ul>
+<li>
+<p>映射的表达</p>
+<ul>
+<li>映射无处不在，键值对无处不在</li>
+<li>例如：统计数据出现的次数，数据是键，次数是值</li>
+<li>最主要作用：表达键值对数据，进而操作它们</li>
+</ul>
+</li>
+<li>
+<p>元素遍历</p>
+<pre><code class="language-python">for k in d :
+	&lt;语句块&gt;
+</code></pre>
+</li>
+<li>
+<p>映射关系采用键值对表达</p>
+</li>
+<li>
+<p>字典类型使用{}和dict()创建，键值对之间用:分隔</p>
+</li>
+<li>
+<p>d[key] 方式既可以索引，也可以赋值</p>
+</li>
+<li>
+<p>字典类型有一批操作方法和函数，最重要的是.get()</p>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[花谢香犹在]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/hua-xie-xiang-you-zai/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/hua-xie-xiang-you-zai/">
+        </link>
+        <updated>2020-01-23T15:15:11.000Z</updated>
+        <content type="html"><![CDATA[<p><em>瞎写完成任务的</em></p>
+<p>落红不是无情物，化作春泥更护花。</p>
+<p>东风拂柳，柳絮随风而散，跟着风儿乱飞。飞到游人的脸上，轻轻挠；飘入乱花从中，与花儿调笑；落在新翻的泥土里，悄悄生根汲取营养。</p>
+<p>春天是什么颜色的？</p>
+<p>这个问题没有标准答案。在我这里，它是开在春风中每一朵花的颜色。</p>
+<p>每一种花，无论是樱花、迎春、玫瑰、郁金香......或是其中的每一朵。其独一无二的颜色，每一个都是春天。</p>
+<p>春天的气息，就这样慢慢地扩散开来。</p>
+<p>然而，这样的美丽却十分短暂。待到春意阑珊时，花瓣便片片地落下。若是樱花，则在逐渐暖和的风中，在风的轻抚中脱离，而后散落，只有满地的红证明它们；若是玫瑰，则渐次枯萎，再挨个落下，徒留黑红黑红的几片顽强地留在花萼上面，垂头。</p>
+<p>花易落，春易逝。春风不解风情......</p>
+<p>可惜，可惜啊......短短数月，这姹紫嫣红开遍，都付与断井颓垣。</p>
+<p>春红与林花相互谢别，只剩光秃秃的树枝告示春天的过去。</p>
+<p>不知过了多久，也许是过了几天、或是几周，树枝上的某处有一个小小的嫩叶钻了出来。嫩绿，小巧，轻轻地打个颤，与暖风共同摇摆。</p>
+<p>随着树枝向下看，褶皱起伏的枝干，干瘪皲裂的树皮，岁月的脉络延伸开来。在树根的边上，那块潮湿微润的泥土上，已经开始腐烂的花瓣。</p>
+<p>饥渴难耐的微生物在花瓣上面运作降解，将有机物转为无机物。</p>
+<p>一点一滴的营养自花瓣中出，经微生物中转，渗入了根部附近的土壤中。慢慢沉淀、扩散。</p>
+<p>再然后，是树根的汲取，枝叶在阳光的照射下进行呼吸作用与光合作用，带动整体的枝干新陈代谢，水分循环。茎部的细管将无机物与水引导，一点点的营养进入树的各部分，缓缓滋养。丝丝缕缕，进入叶脉，而后散入每一层每一个细胞当中。</p>
+<p>叶，吸收，成长。</p>
+<p>仿佛按了加速键，新叶不断长出，嫩叶迅速抽枝，霎时间整棵树布满了嫩嫩的绿叶。一阵风吹过，哗哗声一片。</p>
+<p>这是夏天的气息，是伴着花香的清新，是落红的再生。</p>
+<p>也许，春天很短暂，不过一瞬，五彩缤纷便散去。</p>
+<p>但花的生命却不止这一瞬，它们不止活在春天，也在夏季延续生命。</p>
+<p>花谢香犹在。</p>
+<p><em>2020.1.23</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python函数初学]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-han-shu-chu-xue/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-han-shu-chu-xue/">
+        </link>
+        <updated>2020-01-20T11:34:59.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="函数的定义">函数的定义</h2>
+<ul>
+<li>
+<p>函数是一段代码的表示</p>
+</li>
+<li>
+<p>函数是一段具有特定功能的、可重用的语句组</p>
+</li>
+<li>
+<p>函数是一种功能的抽象，一般函数表达特定功能</p>
+</li>
+<li>
+<p><code>y = f(x)</code>:</p>
+<ul>
+<li>函数定义时，所指定的参数是一种占位符</li>
+<li>函数定义后，如果不经过调用，不会被执行</li>
+<li>函数定义时，参数是输入、函数体是处理、结果是输出 (IPO)</li>
+</ul>
+</li>
+<li>
+<p>两个作用：降低编程难度 和 代码复用</p>
+</li>
+</ul>
+<pre><code class="language-python">def &lt;函数名&gt;(&lt;参数(0个或多个)&gt;) :
+	&lt;函数体&gt;
+	return &lt;返回值
+</code></pre>
+<h4 id="可变参数传递"><em>可变参数传递</em></h4>
+<ul>
+<li>函数定义时可以设计可变数量参数，既不确定参数总数量</li>
+</ul>
+<pre><code class="language-python">def &lt;函数名&gt;(&lt;参数&gt;, *b ) :
+	&lt;函数体&gt;
+	return &lt;返回值&gt;
+</code></pre>
+<ul>
+<li>
+<pre><code class="language-python">def fact(n, *b) :
+	s = 1
+	for i in range(1, n+1):
+		s *= i
+	for item in b:
+		s *= item
+	return s
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; fact(10,3)
+10886400
+&gt;&gt;&gt; fact(10,3,5,8)
+435456000
+</code></pre>
+</li>
+</ul>
+<h2 id="局部变量和全局变量">局部变量和全局变量</h2>
+<ul>
+<li>基本数据类型，无论是否重名，局部变量与全局变量不同</li>
+<li>可以通过global保留字在函数内部声明全局变量</li>
+<li>组合数据类型，如果局部变量未真实创建，则是全局变量</li>
+</ul>
+<h2 id="lambda函数"><em>lambda函数</em></h2>
+<ul>
+<li>
+<p>lambda函数返回函数名作为结果</p>
+</li>
+<li>
+<p>- lambda函数是一种匿名函数，即没有名字的函数</p>
+<pre><code class="language-python">&lt;函数名&gt; = lambda &lt;参数&gt;: &lt;表达式&gt;
+</code></pre>
+<p>等价于</p>
+<pre><code class="language-python">def &lt;函数名&gt;(&lt;参数&gt;) :
+	&lt;函数体&gt;
+	return &lt;返回值&gt;
+</code></pre>
+<ul>
+<li>
+<pre><code class="language-python">&gt;&gt;&gt; f = lambda x, y : x + y
+&gt;&gt;&gt; f(10, 15)
+25
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>lambda函数主要用作一些特定函数或方法的参数</p>
+</li>
+<li>
+<p>lambda函数有一些固定使用方式，建议逐步掌握</p>
+</li>
+<li>
+<p>一般情况，建议使用def定义的普通函数</p>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python运算符整理]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-yun-suan-fu-zheng-li/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-yun-suan-fu-zheng-li/">
+        </link>
+        <updated>2020-01-19T08:43:49.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="算术运算符">算术运算符</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">运算符</th>
+<th>描述</th>
+<th>示例(<code>a=10</code> <code>b=21</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>+</code></td>
+<td>加法运算，将运算符两边的操作数增加</td>
+<td><code>a + b = 31</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>-</code></td>
+<td>减法运算，将运算符左边的操作数减去右边的操作数</td>
+<td><code>a – b = -11</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>*</code></td>
+<td>乘法运算，将运算符两边的操作数相乘</td>
+<td><code>a * b = 210</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/</code></td>
+<td>除法运算，用右操作数除左操作数</td>
+<td><code>b / a = 2.1</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>%</code></td>
+<td>模运算，用右操作数除数左操作数并返回余数</td>
+<td><code>b % a = 1</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>**</code></td>
+<td>对运算符进行指数(幂)计算</td>
+<td><code>a ** b</code>，表示<code>10</code>的<code>21</code>次幂</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>//</code></td>
+<td>地板除，操作数的除法，其结果是删除小数点后的商数。 但如果其中一个操作数为负数，则结果将被保留，即从零(向负无穷大)舍去</td>
+<td><code>9//2 = 4</code>,<code>9.0//2.0 = 4.0</code>, <code>-11//3 = -4</code>, <code>-11.0//3 = -4.0</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="比较关系运算符">比较(关系)运算符</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">运算符</th>
+<th>描述</th>
+<th>示例(<code>a=10</code> <code>b=21</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>==</code></td>
+<td>如果两个操作数的值相等，则条件为真</td>
+<td><code>(a == b)</code>求值结果为 <code>false</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>!=</code></td>
+<td>如果两个操作数的值不相等，则条件为真</td>
+<td><code>(a != b)</code>求值结果为 <code>true</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&gt;</code></td>
+<td>如果左操作数的值大于右操作数的值，则条件成为真</td>
+<td><code>(a &gt; b)</code>求值结果为 <code>false</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;</code></td>
+<td>如果左操作数的值小于右操作数的值，则条件成为真</td>
+<td><code>(a &lt; b)</code>求值结果为 <code>true</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&gt;=</code></td>
+<td>如果左操作数的值大于或等于右操作数的值，则条件成为真</td>
+<td><code>(a &gt;= b)</code>求值结果为 <code>false</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;=</code></td>
+<td>如果左操作数的值小于或等于右操作数的值，则条件成为真</td>
+<td><code>(a &lt;= b)</code>求值结果为 <code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="赋值运算符">赋值运算符</h2>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例(<code>a=10</code> <code>b=21</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code></td>
+<td>将右侧操作数的值分配给左侧操作数</td>
+<td><code>c = a + b</code>表示将<code>a + b</code>的值分配给<code>c</code></td>
+</tr>
+<tr>
+<td><code>+=</code></td>
+<td>将右操作数相加到左操作数，并将结果分配给左操作数</td>
+<td><code>c + = a</code>等价于<code>c = c + a</code></td>
+</tr>
+<tr>
+<td><code>-=</code></td>
+<td>从左操作数中减去右操作数，并将结果分配给左操作数</td>
+<td><code>c -= a</code> 等价于 <code>c = c - a</code></td>
+</tr>
+<tr>
+<td><code>*=</code></td>
+<td>将右操作数与左操作数相乘，并将结果分配给左操作数</td>
+<td><code>c *= a</code> 等价于 <code>c = c * a</code></td>
+</tr>
+<tr>
+<td><code>/=</code></td>
+<td>将左操作数除以右操作数，并将结果分配给左操作数</td>
+<td><code>c /= a</code> 等价于 <code>c = c / a</code></td>
+</tr>
+<tr>
+<td><code>%=</code></td>
+<td>将左操作数除以右操作数的模数，并将结果分配给左操作数</td>
+<td><code>c %= a</code> 等价于 <code>c = c % a</code></td>
+</tr>
+<tr>
+<td><code>**=</code></td>
+<td>执行指数(幂)计算，并将值分配给左操作数</td>
+<td><code>c **= a</code> 等价于 <code>c = c ** a</code></td>
+</tr>
+<tr>
+<td><code>//=</code></td>
+<td>运算符执行地板除运算，并将值分配给左操作数</td>
+<td><code>c //= a</code> 等价于 <code>c = c // a</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="逻辑运算符">逻辑运算符</h2>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>and</code></td>
+<td>如果两个操作数都为真，则条件成立</td>
+<td><code>(a and b)</code>的结果为<code>False</code></td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>如果两个操作数中的任何一个非零，则条件成为真</td>
+<td><code>(a or b)</code>的结果为<code>True</code></td>
+</tr>
+<tr>
+<td><code>not</code></td>
+<td>用于反转操作数的逻辑状态</td>
+<td><code>not(a and b)</code> 的结果为<code>True</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="按位运算符">按位运算符</h2>
+<p>按位运算符执行逐位运算。 假设变量<code>a = 60</code>; 和变量<code>b = 13</code>; 现在以二进制格式，它们将如下 -</p>
+<pre><code class="language-shell">a = 0011 1100
+
+b = 0000 1101
+
+-----------------
+
+a&amp;b = 0000 1100
+
+a|b = 0011 1101
+
+a^b = 0011 0001
+
+~a = 1100 0011
+Shell
+</code></pre>
+<p>Python的内置函数<code>bin()</code>可用于获取整数的二进制表示形式。</p>
+<p>以下是Python语言支持位运算操作符 -</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&amp;</code></td>
+<td>如果它存在于两个操作数中，则操作符复制位到结果中</td>
+<td><code>(a &amp; b)</code> 结果表示为 <code>0000 1100</code></td>
+</tr>
+<tr>
+<td>|</td>
+<td>如果它存在于任一操作数，则复制位。</td>
+<td><code>(a|b) = 61</code> 结果表示为 <code>0011 1101</code></td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>二进制异或。如果它是一个操作数集合，但不是同时是两个操作数则将复制位。</td>
+<td><code>(a ^ b) = 49</code> (结果表示为 <code>0011 0001</code>)</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>二进制补码，它是一元的，具有“翻转”的效果。</td>
+<td><code>(~a ) = -61</code>有符号的二进制数，表示为<code>1100 0011</code>的补码形式。</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>二进制左移，左操作数的值由右操作数指定的位数左移。</td>
+<td><code>a &lt;&lt; 2 = 240</code> (结果表示为 <code>1111 0000</code>)</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>二进制右移，左操作数的值由右操作数指定的位数右移。</td>
+<td><code>a &gt;&gt; 2 = 15</code>(结果表示为<code>0000 1111</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="成员运算符">成员运算符</h2>
+<p>Python成员运算符测试给定值是否为序列中的成员，例如字符串，列表或元组。 有两个成员运算符：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>in</code></td>
+<td>如果在指定的序列中找到一个变量的值，则返回<code>true</code>，否则返回<code>false</code>。</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>not in</code></td>
+<td>如果在指定序列中找不到变量的值，则返回<code>true</code>，否则返回<code>false</code>。</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="身份运算符">身份运算符</h2>
+<p>身份运算符比较两个对象的内存位置。常用的有两个身份运算符：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is</code></td>
+<td>如果运算符任一侧的变量指向相同的对象，则返回<code>True</code>，否则返回<code>False</code>。</td>
+<td></td>
+</tr>
+<tr>
+<td><code>is not</code></td>
+<td>如果运算符任一侧的变量指向相同的对象，则返回<code>True</code>，否则返回<code>False</code>。</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="运算符优先级">运算符优先级</h2>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>**</code></td>
+<td>指数(次幂)运算</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>~</code> <code>+</code>  <code>-</code></td>
+<td>补码，一元加减(最后两个的方法名称是<code>+@</code>和<code>-@</code>)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>*</code> <code>/</code> <code>%</code> <code>//</code></td>
+<td>乘法，除法，模数和地板除</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>+</code> <code>-</code></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>&gt;&gt;</code> <code>&lt;&lt;</code></td>
+<td>向右和向左位移</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>^</code> <code>|</code></td>
+<td>按位异或和常规的“<code>OR</code>”</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>&lt;=</code> <code>&lt;</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>比较运算符</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>&lt;&gt;</code> <code>==</code> <code>!=</code></td>
+<td>等于运算符</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>=</code> <code>%=</code> <code>/=</code> <code>//=</code> <code>-=</code> <code>+=</code> <code>*=</code> <code>**=</code></td>
+<td>赋值运算符</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>is</code> <code>is not</code></td>
+<td>身份运算符</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>in</code> <code>not in</code></td>
+<td>成员运算符</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>not</code> <code>or</code> <code>and</code></td>
+<td>逻辑运算符</td>
+</tr>
+</tbody>
+</table>
+<p>//原文出自[易百教程],原文链接：https://www.yiibai.com/python/python_basic_operators.html</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-random库学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-random-ku-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-random-ku-xue-xi/">
+        </link>
+        <updated>2020-01-19T06:18:20.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="基本随机数函数">基本随机数函数</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">seed(a=None)</td>
+<td>初始化给定的随机数种子，默认为当前系统时间<br/><code>&gt;&gt;&gt;random.seed(10) #产生种子10对应的序列</code></td>
+</tr>
+<tr>
+<td style="text-align:center">random()</td>
+<td>生成一个[0.0, 1.0)之间的随机小数<br/><code>&gt;&gt;&gt;random.random()</code><br/><code>0.5714025946899135</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<pre><code class="language-python">&gt;&gt;&gt; import random
+&gt;&gt;&gt; random.seed(10)
+&gt;&gt;&gt; random.random()
+0.5714025946899135
+&gt;&gt;&gt; random.random()
+0.4288890546751146
+</code></pre>
+</li>
+<li>
+<pre><code class="language-python">&gt;&gt;&gt; import random
+&gt;&gt;&gt; random.seed(10)
+&gt;&gt;&gt; random.random()
+0.5714025946899135
+&gt;&gt;&gt; random.seed(10)
+&gt;&gt;&gt; random.random()
+0.5714025946899135
+</code></pre>
+<h2 id="扩展随机数函数">扩展随机数函数</h2>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">randint(a, b)</td>
+<td>生成一个[a, b]之间的整数<br/><code>&gt;&gt;&gt;random.randint(10, 100)</code><br/><code>64</code></td>
+</tr>
+<tr>
+<td style="text-align:center">randrange(m, n[, k])</td>
+<td>生成一个[m, n)之间以k为步长的随机整数<br/><code>&gt;&gt;&gt;random.randrange(10, 100, 10)</code><br/>80</td>
+</tr>
+<tr>
+<td style="text-align:center">getrandbits(k)</td>
+<td>生成一个k比特长的随机整数<br/><code>&gt;&gt;&gt;random.getrandbits(16)</code><br/><code>37885</code></td>
+</tr>
+<tr>
+<td style="text-align:center">uniform(a, b)</td>
+<td>生成一个[a, b]之间的随机小数<br/><code>&gt;&gt;&gt;random.uniform(10, 100)</code><br/><code>13.096321648808136</code></td>
+</tr>
+<tr>
+<td style="text-align:center">choice(seq)</td>
+<td>从序列seq中随机选择一个元素<br/><code>&gt;&gt;&gt;random.choice([1,2,3,4,5,6,7,8,9])</code><br/><code>8</code></td>
+</tr>
+<tr>
+<td style="text-align:center">shuffle(seq)</td>
+<td>将序列seq中元素随机排列，返回打乱后的序列<br/><code>&gt;&gt;&gt;s=[1,2,3,4,5,6,7,8,9];random.shuffle(s);print(s)</code><br/><code>[3, 5, 8, 9, 6, 1, 2, 7, 4]</code></td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python-time库学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-time-ku-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-time-ku-xue-xi/">
+        </link>
+        <updated>2020-01-18T11:47:44.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="time库-三类函数">time库 三类函数</h2>
+<ul>
+<li>
+<p>时间获取：time() ctime() gmtime()</p>
+</li>
+<li>
+<p>时间格式化：strftime() strptime()</p>
+</li>
+<li>
+<p>程序计时：sleep(), perf_counter()</p>
+</li>
+</ul>
+<h3 id="时间获取">时间获取</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">time()</td>
+<td>获取当前时间戳，即计算机内部时间值，浮点数<br/><code>&gt;&gt;&gt;time.time()</code><br/><code>1516939876.6022282</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ctime()</td>
+<td>获取当前时间并以易读方式表示，返回字符串<br/><code>&gt;&gt;&gt;time.ctime()</code><br/><code>'Fri Jan 26 12:11:16 2018'</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gmtime()</td>
+<td>获取当前时间，表示为计算机可处理的时间格式<br/><code>&gt;&gt;&gt;time.gmtime()</code><br/><code>time.struct_time(tm_year=2018, tm_mon=1, tm_mday=26, tm_hour=4, tm_min=11, tm_sec=16, tm_wday=4, tm_yday=26, tm_isdst=0)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="时间格式化">时间格式化</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">strptime(str, tpl)</td>
+<td>str是字符串形式的时间值<br/>tpl是格式化模板字符串，用来定义输入效果<br/><code>&gt;&gt;&gt;timeStr = '2018-01-26 12:55:20'</code><br/><code>&gt;&gt;&gt;time.strptime(timeStr, &quot;%Y-%m-%d %H:%M:%S&quot;)</code><br/><code>time.struct_time(tm_year=2018, tm_mon=1, tm_mday=26, tm_hour=4, tm_min=11, tm_sec=16, tm_wday=4, tm_yday=26, tm_isdst=0)</code></td>
+</tr>
+<tr>
+<td style="text-align:center">strftime(tpl, ts)</td>
+<td>tpl是格式化模板字符串，用来定义输出效果<br/>ts是计算机内部时间类型变量<br/><code>&gt;&gt;&gt;t = time.gmtime()</code><br/><code>&gt;&gt;&gt;time.strftime(&quot;%Y-%m-%d %H:%M:%S&quot;,t)</code><br/><code>'2018-01-26 12:55:20'</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="格式化控制符">格式化控制符</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">格式化字符串</th>
+<th style="text-align:center">日期/时间说明</th>
+<th>值范围和实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">%Y</td>
+<td style="text-align:center">年份</td>
+<td>0000~9999，例如：1900</td>
+</tr>
+<tr>
+<td style="text-align:center">%m</td>
+<td style="text-align:center">月份</td>
+<td>01~12，例如：10</td>
+</tr>
+<tr>
+<td style="text-align:center">%B</td>
+<td style="text-align:center">月份名称</td>
+<td>January~December，例如：April</td>
+</tr>
+<tr>
+<td style="text-align:center">%b</td>
+<td style="text-align:center">月份名称缩写</td>
+<td>Jan~Dec，例如：Apr</td>
+</tr>
+<tr>
+<td style="text-align:center">%d</td>
+<td style="text-align:center">日期</td>
+<td>01~31，例如：25</td>
+</tr>
+<tr>
+<td style="text-align:center">%A</td>
+<td style="text-align:center">星期</td>
+<td>Monday~Sunday，例如：Wednesday</td>
+</tr>
+<tr>
+<td style="text-align:center">%a</td>
+<td style="text-align:center">星期缩写</td>
+<td>Mon~Sun，例如：Wed</td>
+</tr>
+<tr>
+<td style="text-align:center">%H</td>
+<td style="text-align:center">小时（24h制）</td>
+<td>00~23，例如：12</td>
+</tr>
+<tr>
+<td style="text-align:center">%I</td>
+<td style="text-align:center">小时（12h制）</td>
+<td>01~12，例如：7</td>
+</tr>
+<tr>
+<td style="text-align:center">%p</td>
+<td style="text-align:center">上/下午</td>
+<td>AM, PM，例如：PM</td>
+</tr>
+<tr>
+<td style="text-align:center">%M</td>
+<td style="text-align:center">分钟</td>
+<td>00~59，例如：26</td>
+</tr>
+<tr>
+<td style="text-align:center">%S</td>
+<td style="text-align:center">秒</td>
+<td>00~59，例如：26</td>
+</tr>
+</tbody>
+</table>
+<h3 id="程序计时">程序计时</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">perf_counter()</td>
+<td>返回一个CPU级别的精确时间计数值，单位为秒<br/>由于这个计数值起点不确定，连续调用差值才有意义<br/><code>&gt;&gt;&gt;start = time.perf_counter()</code><br/><code>318.66599499718114</code><br/><code>&gt;&gt;&gt;end = time.perf_counter()</code><br/><code>341.3905185375658</code><br/><code>&gt;&gt;&gt;end - start</code><br/><code>22.724523540384666</code></td>
+</tr>
+<tr>
+<td style="text-align:center">sleep(s)</td>
+<td>s拟休眠的时间，单位是秒，可以是浮点数<br/><code>&gt;&gt;&gt;def wait():</code><br/>        <code>time.sleep(3.3)</code><br/><code>&gt;&gt;&gt;wait() #程序将等待3.3秒后再退出</code></td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python字符串学习]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/python-zi-fu-chuan-xue-xi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/python-zi-fu-chuan-xue-xi/">
+        </link>
+        <updated>2020-01-18T10:56:18.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="字符串处理函数">字符串处理函数</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数及使用</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">len(x)</td>
+<td style="text-align:left">长度，返回字符串x的长度<br/>len(&quot;一二三123&quot;)结果为6</td>
+</tr>
+<tr>
+<td style="text-align:center">str(x)</td>
+<td style="text-align:left">任意类型x所对应的字符串形式<br/>str(1.23)结果为&quot;1.23&quot; str([1,2])结果为&quot;[1,2]&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">hex(x) 或 oct(x)</td>
+<td style="text-align:left">整数x的十六进制或八进制小写形式字符串<br/>hex(425)结果为&quot;0x1a9&quot; oct(425)结果为&quot;0o651&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">chr(u)</td>
+<td style="text-align:left">x为Unicode编码，返回其对应的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">ord(x)</td>
+<td style="text-align:left">x为字符，返回其对应的Unicode编码</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符串处理方法">字符串处理方法</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法及使用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">str.lower() 或 str.upper()</td>
+<td>返回字符串的副本，全部字符小写/大写<br/> &quot;AbCdEfGh&quot;.lower() 结果为 &quot;abcdefgh&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">str.split(sep=None)</td>
+<td>返回一个列表，由str根据sep被分隔的部分组成 <br/>&quot;A,B,C&quot;.split(&quot;,&quot;) 结果为 ['A','B','C']</td>
+</tr>
+<tr>
+<td style="text-align:center">str.count(sub)</td>
+<td>返回子串sub在str中出现的次数 <br/>&quot;an apple a day&quot;.count(&quot;a&quot;) 结果为 4</td>
+</tr>
+<tr>
+<td style="text-align:center">str.replace(old, new)</td>
+<td>返回字符串str副本，所有old子串被替换为new<br/>&quot;python&quot;.replace(&quot;n&quot;,&quot;n123.io&quot;) 结果为 &quot;python123.io&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">str.center(width[,fillchar])</td>
+<td>字符串str根据宽度width居中，fillchar可选<br/>&quot;python&quot;.center(20,&quot;=&quot;) 结果为 '======= python ======='</td>
+</tr>
+<tr>
+<td style="text-align:center">str.strip(chars)</td>
+<td>从str中去掉在其左侧和右侧chars中列出的字符 <br/>&quot;= python= &quot;.strip(&quot; =np&quot;) 结果为 &quot;ytho&quot;</td>
+</tr>
+<tr>
+<td style="text-align:center">str.join(iter)</td>
+<td>在iter变量除最后元素外每个元素后增加一个str <br/>&quot;,&quot;.join(&quot;12345&quot;) 结果为 &quot;1,2,3,4,5&quot; #主要用于字符串分隔等</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符串类型的格式化">字符串类型的格式化</h2>
+<ul>
+<li>字符串格式化使用.format()方法，用法如下：<br/> &lt;模板字符串&gt;.format(&lt;逗号分隔的参数&gt;)</li>
+<li>槽内部对格式化的配置方式<br>
+{ &lt;参数序号&gt;:&lt;格式控制标记&gt;}</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">:</th>
+<th style="text-align:center">&lt;填充&gt;</th>
+<th style="text-align:center">&lt;对齐&gt;</th>
+<th style="text-align:center">&lt;宽度&gt;</th>
+<th style="text-align:center">&lt;,&gt;</th>
+<th style="text-align:center">&lt;.精度&gt;</th>
+<th style="text-align:center">&lt;类型&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">引导符号</td>
+<td style="text-align:center">用于填充的单个字符</td>
+<td style="text-align:center">&lt; 左对齐<br/>&gt; 右对齐<br/>^ 居中对齐</td>
+<td style="text-align:center">槽设定的输出宽度</td>
+<td style="text-align:center">数字的千位分隔符</td>
+<td style="text-align:center">浮点数小数精度 或 字符串最大输出长度</td>
+<td style="text-align:center">整数类型<br/>b, c, d, o, x, X<br/>浮点数类型<br/>e, E, f, %</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">&gt;&gt;&gt;&quot;{0:=^20}&quot;.format(&quot;PYTHON&quot;)
+'=======PYTHON======='
+
+&gt;&gt;&gt;&quot;{0:*&gt;20}&quot;.format(&quot;BIT&quot;)
+'*****************BIT'
+
+&gt;&gt;&gt;&quot;{:10}&quot;.format(&quot;BIT&quot;)
+'BIT       '
+
+&gt;&gt;&gt;&quot;{0:,.2f}&quot;.format(12345.6789)
+'12,345.68'
+
+&gt;&gt;&gt;&quot;{0:b},{0:c},{0:d},{0:o},{0:x},{0:X}&quot;.format(425)
+'110101001,Ʃ,425,651,1a9,1A9'
+
+&gt;&gt;&gt;&quot;{0:e},{0:E},{0:f},{0:%}&quot;.format(3.14)
+'3.140000e+00,3.140000E+00,3.140000,314.000000%'
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[学习心得]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/xue-xi-xin-de/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/xue-xi-xin-de/">
+        </link>
+        <updated>2019-12-22T04:33:41.000Z</updated>
+        <content type="html"><![CDATA[<p>今年是2019年，也是五四运动一百周年。这几天，我学习了“习近平在纪念五四运动100周年大会上的讲话”，尤其是其中习近平总书记对于青年的六点希望，让人受益匪浅。<br>
+习近平说：“第一，新时代中国青年要树立远大理想。青年的理想信念关乎国家未来。青年理想远大、信念坚定，是一个国家、一个民族无坚不摧的前进动力。青年志存高远，就能激发奋进潜力，青春岁月就不会像无舵之舟漂泊不定。正所谓“立志而圣则圣矣，立志而贤则贤矣”。青年的人生目标会有不同，职业选择也有差异，但只有把自己的小我融入祖国的大我、人民的大我之中，与时代同步伐、与人民共命运，才能更好实现人生价值、升华人生境界。离开了祖国需要、人民利益，任何孤芳自赏都会陷入越走越窄的狭小天地。<br>
+新时代中国青年要树立对马克思主义的信仰、对中国特色社会主义的信念、对中华民族伟大复兴中国梦的信心，到人民群众中去，到新时代新天地中去，让理想信念在创业奋斗中升华，让青春在创新创造中闪光！”<br>
+作为青年，总书记的话可谓醍醐灌顶。我们应该有一个理想为国奋斗，坚定自己的目标。想到这里，我不禁羞愧起来，回想自己平时在学习上时不时的懈怠，脸上发燥。<br>
+习近平说：“第二，新时代中国青年要热爱伟大祖国。孙中山先生说，做人最大的事情，“就是要知道怎么样爱国”。一个人不爱国，甚至欺骗祖国、背叛祖国，那在自己的国家、在世界上都是很丢脸的，也是没有立足之地的。对每一个中国人来说，爱国是本分，也是职责，是心之所系、情之所归。对新时代中国青年来说，热爱祖国是立身之本、成才之基。当代中国，爱国主义的本质就是坚持爱国和爱党、爱社会主义高度统一。<br>
+新时代中国青年要听党话、跟党走，胸怀忧国忧民之心、爱国爱民之情，不断奉献祖国、奉献人民，以一生的真情投入、一辈子的顽强奋斗来体现爱国主义情怀，让爱国主义的伟大旗帜始终在心中高高飘扬！”<br>
+是啊！当代青年应该爱党爱国，牢记共产党的初心，为了当年的初心而奉献自己的一份力。<br>
+习近平说：“第三，新时代中国青年要担当时代责任。时代呼唤担当，民族振兴是青年的责任。鲁迅先生说，青年“所多的是生力，遇见深林，可以辟成平地的，遇见旷野，可以栽种树木的，遇见沙漠，可以开掘井泉的”。在实现中华民族伟大复兴的新征程上，应对重大挑战、抵御重大风险、克服重大阻力、解决重大矛盾，迫切需要迎难而上、挺身而出的担当精神。只要青年都勇挑重担、勇克难关、勇斗风险，中国特色社会主义就能充满活力、充满后劲、充满希望。青年要保持初生牛犊不怕虎、越是艰险越向前的刚健勇毅，勇立时代潮头，争做时代先锋。一切视探索尝试为畏途、一切把负重前行当吃亏、一切“躲进小楼成一统”逃避责任的思想和行为，都是要不得的，都是成不了事的，也是难以真正获得人生快乐的。<br>
+新时代中国青年要珍惜这个时代、担负时代使命，在担当中历练，在尽责中成长，让青春在新时代改革开放的广阔天地中绽放，让人生在实现中国梦的奋进追逐中展现出勇敢奔跑的英姿，努力成为德智体美劳全面发展的社会主义建设者和接班人！”<br>
+鲁迅先生的话总是这么振聋发聩，尽管总书记很神奇地将正面例子和反面例子都举成先生的话，但先生的话一直是引导我前进的火炬。<br>
+习近平说：“第四，新时代中国青年要勇于砥砺奋斗。奋斗是青春最亮丽的底色。“自信人生二百年，会当水击三千里。”民族复兴的使命要靠奋斗来实现，人生理想的风帆要靠奋斗来扬起。没有广大人民特别是一代代青年前赴后继、艰苦卓绝的接续奋斗，就没有中国特色社会主义新时代的今天，更不会有实现中华民族伟大复兴的明天。千百年来，中华民族历经苦难，但没有任何一次苦难能够打垮我们，最后都推动了我们民族精神、意志、力量的一次次升华。今天，我们的生活条件好了，但奋斗精神一点都不能少，中国青年永久奋斗的好传统一点都不能丢。在实现中华民族伟大复兴的新征程上，必然会有艰巨繁重的任务，必然会有艰难险阻甚至惊涛骇浪，特别需要我们发扬艰苦奋斗精神。奋斗不只是响亮的口号，而是要在做好每一件小事、完成每一项任务、履行每一项职责中见精神。奋斗的道路不会一帆风顺，往往荆棘丛生、充满坎坷。强者，总是从挫折中不断奋起、永不气馁。<br>
+新时代中国青年要勇做走在时代前列的奋进者、开拓者、奉献者，毫不畏惧面对一切艰难险阻，在劈波斩浪中开拓前进，在披荆斩棘中开辟天地，在攻坚克难中创造业绩，用青春和汗水创造出让世界刮目相看的新奇迹！”<br>
+“自信人生二百年，会当水击三千里。”是毛主席的一句名句，总书记在这里可谓使用得十分恰当。“自信人生二百年，是指毛主席认为时间特别珍贵，一定要勤奋，大家务必要珍惜时光，夜晚也要当白昼使用，这样就会拥有两次人生的时间。 同时，毛主席在诗句中也在允许的范围内作了艺术夸张，给人一种喜欢长寿一种人生希望的感觉，揭示了诗人的豪情对生命的渴望对生活的渴望对未来斗争的渴望。”我们青年也应向主席学习这种人生态度。<br>
+习近平说：“第五，新时代中国青年要练就过硬本领。青年是苦练本领、增长才干的黄金时期。“青春虚度无所成，白首衔悲亦何及。”当今时代，知识更新不断加快，社会分工日益细化，新技术新模式新业态层出不穷。这既为青年施展才华、竞展风采提供了广阔舞台，也对青年能力素质提出了新的更高要求。不论是成就自己的人生理想，还是担当时代的神圣使命，青年都要珍惜韶华、不负青春，努力学习掌握科学知识，提高内在素质，锤炼过硬本领，使自己的思维视野、思想观念、认识水平跟上越来越快的时代发展。<br>
+新时代中国青年要增强学习紧迫感，如饥似渴、孜孜不倦学习，努力学习马克思主义立场观点方法，努力掌握科学文化知识和专业技能，努力提高人文素养，在学习中增长知识、锤炼品格，在工作中增长才干、练就本领，以真才实学服务人民，以创新创造贡献国家！”<br>
+总书记在这里又一次使用了用典的手法，足以见得总书记的文学素养。青年作为国家未来的栋梁应该注重自己的创新能力，为国家的创造事业做一份贡献。然而回想自己平时写作业时的照本宣科，让我觉得自己有愧于青年这个身份，更有愧于中国青年这个名头。<br>
+习近平说：“第六，新时代中国青年要锤炼品德修为。人无德不立，品德是为人之本。止于至善，是中华民族始终不变的人格追求。我们要建设的社会主义现代化强国，不仅要在物质上强，更要在精神上强。精神上强，才是更持久、更深沉、更有力量的。青年要把正确的道德认知、自觉的道德养成、积极的道德实践紧密结合起来，不断修身立德，打牢道德根基，在人生道路上走得更正、走得更远。面对复杂的世界大变局，要明辨是非、恪守正道，不人云亦云、盲目跟风。面对外部诱惑，要保持定力、严守规矩，用勤劳的双手和诚实的劳动创造美好生活，拒绝投机取巧、远离自作聪明。面对美好岁月，要有饮水思源、懂得回报的感恩之心，感恩党和国家，感恩社会和人民。要在奋斗中摸爬滚打，体察世间冷暖、民众忧乐、现实矛盾，从中找到人生真谛、生命价值、事业方向。<br>
+新时代中国青年要自觉树立和践行社会主义核心价值观，善于从中华民族传统美德中汲取道德滋养，从英雄人物和时代楷模的身上感受道德风范，从自身内省中提升道德修为，明大德、守公德、严私德，自觉抵制拜金主义、享乐主义、极端个人主义、历史虚无主义等错误思想，追求更有高度、更有境界、更有品位的人生，让清风正气、蓬勃朝气遍布全社会！”<br>
+“故今日之责任，不在他人，而全在我少年。少年智则国智，少年富则国富，少年强则国强，少年独立则国独立，少年自由则国自由，少年进步则国进步，少年胜于欧洲，则国胜于欧洲，少年雄于地球，则国雄于地球。“《中国少年说》可谓十分符合我看完这段的心情。作为中国的年轻一分子，我们应积极向上，做一个道德高尚的中国人，为了中国社会主义的建设、依法治国的完善献出一份力。<br>
+作为当代中国青年我也应以五四精神为精神导向，干出自己的一份事业来！<br>
+心中澎湃，无以言表，谨以鲁迅先生在《灯下漫笔》中的话作结：“但我们也就都像古人一样，永久满足于“古已有之”的时代么？都像复古家一样，不满于现在，就神往于三百年前的太平盛世么？<br>
+自然，也不满于现在的，但是，无须反顾，因为前面还有道路在。而创造这中国历史上未曾有过的第三样时代，则是现在的青年的使命！”<br>
+<em>2019.12.22</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[给自己的小tips]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/gei-zi-ji-de-xiao-tips/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/gei-zi-ji-de-xiao-tips/">
+        </link>
+        <updated>2019-12-15T03:50:11.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>用git更新主题：<br>
+例<code>$ git clone https://github.com/Suremotoo/gridea-theme-nederburg.git</code> <code>$ cd gridea-theme-nederburg</code><br>
+（<code>https://github.com/Suremotoo/gridea-theme-nederburg.git</code>与<code>gridea-theme-nederburg</code>可变）</li>
+</ul>
+<ul>
+<li>pip切换至国内源：<code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/</code>+要安装的
+<ul>
+<li>国内常用镜像源：<pre><code>https://pypi.tuna.tsinghua.edu.cn/simple/   # 清华大学
+https://mirrors.aliyun.com/pypi/simple/     # 阿里云
+https://pypi.douban.com/simple/             # 豆瓣
+https://pypi.mirrors.ustc.edu.cn/simple/    # 中国科学技术大学
+https://pypi.hustunique.com/                # 华中科技大学
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[爱，家庭，生活]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/guan-yu-jie-ji/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/guan-yu-jie-ji/">
+        </link>
+        <updated>2019-11-30T14:49:33.000Z</updated>
+        <content type="html"><![CDATA[<p align="right">——观《天堂的孩子》有感</p>
+戛然而止。这是我看完这部电影的第一感受。
+<p>我迫切地想知道，接下来，那双鞋子的事——到底，妹妹能否拥有一双鞋，而哥哥的鞋子已经破了那该怎么办。</p>
+<p>然而，终究是鱼塘里的脚轻轻摆动，十数个金鱼游窜过来，在脚边围绕。很神奇的是，我的心，那颗有点浮躁不安的心，在这一刻被这部伊朗的电影抚平了。</p>
+<p>这部电影所描写的，我想，不仅仅是一个丢了鞋子的事。哥哥与妹妹之间的情感令我动容，妹妹与盲人的孩子间的友谊充满善意，哥哥与爸爸的互动......这一切都能体现出一个普通的底层伊朗家庭的样子。</p>
+<p>也许，这就是由爱联结起来的，家，的样子吧。我心生感慨，就算没有鞋子，但依然有家人。</p>
+<p>而接下来的一个镜头却莫名地触动了我心中的一根弦：爸爸决定带哥哥去富人区打份零工当园丁，与之前的贫民区画风不同，这里高楼大厦遍地都是，各家都是小别墅，先前在这部电影里好像没见到过的阳光此刻也洒了下来，洁白明亮。</p>
+<p>他们为之服务的那家富人，很友好，哥哥也与里面的小孩玩耍了起来。临走前富人给爸爸的佣金更是让他惊喜。整一个打零工的过程好似在天堂一般，孩子玩耍的画面也仿若文艺复兴的油画。</p>
+<p>我感受到了阶级的存在。</p>
+<p>伊朗，这个政教合一的国家——片子许多地方都有出现伊斯兰教的影子。</p>
+<p>阶级贫富的差距仿佛极难追赶。父子俩在富人家的一次工作所得到的钱已经能使父亲对未来充满了幻想，这笔钱不仅能为兄妹俩各买一双新鞋子还能还掉拖欠许久的房租——这个家庭一直处于负债状况——而这不过是给富人做了一次园丁所得的。</p>
+<p>多么悲哀啊，这笔钱花掉之后呢？这家人恐怕又要回到之前的负债状态，父亲赚来的钱只能勉强度日。这样的贫富差距好似天埑。</p>
+<p>更别说，片中出现的其他更为艰难的人——比如那个盲人。</p>
+<p>所幸，哥哥赢得了比赛。</p>
+<p><em>2019.11.30</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[记本次搭建博客]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke/">
+        </link>
+        <updated>2019-11-10T03:44:47.000Z</updated>
+        <content type="html"><![CDATA[<p>经过曲折，我终于把个人博客给搭建起来了——尽管很粗糙。<br>
+但是，好爽啊！</p>
+<ul>
+<li>此篇文章开始有博客，此前的是未搭建前写的。<br>
+先存着，回头再补（我也不知道什么时候</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[读《狂人日记》有感]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/">
+        </link>
+        <updated>2019-10-20T10:23:11.000Z</updated>
+        <content type="html"><![CDATA[<p>——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！<br>
+上文是《狂人日记》中最出名的段落之一，第一次看到这段文字的时候，我被震惊了。初看惊艳，再细细品，更有一种不一样的感觉。当时的我只知道这话是鲁迅说的，却不太了解其他的。于是，我准备去寻找原文出处。<br>
+老实说，“鲁迅”这个名词，在当时的我心中快接近妖魔化了。试问哪个中学生不对鲁迅的大名心有余悸过？但我还是找来了《狂人日记》拜读。<br>
+先是囫囵吞枣地通读了一遍，了解了大概，但仍是让人不寒而栗。一是，在这个社会里，人吃人；二是，这种人吃人竟然没有人认为不对，唯一认识到的人竟是主角———狂人。<br>
+狂人，狂人，说他狂也不狂，不然何以说出“凡事总须研究，才会明白。”这种话来；说他不狂也不尽然，不然何以有“那赵家的狗，何以看我两眼呢？”此类话。<br>
+然而他究竟是不狂的，在他许多似乎前言不搭后语的日记之中，我们能看到旧社会家族制度和封建礼教对人的迫害、对人性的摧残。<br>
+是在吃人！<br>
+人，吃人。这便是封建礼教的本质。然而无论是书中的“正常人”或是现实中的常人，都对此毫无异议。仿佛生来就是这样的。<br>
+“一定是他娘老子先教的”！<br>
+不然，怎么有人生来就会吃人呢？<br>
+不然，怎么有人生来就会用封建礼教约束人、教服人、吃掉人呢？<br>
+若是不服，不跟着一起，就是疯子！“预备下一个疯子的名目罩上我。将来吃了，不但太平无事，怕还会有人见情。佃户说的大家吃了一个恶人，正是这方法。这是他们的老谱！”于是乎，狂人便理所应当地，成为了狂人。<br>
+而那些受过迫害的人呢？“他们——也有给知县打枷过的，也有给绅士掌过嘴的，也有衙役占了他妻子的，也有老子娘被债主逼死的”。然后他们就起来迫害其他人，比如——狂人。然后，“唇边还抹着人油，而且心里满装着吃人的意思”地，说：“这是从来如此……”<br>
+于是，这个猛士，被迫害但不屈服的猛士，发问道：“从来如此，便对么？”<br>
+“我不同你讲这些道理；总之你不该说，你说便是你错！”<br>
+狂人在努力地抗争，他仍然是拥有希望的，他将希望寄托于新生，发出呐喊：“没有吃过人的孩子，或者还有？<br>
+救救孩子……“<br>
+然而我竟也不知道到了现在，吃人的事情也仍是轮番上演。愚昧的受害者与加害者，打着传统、正义、正常的旗号，敲锣打鼓。各各摩拳擦掌，准备好了文明人的餐具，意欲吃人。<br>
+时间永是流逝，街市依旧太平<br>
+<em>10.20.2019</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[清风不识字]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi/">
+        </link>
+        <updated>2019-07-22T06:25:05.000Z</updated>
+        <content type="html"><![CDATA[<p>这时候是乾隆爷的天下。可谓是四海升平，万民归矣。乾隆爷的百姓中，总有那么一些人爱到酒馆里边儿，听听那说书的讲故事。<br>
+“石先生，你不是常自称'话百事'么，今日不如——讲讲徐述夔（kuí）！”是日，保定某甲酒馆中冒出了这么个声音。<br>
+“不错！常闻石先生无话不可谈，无事不可讲……”说出这话的人，拿手指了指天。<br>
+“是这个理。”被称作石先生的说书人笑言，盯着刚刚指天的男子说道：“吴今甘，徐述夔的事迹你可得听好了。”<br>
+且看那说书人身着素色长褂，两肩宽厚，虎背熊腰，脖子粗而短，一条条肥肉横行。再往上瞧，满是横肉的脸上别着厚厚的两瓣唇，挂上一双三角眼。任哪位久慕其大名的听客来，都不禁望而生畏。<br>
+石先生顺了顺身上的衣，再往脸上堆满笑，预备开始讲。这一下，他通身的气派活似换了个人。之前能生生叫人吓退的气势仿佛从未有过，竟是有一股莫名的亲和之感。<br>
+说书人清了清喉咙，道：“要说这位徐述夔，可是触了那位的霉头。”说罢，他朝上拱了拱手。<br>
+“莫道荧光小，犹怀照夜心。<br>
+　清风不识字，何故乱翻书。<br>
+若言徐述夔，便不得不提此诗。他被抄家斩首，便是此诗引起。”<br>
+“不过一诗，便抄家斩首，真是欲加之罪何患无辞！”下首的一位叫了起来。<br>
+“莫急，”说书人笑看他道，“且听我细细道来。”<br>
+“话说这述夔某日起夜，听闻老鼠咬衣，其声切切磨磨闹心肺，嘈嘈杂杂上肝脾。愤懑不已，吟出一句：‘毁我衣冠皆鼠辈，捣尔巢穴是明朝。’来，此是前因。<br>
+又不知何日，徐述夔前往京都。这一去是不知前路几何：通天大路条条赴，我报路长嗟日暮。若是寻常书生，或尽心竭力报国，或惶惶不识终日耳。唯有徐述夔此人，临行前竟又是一句大逆不道：‘明朝期振翮一举去清都。’”<br>
+此话一出，激起千层浪，一位男子便忍不住问：“石先生，大逆不道何以见得？”<br>
+“清都。”石先生看了他一眼，扔下两字继续讲了起来。<br>
+“圣人曰：‘逝者如斯夫，不舍昼夜。’ 徐述夔竟在京中度过不少岁月，并写下了清风诗。也因此被抄家。<br>
+古人云：食君之禄，忠君之事。<br>
+此君不为圣上分忧，更欲前朝，实是大逆不道。”<br>
+“此言差矣，”那位吴今甘在座中道，“不过是几首诗罢，何至于此。”<br>
+“那是缅怀前朝的诗。”旁边的一位反驳。<br>
+吴今甘皱起眉头，不认同：“如果仅仅因为还未付诸行动的话而轻易判罪，甚至到了抄家的地步，真是没道理。”<br>
+……<br>
+是夜，几个士兵敲开了一家人的门。开门的男人看到眼前景象，心头一紧，不知自己到底犯了何罪。<br>
+“我们找吴今甘。”<br>
+“找错人了，他在隔壁。”<br>
+简短的对话后，士兵又敲开的隔壁的门。<br>
+“吴今甘吗，你犯了思想罪。”<br>
+#7.22.2019<br>
+#自己瞎几把完全不看史书乱编</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[焚书令]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/fen-shu-ling/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/fen-shu-ling/">
+        </link>
+        <updated>2019-06-16T08:26:40.000Z</updated>
+        <content type="html"><![CDATA[<p>嬴政看着底下，群臣坐在两列各自交谈或者对饮。他对这副景况很满意，战乱不休的七国在自己的手上统一多年，自己就是这个天下唯一的皇帝，他就忍不住地高兴。于是他站了起来，对着臣子们朗声地笑：“好！朕敬各位一杯！”<br>
+臣子们也都纷纷站起来，与嬴政喝了一杯酒。<br>
+这时侯，仆射周青臣出列，脸上不住的谄媚，向高坐在殿上的皇帝躬身一拜：“多年前，秦的地方也不过区区千里，全赖陛下神灵明圣，平定了海内诸国，将蛮夷所放逐，日与月所照到的地方，没有一个是不臣服的。您将诸侯国变为了郡县，所以人人都能得以安乐，不用担心收到战争的危害，这种功业可以传万代，自上古以来没有哪一位能比得上陛下的威德。”<br>
+“哈哈！”尽管是奉承的话，但嬴政依然很受用。<br>
+听见这种话，早就对皇帝设郡县不满的齐人博士淳于越忍不住进言：“臣听闻殷、周的君王统治天下一千多年，分封子弟功臣当作自己的辅佐……事情不效法法古人而能长久的，还没有听说过。”<br>
+淳博士舒了口气，转头厌恶地看了眼周仆射，又对皇帝说：“刚才青臣又当面阿谀，以致加重陛下的过失，这不是忠臣干的事。”<br>
+嬴政看着他，眼中似乎燃起了熊熊怒火，又好像毫无波澜，他面无表情地看着淳博士，良久：“此事交给丞相商议。”<br>
+“以前三皇五帝时制度是各不一样的，他们用各自的方法治国，但不是因为要与古人相反，而是时代变化了。”李斯站在嬴政的书案前，笑着说，“现如今，陛下是书同文车同轨，创万世之功业。不是那些愚儒可以知道的。”<br>
+“嗯。”嬴政把玩着一个圭臬镇纸，“这几年，士人们对法令的不满越来越大了，连带着百姓中也有许多的抗议声。”<br>
+“是。”李斯了然，“现如今天下已经安定了，法令处于一人，百姓如果要养家就得努力种田，这读书人就要学习法令刑禁。”<br>
+李斯抬眼看了看皇帝，嬴政仍然在把玩那块圭臬，脸上看不出什么表情，半眯的眼睛透不出任何情绪。皇帝的不表态代表不满意。李斯的心头一跳，说道：“现在这批儒生不学当今而效法古人，并借此来否定当今，惑乱百姓的听闻……”<br>
+“长此以往，儒生之口就是天下人之口。”皇帝严冷声音突然响起。<br>
+李斯直接跪了下去，俯身大拜，言语干涩，声音带着微微的颤抖：“丞相我李斯冒死进言：古代天下分散混乱，人人都在夸耀自己私下所学的知识，诽谤在上位者所制定的政策法令。现在天下一统，已有是非黑白。私人讲学又结党反对法令教化，一有朝廷政令，就以各自所学进行评议。入朝时心不在焉，出朝则街谈巷议，用大言欺君来博取声誉，用特立独行来赢得美名，还率领臣民兴诽谤！……臣请陛下，令史官把不是记载秦朝的典籍一律烧毁。”<br>
+他咽了咽口水，喉咙便顺畅了起来：“如果不是博士官的职务，这天下敢有收藏《诗》、《书》，此类百家著作的，全部搜出，送到官府烧毁。有二人敢谈论《诗》、《书》的，处死。百姓都是健忘的，等过几个月，思想罪将合情合理。”<br>
+“医药、卜筮、种植一类的书，不可烧。”嬴政的声音比刚才缓和了许多。<br>
+“是。”李斯继续，“只有医药、卜筮、种植一类的书所不烧。如果有想学法令的，以官吏为老师。”<br>
+“那么，你整理一下，书于我。”<br>
+#6.16.2019</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[娜塔莎的悲壮]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang/">
+        </link>
+        <updated>2019-05-25T06:24:14.000Z</updated>
+        <content type="html"><![CDATA[<p>娜塔莎·罗曼诺夫（Natasha Romanoff），黑寡妇，初代复仇者之一，前苏联特工。<br>
+你可以将诡计之神洛基骗过，可以将被心灵宝石控制的鹰眼唤醒，可以将处在狂暴状态的浩克安抚。<br>
+总是会有人质疑，黑寡妇和鹰眼两个凡人，怎么能当超级英雄呢？鹰眼，好歹还有射箭的特长，弹无虚发。而娜塔莎，似乎只是特工，也没有其它超能力，怎么会是超级英雄。你也许不应该在复联之中。<br>
+有人说，娜塔莎是其它几位复仇者之间的桥梁，你是那个能将他们联系起来的蛛网。是啊，你将复联当成了家，将其它的复仇者当成了家人。其它复仇者们也爱复联，是将复联的朋友们看成亲人，而娜塔莎是看成了家人。<br>
+托尼有小辣椒和小蜘蛛，史蒂夫有佩姬和巴基，索尔有父母与洛基，鹰眼妻儿双全……而你只有他们。<br>
+那个响指后的五年后，有要归园田居的，有自暴自弃的，而你一直不放弃，固执地寻求能让失去的人回来的方法，努力聚起可用的力量，于是到最后：“For the last five years I have been to do one thing, get to right here. That’s all it’s been about. Bringing everybody back. Let me go. It is OK.”(“过去五年我一直在做一件事，那就是来到这里。这就是我存在的意义所在。把所有人都就回来。让我去吧，没关系的。”)<br>
+说了一分钟后见的你，是唯一那个无法再见的……<br>
+“如果娜塔莎有家人，那就是我们。”队长说。<br>
+娜塔莎为了这个家，殚精竭虑，甚至牺牲了自己。你在为了灵魂宝石的那一跳的过程中在想什么呢？是不是在庆幸克林顿没有跳下去，他还有老婆孩子；是不是再欣慰灵魂宝石能拿到，失去的人还能再回来。<br>
+而自己，孑然一身了无牵挂，正是去换来灵魂宝石的最佳人选。 于是，你义无反顾地冲了下去，正如出发前说的：“不惜一切代价。”但这个代价最多也只能是你。<br>
+“假如我不曾见过光明，我本可以忍受黑暗。”——狄金森<br>
+于是，曾在黑暗中的罗曼诺夫特工为了你的光明——复联这个家，为了让鹰眼的家庭完整，为了让所有人回来，你选择了自己的永不回来。<br>
+你害怕吗？当骨头因撞击断裂，当内脏因撞击而破。那是怎么样的苦痛啊，你向来是惯于忍受苦楚的，这一次也是。<br>
+娜塔莎·罗曼诺夫也有一颗温暖的心啊。<br>
+然而，到了最后，或为了独立电影电影的造势或因为更重要的斯塔克先生，漫威到了《END GAME》的最后也没有为你准备葬礼。<br>
+我先知道了你是怎么死的，然后才了解到你是怎么来的。<br>
+娜塔莎！娜塔莎!<br>
+你还有很多人爱着的，不仅是复联大家庭，还有其它很多很多的人啊。<br>
+You are not alone,too.<br>
+I love you three thousand.</p>
+<p>5.25.2019</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[五四！五四！]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/wu-si-wu-si/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si/">
+        </link>
+        <updated>2019-05-03T06:22:31.000Z</updated>
+        <content type="html"><![CDATA[<p>愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光，就令萤火一般，也可以在黑暗里发一点光，不必等候炬火。此后如竟没有炬火：我便是唯一的光。<br>
+——鲁迅《热风·随感录四十一》<br>
+时间匆匆流逝，不知不觉中我们竟迎来了“五四”的一百周年。<br>
+当年，我们在巴黎和会中失利，屈辱接受条约。消息传回，举国哗然，在校学生愤而罢课，商人罢市工人罢工。最后，北洋政府放人，领土主权回收。正是“五四”开启了新民主主义革命。<br>
+如此热血，如此慷慨，我辈当以之为楷模！遇深林则辟平地，遇旷野则栽树木，遇沙漠则掘井泉。“青年要保持初生牛犊不怕虎、越是艰险越向前的刚健勇毅，勇立时代潮头，争做时代先锋。”要拆了这屋顶，毁了那铁屋。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>我以为不必在意流言蜚语，只管撸起袖子干！<br>
+“大胆地说话，勇敢地进行，忘掉了一切利害，推开了古人，将自己的真心的话发表出来。”这是鲁迅先生在《无声的中国》中所言，胸怀爱国之心的我们自然要勇敢地呐喊出所思所想。而最怕的，便是沉默，“沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。”<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>我们要敢想、敢说、敢发声，最重要的便是说出真话，说出自己的心里话。习近平总书记在这次“在纪念五四运动100周年大会上的讲话”中提到：“我们要关注青年所思、所忧、所盼。”这不仅是劝告长辈关心青年，更是鼓励青年表达自己！<br>
+君不见，“五四”中多少先贤站出来发声，多少学生自发游行。他们在争取领土主权，在表达自己拳拳爱国之心，在为了祖国而奋斗！因为他们的一腔热血，当时的中国再黑暗也有希望，伸手不见五指中迸发出的微小火光最终会带来光明，将无声的中国变为有声的中国。<br>
+奔走，发声，只盼能救中国。尽管最后资本主义让他们失望了，悲切地说：“我觉得革命以前，我是做奴隶；革命以后不多久，就受了奴隶的骗，变成他们的奴隶了。我觉得有许多民国国民而是民国的敌人。”<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 但我想历史决不会重演，只要我们坚定对马克思主义的信仰、对中国特色社会主义的信念、对中华民族伟大复兴中国梦的信心，就一定能将“五四”的精神传承并发扬光大。<br>
+路漫漫其修远兮，吾将上下而求索！<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<p>5.3.2019</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>“遇深林则辟平地，遇旷野则栽树木，遇沙漠则掘井泉！”化用《华盖集·导师》中“你们所多的是生力，遇见深林，可以辟成平地的，遇见旷野，可以栽种树木，遇见沙漠，可以开掘井泉的。”；“青年要保持初生牛犊不怕虎、越是艰险越向前的刚健勇毅，勇立时代潮头，争做时代先锋。”语出习近平“在纪念五四运动100周年大会上的讲话”；“要拆了这屋顶，毁了那铁屋。”化用《无声的中国》中“中国人的性情是总喜欢调和，折中的。譬如你说，这屋子太暗，须在这里开一个窗，大家一定不允许的。但如果你主张拆掉屋顶，他们就会来调和，愿意开窗了。”及《呐喊·自序》中“假如一间铁屋子，是绝无窗户而万难破毁的，里面有许多熟睡的人们，不久都要闷死了，然而是从昏睡入死灭，并不感到就死的悲哀。现在你大嚷起来，惊起了较为清醒的几个人，使这不幸的少数者来受无可挽救的临终的苦楚，你倒以为对得起他们么？……然而几个人既然起来，你不能说决没有毁坏这铁屋的希望。” <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>“沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。”语出《纪念刘和珍君》。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>“我觉得革命以前，我是做奴隶；革命以后不多久，就受了奴隶的骗，变成他们的奴隶了。我觉得有许多民国国民而是民国的敌人。”语出《华盖集·忽然想到四》。 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>“路漫漫其修远兮，吾将上下而求索！”语出《离骚》。 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浅侃“人类的本质是复读机”]]></title>
+        <id>https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/</id>
+        <link href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/">
+        </link>
+        <updated>2019-03-24T06:16:33.000Z</updated>
+        <content type="html"><![CDATA[<p>众所周知，人类的本质是复读机。<br>
+自幼时以来，人类便开始复读，例如：“叫妈妈”“妈妈”。从此，人便走上复读机之路。<br>
+之后便开始上学，从老师、课本之中汲取知识，其过程也就是复读的过程。学文科时，通过不断重复，多且繁的知识在一遍遍的复读中去除冗余，完善所需，以求从全损音质逐步变为无损音质；学理科时，也通过不断地使用公式，来输出曾被百千人输出过的结果。<br>
+在这个过程中，我们可以发现，这复读机的复读效率并不怎么样。只有在同一台复读机通过重复复读相同内容的情况下，附以加工，才会使最后结果趋向精确。那么，如果是一台复读机，复读前一台，而又有一台再复读，以此类推，会是怎么样呢？结果显而易见，越到后面，声音质量会越差。于是，便出现了这样的句子：<br>
+“人类的本质是复读机。”<br>
+“人类的木质是复读机。”<br>
+“人米的木质是夏读机。”<br>
+“人米勺十质足夏卖几。”<br>
+某位不愿意透露姓名的明代思想家教育家李贽曾在作品《题孔子像于芝佛院》中写道：“以孔子有是言也……儒先亿度而言之，父师沿袭而诵之，小子聋而听之。万口一词，不可破也；千年一律，不自知也。”<br>
+这复读得越多，那么音质则会更涣散，所能发散的也就更广泛，也能传播得越广泛。这所谓的流言便也就出来了。<br>
+流言之力，是能使粪便增光，蛆虫成圣的。——鲁迅<br>
+或许有人会质疑，这也不过只能证明人类与复读机有些许相同之处，何来本质。<br>
+伟大的马克思先生曾说过：“人的本质不是单个人所固有的抽象物,在其现实性上,它是一切社会关系的总和。”、“观念的东西不外是移入人的头脑并在人的头脑中改造过的物质的东西而已。”<br>
+人，一开始是类人猿。那么是什么把人和类人猿分开了呢？复读，不断地复读，并且能储存下来，能转换格式，再重新输出结果，让其它复读机在进行复读。这便有了社会关系。而所谓的观念者，不就是被储存下来的文件？<br>
+鲁迅先生也有说过相似的话：“天才们无论怎样说大话，归根结蒂，还是不能凭空创造。描神画鬼，毫无对证，本可以专靠了神思，所谓“天马行空”似的挥写了，然而他们写出来的，也不过是三只眼，长颈子，就是在常见的人体上，增加了眼睛一只，增长了颈子二三尺而已。”<br>
+此不外乎复读机者？<br>
+就是上文引用名人名言，不也是复读？<br>
+那么人类的本质，大概确是复读机不错了。<br>
+3.24.2019</p>
+]]></content>
+    </entry>
+</feed>

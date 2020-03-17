@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+  <head lang="zh">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta name="renderer" content="webkit">
+<meta name="description" content="如履薄冰，如临深渊。">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+<title>Python-beautiful soup库入门 | 履冰&#39;blog</title>
+<link href="https://gaoliujiadi.github.io/blog//styles/main.css" type="text/css" rel="stylesheet"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.css"/>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.js"></script>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/contrib/auto-render.min.js"></script>
+<script src="//cdn.bootcss.com/mermaid/8.3.1/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.pjax.min.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/basic.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/search.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script async type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/lightgallery/1.6.12/js/lightgallery.min.js"></script>
+<script src="https://cdn.bootcss.com/tocbot/4.8.1/tocbot.js"></script>
+
+  </head>
+  <body>
+     <div class="header">
+      <div class="logo_title">
+		  
+        <div class="title animated fadeInDown"><img id="img1" alt="logo" style="display:inline-block;" src="https://gaoliujiadi.github.io/blog//images/avatar.png"/>
+<script>
+var r = 0;
+    window.onload = function(){
+        var current = 0;
+        document.getElementById('img1').onclick = function(){
+            current = (current+90)%360;
+            this.style.transform = 'rotate('+current+'deg)';
+        }
+    };
+</script>
+
+          <h1 title="履冰&#39;blog" class="weaklink"><a  href="/">履冰&#39;blog</a>
+
+          </h1>
+	  
+
+          <div class="navbar weaklink">
+            <div class="normal_nav">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+		
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	  
+ 
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+  </li
+ 
+  
+ <li>
+
+      </ul>
+	  
+      <div style="inline-block;float:right;margin-top:1em">
+        <form id="gridea-search-form" data-update="1578893743252" action="/search/index.html">
+          <input class="search-input" autocomplete="on" spellcheck="false" name="q" placeholder="Search...">
+        </form>
+      </div>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+            </div>
+			
+			<div class="hamberger"><i class="fa fa-bars"></i>
+<i class="fa fa-times"></i>
+
+			</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="hidden_nav animated fadeInDown">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+
+  </li>
+
+
+
+
+      </ul>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+      </div>
+
+    </div>
+
+
+
+
+
+    <div class="main" id="pjax-container">
+      <div class="main-inner">
+<div class="content">
+<div class="post_page" >
+<div class="post">
+  <div class="post_title sm_margin">
+    <h2><a>Python-beautiful soup库入门</a>
+    </h2>
+  </div>
+<script>
+function lan(){
+	if (document.getElementById("lan").innerText == "繁"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_tw.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "简"
+	}
+	else if(document.getElementById("lan").innerText == "簡"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_cn.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "繁"
+		}
+}
+
+function change(){	
+    var rand = Math.random()*1+1;
+    var num = window.getComputedStyle(document.getElementsByName("show")[0],undefined).fontSize;
+	num = num.slice(0,-2); 
+    document.getElementById("show").style.fontSize = num - rand +'px';
+}
+</script>
+  <div class="post_details">
+    <div class="info"><i class="fa fa-calendar"></i>
+<span class="date_info">2020-02-27</span>
+<i class="fa fa-eye"></i>
+<span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
+<i class="fa fa-bookmark-o"></i>
+<span class="tags_info weaklink">
+	
+	<a href="https://gaoliujiadi.github.io/blog/tag/python/" class="tag">Python</a>
+
+</span>
+<i class="fa fa-anchor"></i>
+<span style="margin-right:15px">
+3821字
+</span>
+<i class="fa fa-clock-o"></i>
+<span style="margin-right:15px">
+22 min read
+</span>
+<span style="margin-right:15px">
+<i class="fa fa-share"></i>
+<a title="QR code" target="_blank" href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/"><i class="fa fa-qrcode"></i></a>
+<a title="qq share" target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/&sharesource=qzone&title=Python-beautiful soup库入门&pics=https://blog.blinkstar.cn/images/avatar.png&summary="><i class="fa fa-qq"></i></a>
+<a title="weibo share" target="_blank" href="https://service.weibo.com/share/share.php?url=https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/&sharesource=weibo&title=Python-beautiful soup库入门 + " - " + &pic="https://blog.blinkstar.cn/images/avatar.png"><i class="fa fa-weibo"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="daxiao" href="javascript:void(0);" onclick="change();" title="调整字体大小"><i class="fa fa-font"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="lan" href="javascript:void(0);" onclick="lan();" title="调整简繁体">繁</a>
+</span>
+</div>
+  </div>
+
+    <div class="post_content markdown">
+	
+	<img id="mememe" alt="featureimg" src="//source.unsplash.com/800x400/?arts,weather">
+	
+    <div name="show" id="show">
+	<p class="md_block"><span class="md_line md_line_start md_line_end"><ul>
+<li>
+<p>演示HTML页面地址：http://python123.io/ws/demo.html</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;http://python123.io/ws/demo.html&quot;)
+&gt;&gt;&gt; r.text
+'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href=&quot;http://www.icourse163.org/course/BIT-268001&quot; class=&quot;py1&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; class=&quot;py2&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'
+&gt;&gt;&gt; demo = r.text
+&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; print(soup.prettify())
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;title&gt;
+   This is a python demo page
+  &lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;p class=&quot;title&quot;&gt;
+   &lt;b&gt;
+    The demo python introduces several python courses.
+   &lt;/b&gt;
+  &lt;/p&gt;
+  &lt;p class=&quot;course&quot;&gt;
+   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+    Basic Python
+   &lt;/a&gt;
+   and
+   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;
+    Advanced Python
+   &lt;/a&gt;
+   .
+  &lt;/p&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</li>
+<li>
+<p><strong><code>from bs4 import BeautifulSoup</code></strong></p>
+<p><code>soup = BeautifulSoup('&lt;p&gt;data&lt;/p&gt;',html.parser)</code></p>
+</li>
+</ul>
+<h2 id="beautiful-soup库的基本元素">Beautiful Soup库的基本元素</h2>
+<h3 id="beautiful-soup类">Beautiful Soup类</h3>
+<ul>
+<li>BeautifulSoup对应一个HTML/XML文档的全部内容</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(&quot;&lt;html&gt;data&lt;/html&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup2 = BeautifulSoup(open(&quot;F://program//spider//demo.html&quot;),&quot;html.parser&quot;)
+</code></pre>
+<h3 id="beautifulsoup类的基本元素">BeautifulSoup类的基本元素</h3>
+<table>
+<thead>
+<tr>
+<th>基本元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tag</td>
+<td>标签，最基本的信息组织单元，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>标签的名字，<code>&lt;p&gt;…&lt;/p&gt;</code>的名字是'p'，格式：<code>&lt;tag&gt;.name</code></td>
+</tr>
+<tr>
+<td>Attributes</td>
+<td>标签的属性，字典形式组织，格式：<code>&lt;tag&gt;.attrs</code></td>
+</tr>
+<tr>
+<td>NavigableString</td>
+<td>标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：<code>&lt;tag&gt;.string</code></td>
+</tr>
+<tr>
+<td>Comment</td>
+<td>标签内字符串的注释部分，一种特殊的Comment类型</td>
+</tr>
+</tbody>
+</table>
+<h4 id="tag标签">Tag标签</h4>
+<p>标签，最基本的信息组织单元，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</p>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.title
+&lt;title&gt;This is a python demo page&lt;/title&gt;
+&gt;&gt;&gt; tag = soup.a
+&gt;&gt;&gt; tag
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+</code></pre>
+<ul>
+<li>任何存在于HTML语法中的标签都可以用<code>soup.&lt;tag&gt;</code>访问获得<br>
+当HTML文档中存在多个相同<tag>对应内容时，<code>soup.&lt;tag&gt;</code>返回第一个</li>
+</ul>
+<h4 id="tag的name">Tag的name</h4>
+<p>标签的名字，<code>&lt;p&gt;…&lt;/p&gt;</code>的名字是'p'，格式：<code>&lt;tag&gt;.name</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.a.name
+'a'
+&gt;&gt;&gt; soup.a.parent.name
+'p'
+&gt;&gt;&gt; soup.a.parent.parent.name
+'body'
+</code></pre>
+<ul>
+<li>每个<code>&lt;tag&gt;</code>都有自己的名字，通过<code>&lt;tag&gt;.name</code>获取，字符串类型</li>
+</ul>
+<h4 id="tag的attrs">Tag的attrs</h4>
+<p>标签的属性，字典形式组织，格式：<code>&lt;tag&gt;.attrs</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; tag = soup.a
+&gt;&gt;&gt; tag.attrs
+{'href': 'http://www.icourse163.org/course/BIT-268001', 'class': ['py1'], 'id': 'link1'}
+&gt;&gt;&gt; tag.attrs['class']
+['py1']
+&gt;&gt;&gt; tag.attrs['href']
+'http://www.icourse163.org/course/BIT-268001'
+&gt;&gt;&gt; type(tag.attrs)
+&lt;class 'dict'&gt;
+&gt;&gt;&gt; type(tag)
+&lt;class 'bs4.element.Tag'&gt;
+</code></pre>
+<ul>
+<li>一个<code>&lt;tag&gt;</code>可以有0或多个属性，字典类型</li>
+</ul>
+<h4 id="tag的navigablestring">Tag的NavigableString</h4>
+<p>标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：<code>&lt;tag&gt;.string</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.a
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+&gt;&gt;&gt; soup.a.string
+'Basic Python'
+&gt;&gt;&gt; soup.p
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&gt;&gt;&gt; soup.p.string
+'The demo python introduces several python courses.'
+&gt;&gt;&gt; type(soup.p.string)
+&lt;class 'bs4.element.NavigableString'&gt;
+</code></pre>
+<ul>
+<li>NavigableString可以跨越多个层次</li>
+</ul>
+<h4 id="tag的comment">Tag的Comment</h4>
+<p>标签内字符串的注释部分，一种特殊的Comment类型</p>
+<pre><code class="language-python">&gt;&gt;&gt; newsoup = BeautifulSoup(&quot;&lt;b&gt;&lt;!--This is a comment--&gt;&lt;/b&gt;&lt;p&gt;This is not a comment&lt;/p&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; newsoup.b.string
+'This is a comment'
+&gt;&gt;&gt; type(newsoup.b.string)
+&lt;class 'bs4.element.Comment'&gt;#注释
+&gt;&gt;&gt; newsoup.p.string
+'This is not a comment'
+&gt;&gt;&gt; type(newsoup.p.string)
+&lt;class 'bs4.element.NavigableString'&gt;#非注释
+</code></pre>
+<ul>
+<li>Comment是一种特殊类型</li>
+</ul>
+<h3 id="beautiful-soup库解析器">Beautiful Soup库解析器</h3>
+<table>
+<thead>
+<tr>
+<th>解析器</th>
+<th>使用方法</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bs4的HTML解析器</td>
+<td><code>BeautifulSoup(mk,'html.parser')</code></td>
+<td>安装bs4库</td>
+</tr>
+<tr>
+<td>lxml的HTML解析器</td>
+<td><code>BeautifulSoup(mk,'lxml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr>
+<td>lxml的XML解析器</td>
+<td><code>BeautifulSoup(mk,'xml')</code></td>
+<td><code>pip install lxml</code></td>
+</tr>
+<tr>
+<td>html5lib的解析器</td>
+<td><code>BeautifulSoup(mk,'html5lib')</code></td>
+<td><code>pip install html5lib</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="基于bs4库的html内容遍历方法">基于bs4库的HTML内容遍历方法</h2>
+<h3 id="标签树的下行遍历">标签树的下行遍历</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.contents</code></td>
+<td>子节点的列表，将<code>&lt;tag&gt;</code>所有儿子节点存入列表</td>
+</tr>
+<tr>
+<td><code>.children</code></td>
+<td>子节点的迭代类型，与.contents类似，用于循环遍历儿子节点</td>
+</tr>
+<tr>
+<td><code>.descendants</code></td>
+<td>子孙节点的迭代类型，包含所有子孙节点，用于循环遍历</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>contents</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,'html.parser')
+&gt;&gt;&gt; soup.head
+&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&gt;&gt;&gt; soup.head.contents
+[&lt;title&gt;This is a python demo page&lt;/title&gt;]
+&gt;&gt;&gt; soup.body.contents
+['\n', &lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;, '\n', &lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;, '\n']
+&gt;&gt;&gt; len(soup.body.contents)
+5
+&gt;&gt;&gt; soup.body.contents[1]
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&gt;&gt;&gt; 
+</code></pre>
+</li>
+<li>
+<p><code>.children</code>（遍历儿子节点）</p>
+<pre><code class="language-python">&gt;&gt;&gt; for child in soup.body.children:
+	print(child)
+
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+</li>
+<li>
+<p><code>.descendants</code>（遍历子孙节点）</p>
+<pre><code class="language-python">&gt;&gt;&gt; for child in soup.body.descendants:
+	print(child)
+
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;
+The demo python introduces several python courses.
+
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;
+Basic Python
+ and 
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+Advanced Python
+.
+</code></pre>
+</li>
+</ul>
+<h3 id="标签树的上行遍历">标签树的上行遍历</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.parent</code></td>
+<td>节点的父亲标签</td>
+</tr>
+<tr>
+<td><code>.parents</code></td>
+<td>节点先辈标签的迭代类型，用于循环遍历先辈节点</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>.parent</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.title.parent
+&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&gt;&gt;&gt; soup.html.parent
+&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+&gt;&gt;&gt; soup.parent
+</code></pre>
+</li>
+<li>
+<p><code>.parents</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; for parent in soup.a.parents:
+	if parent is None:
+		print(parent)
+	else:
+		print(parent.name)
+		
+p
+body
+html
+[document]
+</code></pre>
+<ul>
+<li>遍历所有先辈节点，包括soup本身，所以要区别判断</li>
+</ul>
+</li>
+</ul>
+<h3 id="标签树的平行遍历">标签树的平行遍历</h3>
+<p>平行遍历发生在同一个父节点下的各节点间</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.next_sibling</code></td>
+<td>返回按照HTML文本顺序的下一个平行节点标签</td>
+</tr>
+<tr>
+<td><code>.previous_sibling</code></td>
+<td>返回按照HTML文本顺序的上一个平行节点标签</td>
+</tr>
+<tr>
+<td><code>.next_siblings</code></td>
+<td>迭代类型，返回按照HTML文本顺序的后续所有平行节点标签</td>
+</tr>
+<tr>
+<td><code>.previous_siblings</code></td>
+<td>迭代类型，返回按照HTML文本顺序的前续所有平行节点标签</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>.next_sibling</code>&amp;<code>.previous_sibling</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.a.next_sibling
+' and '
+&gt;&gt;&gt; soup.a.next_sibling.next_sibling
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+&gt;&gt;&gt; soup.a.previous_sibling
+'Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n'
+&gt;&gt;&gt; soup.a.previous_sibling.previous_sibling
+&gt;&gt;&gt; soup.a.parent
+&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;
+</code></pre>
+</li>
+<li>
+<p><code>.next_siblings</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; for sibling in soup.a.next_siblings:
+	print(sibling)
+
+	
+ and 
+&lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;
+.
+</code></pre>
+</li>
+<li>
+<p><code>.previous_siblings</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; for sibling in soup.a.previous_siblings:
+	print(sibling)
+
+	
+Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+</code></pre>
+</li>
+</ul>
+<h2 id="美化">美化</h2>
+<h3 id="bs4库的prettify方法">bs4库的prettify()方法</h3>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;http://python123.io/ws/demo.html&quot;)
+&gt;&gt;&gt; demo = r.text
+&gt;&gt;&gt; demo
+'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class=&quot;title&quot;&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href=&quot;http://www.icourse163.org/course/BIT-268001&quot; class=&quot;py1&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; class=&quot;py2&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'
+&gt;&gt;&gt; from bs4 import BeautifulSoup
+&gt;&gt;&gt; soup = BeautifulSoup(demo,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.prettify()
+'&lt;html&gt;\n &lt;head&gt;\n  &lt;title&gt;\n   This is a python demo page\n  &lt;/title&gt;\n &lt;/head&gt;\n &lt;body&gt;\n  &lt;p class=&quot;title&quot;&gt;\n   &lt;b&gt;\n    The demo python introduces several python courses.\n   &lt;/b&gt;\n  &lt;/p&gt;\n  &lt;p class=&quot;course&quot;&gt;\n   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\n   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;\n    Basic Python\n   &lt;/a&gt;\n   and\n   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;\n    Advanced Python\n   &lt;/a&gt;\n   .\n  &lt;/p&gt;\n &lt;/body&gt;\n&lt;/html&gt;'
+&gt;&gt;&gt; print(soup.prettify())
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;title&gt;
+   This is a python demo page
+  &lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;p class=&quot;title&quot;&gt;
+   &lt;b&gt;
+    The demo python introduces several python courses.
+   &lt;/b&gt;
+  &lt;/p&gt;
+  &lt;p class=&quot;course&quot;&gt;
+   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+   &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+    Basic Python
+   &lt;/a&gt;
+   and
+   &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;
+    Advanced Python
+   &lt;/a&gt;
+   .
+  &lt;/p&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li>
+<p>prettify()可用于标签，方法：<code>&lt;tag&gt;.prettify()</code></p>
+<pre><code class="language-python">&gt;&gt;&gt; print(soup.a.prettify())
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;
+ Basic Python
+&lt;/a&gt;
+</code></pre>
+</li>
+</ul>
+<h3 id="bs4库的编码">bs4库的编码</h3>
+<ul>
+<li>
+<p>bs4库将任何HTML输入都变成utf‐8编码<br>
+Python 3.x默认支持编码是utf‐8,解析无障碍</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup = BeautifulSoup(&quot;&lt;p&gt;中文&lt;/p&gt;&quot;,&quot;html.parser&quot;)
+&gt;&gt;&gt; soup.p.string
+'中文'
+&gt;&gt;&gt; print(soup.p.prettify())
+&lt;p&gt;
+ 中文
+&lt;/p&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="基于bs4库的html内容查找方法">基于bs4库的HTML内容查找方法</h2>
+<p><b><code>&lt;&gt;.find_all(name, attrs, recursive, string, **kwargs)</code></b></p>
+<p>返回一个<strong>列表</strong>类型，存储查找的结果</p>
+<ul>
+<li>
+<p>name:对标签名称的检索字符串</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('a')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+&gt;&gt;&gt; soup.find_all(['a','b'])
+[&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;, &lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+</code></pre>
+<ul>
+<li>
+<p>若标签名称为&quot;True&quot;，将显示所有标签信息:</p>
+<pre><code class="language-python">&gt;&gt;&gt; for tag in soup.find_all(True):
+	print(tag.name)
+
+html
+head
+title
+body
+p
+b
+p
+a
+a
+</code></pre>
+</li>
+<li>
+<p>若只想搜索有&quot;b&quot;的标签，用正则表达式库:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import re
+&gt;&gt;&gt; for tag in soup.find_all(re.compile('b')):
+	print(tag.name)
+	
+body
+b
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>attrs:对标签属性值的检索字符串，可标注属性检索</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('p','course')
+[&lt;p class=&quot;course&quot;&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:
+
+&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt; and &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;]
+&gt;&gt;&gt; soup.find_all(id='link1')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;]
+</code></pre>
+</li>
+<li>
+<p>recursive:是否对子孙全部检索，默认True</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all('a')
+[&lt;a class=&quot;py1&quot; href=&quot;http://www.icourse163.org/course/BIT-268001&quot; id=&quot;link1&quot;&gt;Basic Python&lt;/a&gt;, &lt;a class=&quot;py2&quot; href=&quot;http://www.icourse163.org/course/BIT-1001870001&quot; id=&quot;link2&quot;&gt;Advanced Python&lt;/a&gt;]
+&gt;&gt;&gt; soup.find_all('a',recursive=False)
+[]
+</code></pre>
+</li>
+<li>
+<p>string:&lt;&gt;…&lt;/&gt;中字符串区域的检索字符串</p>
+<pre><code class="language-python">&gt;&gt;&gt; soup.find_all(string='Basic Python')
+['Basic Python']
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; soup.find_all(string=re.compile('python'))
+['This is a python demo page', 'The demo python introduces several python courses.']
+</code></pre>
+</li>
+</ul>
+<p><em><code>&lt;tag&gt;(..)</code>等价于<code>&lt;tag&gt;.find_all(..)</code><br>
+<code>soup(..)</code>等价于<code>soup.find_all(..)</code></em></p>
+<h3 id="扩展方法">扩展方法</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find()</code></td>
+<td>搜索且只返回一个结果，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_parents()</code></td>
+<td>在先辈节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_parent()</code></td>
+<td>在先辈节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_next_siblings()</code></td>
+<td>在后续平行节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_next_sibling()</code></td>
+<td>在后续平行节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_previous_siblings()</code></td>
+<td>在前序平行节点中搜索，返回列表类型，同<code>.find_all()</code>参数</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&lt;&gt;.find_previous_sibling()</code></td>
+<td>在前序平行节点中返回一个结果，同<code>.find()</code>参数</td>
+</tr>
+</tbody>
+</table>
+</span></p></div><div id = "warn"></div>
+	<br>
+	<hr>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-user"></i>本文由<a rel="license" href="/">履冰&#39;blog</a>创作</div>	
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-cc"></i>该文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。转载请注明出处！</div>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-clock-o"></i>发布时间为：2020-02-27</div>    
+<div class="reward"><div class="reward-button">赏 <span class="reward-code"> <span class="alipay-code"> <img class="alipay-img" alt = "support" src="https://gaoliujiadi.github.io/blog//media/images/alipay.png"><b>支付宝扫码打赏</b> </span> <span class="wechat-code"> <img alt ="support" class="wechat-img" src="https://gaoliujiadi.github.io/blog//media/images/wechat.png"><b>微信打赏</b> </span> </span></div></div>
+<div style="text-align:center;color: #ccc;font-size:14px;">如果觉得这篇文章对您有帮助，可以请作者喝一杯饮料哦🥤</div>    
+</div>
+</div>
+
+<style type="text/css">
+#mememe {
+	border:3px;
+	border-radius:5px;
+    background-repeat: no-repeat;
+    height: 100%;
+	width: 100%;
+	display: inline-block;
+	border-radius:5px; 
+}
+</style>
+
+<div style="width:100%;overflow:hidden">
+
+          <div style="float:right;text-align:right;color:#ccc;font-size:18px;width:50%;">
+            下一篇
+            <a href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/">
+              <p class="post-title">
+                <b>Python-requests库5个实例</b>
+              </p>
+            </a>
+          </div>
+
+
+
+          <div style="float:left;text-align:left;color:#ccc;font-size:18px;width:50%;">
+            上一篇
+            <a href="https://gaoliujiadi.github.io/blog/post/zheng-ze-ru-men/">
+              <p class="post-title">
+                <b>Python-Re库入门</b>
+              </p>
+            </a>
+          </div>
+
+</div>
+
+<div class="doc_comments">
+
+          
+			<div id="gitalk-container"></div>
+            <link href="https://cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css" rel="stylesheet">
+<script>
+  var gitalk = new Gitalk({
+    clientID: '1e4b683b5d2047ab4a97',
+    clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
+    repo: 'blog',
+    owner: 'gaoliujiadi',
+    admin: ['gaoliujiadi'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+          
+			  
+          
+        
+</div>
+<script>
+var link="";$("img").each((i,o)=>{var o=$(o);if(o.attr("src").indexOf("sinaimg")>0||o.attr("src").indexOf("qpic")>0||o.attr("src").indexOf("baidu")>0||o.attr("src").indexOf("sinaimg")>0){o.attr("referrerpolicy","no-referrer");link=o.attr("src");o.attr("src",link);}});
+imgList = document.querySelectorAll('.md_block img')
+imgList.forEach(img => {
+  if (img.alt !== "logo" && img.alt !== "featureimg"){
+  let div1 = document.createElement('div')
+  let div = document.createElement('div')
+  div.className='back';
+  div.setAttribute("data-src",img.src)
+  var figuration = document.createElement("figcaption")
+  figuration.innerHTML = '<a href="' + img.src + '">' + img.alt + '</a>'
+  img.replaceWith(div1)
+  div1.appendChild(div)
+  div.appendChild(img)
+  div1.appendChild(figuration)}
+})
+$('img').on('error',function(){$(this).prop('src','https://gaoliujiadi.github.io/blog//media/images/broken.jpg')});$(".md_block a").attr("rel","external nofollow");$("a[rel='external nofollow']").attr("target","_blank");$("a[href^='#']").removeAttr("target");$("a.ex").removeAttr("rel");$("a.ex").removeAttr("target");
+content="<div class='warn'>本文最后更新于2020-02-27，已超过 1 年没有更新，涉及的内容可能已经失效！</div>";var date1="2020-02-27 22:38:34";date1=date1.replace("-","/");var date2=new Date();var date3=date2.getTime()-new Date(date1).getTime();var days=Math.floor(date3/(24*3600*1000));if(days>=365){document.getElementById("warn").innerHTML=content};
+$('#pjax-container').lightGallery({
+    selector: '.back'
+});
+</script>
+  </div>
+</div>
+
+
+      </div>
+<div class="toc">
+<ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#beautiful-soup%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%83%E7%B4%A0">Beautiful Soup库的基本元素</a>
+<ul>
+<li><a href="#beautiful-soup%E7%B1%BB">Beautiful Soup类</a></li>
+<li><a href="#beautifulsoup%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%85%83%E7%B4%A0">BeautifulSoup类的基本元素</a>
+<ul>
+<li><a href="#tag%E6%A0%87%E7%AD%BE">Tag标签</a></li>
+<li><a href="#tag%E7%9A%84name">Tag的name</a></li>
+<li><a href="#tag%E7%9A%84attrs">Tag的attrs</a></li>
+<li><a href="#tag%E7%9A%84navigablestring">Tag的NavigableString</a></li>
+<li><a href="#tag%E7%9A%84comment">Tag的Comment</a></li>
+</ul>
+</li>
+<li><a href="#beautiful-soup%E5%BA%93%E8%A7%A3%E6%9E%90%E5%99%A8">Beautiful Soup库解析器</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9F%BA%E4%BA%8Ebs4%E5%BA%93%E7%9A%84html%E5%86%85%E5%AE%B9%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95">基于bs4库的HTML内容遍历方法</a>
+<ul>
+<li><a href="#%E6%A0%87%E7%AD%BE%E6%A0%91%E7%9A%84%E4%B8%8B%E8%A1%8C%E9%81%8D%E5%8E%86">标签树的下行遍历</a></li>
+<li><a href="#%E6%A0%87%E7%AD%BE%E6%A0%91%E7%9A%84%E4%B8%8A%E8%A1%8C%E9%81%8D%E5%8E%86">标签树的上行遍历</a></li>
+<li><a href="#%E6%A0%87%E7%AD%BE%E6%A0%91%E7%9A%84%E5%B9%B3%E8%A1%8C%E9%81%8D%E5%8E%86">标签树的平行遍历</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BE%8E%E5%8C%96">美化</a>
+<ul>
+<li><a href="#bs4%E5%BA%93%E7%9A%84prettify%E6%96%B9%E6%B3%95">bs4库的prettify()方法</a></li>
+<li><a href="#bs4%E5%BA%93%E7%9A%84%E7%BC%96%E7%A0%81">bs4库的编码</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9F%BA%E4%BA%8Ebs4%E5%BA%93%E7%9A%84html%E5%86%85%E5%AE%B9%E6%9F%A5%E6%89%BE%E6%96%B9%E6%B3%95">基于bs4库的HTML内容查找方法</a>
+<ul>
+<li><a href="#%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95">扩展方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+    </div>
+	
+   <div class="footer">
+<div class="site_footer_wrap"><div class="site_footer">
+
+      <div class="mysocials"><div class="my_socials">
+		   
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+</div>
+      </div>
+
+      <div class="copyright" id="copyright">
+	  <script>
+		var date=new Date;
+		var year=date.getFullYear(); 
+		document.write("Copyright © "+year+" " + "履冰&#39;blog. ");
+		</script>
+		Powered by Gridea.
+		<br>
+		本站已稳定运行了
+		<strong><script type="text/javascript">
+		var urodz= new Date("11/11/2019");
+		var now = new Date();
+		var ile = now.getTime() - urodz.getTime();
+		var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+		document.write(+dni)
+		</script>
+		</strong>天
+		<br>
+		本站总访问量为 <strong><span id="busuanzi_value_site_uv"></span></strong> 次
+	  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+      </div>
+	  <img src="https://gaoliujiadi.github.io/blog//media/images/font.svg">
+
+    </div>
+
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/darkmode.js"></script>
+<script>
+new Darkmode({label: '🌓',backgroundColor: '#f7f7f7',time: '0.5s'}).showWidget();
+console.clear();
+console.log("\n %c \u26a1Theme: Bitcron-pro Author's Blog:https://blog.blinkstar.cn  Writen By Serence  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;", );
+</script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+
+
+</body>
+
+</html>

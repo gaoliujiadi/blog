@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+  <head lang="zh">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta name="renderer" content="webkit">
+<meta name="description" content="如履薄冰，如临深渊。">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+<title>Python-scrapy学习 | 履冰&#39;blog</title>
+<link href="https://gaoliujiadi.github.io/blog//styles/main.css" type="text/css" rel="stylesheet"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.css"/>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.js"></script>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/contrib/auto-render.min.js"></script>
+<script src="//cdn.bootcss.com/mermaid/8.3.1/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.pjax.min.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/basic.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/search.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script async type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/lightgallery/1.6.12/js/lightgallery.min.js"></script>
+<script src="https://cdn.bootcss.com/tocbot/4.8.1/tocbot.js"></script>
+
+  </head>
+  <body>
+     <div class="header">
+      <div class="logo_title">
+		  
+        <div class="title animated fadeInDown"><img id="img1" alt="logo" style="display:inline-block;" src="https://gaoliujiadi.github.io/blog//images/avatar.png"/>
+<script>
+var r = 0;
+    window.onload = function(){
+        var current = 0;
+        document.getElementById('img1').onclick = function(){
+            current = (current+90)%360;
+            this.style.transform = 'rotate('+current+'deg)';
+        }
+    };
+</script>
+
+          <h1 title="履冰&#39;blog" class="weaklink"><a  href="/">履冰&#39;blog</a>
+
+          </h1>
+	  
+
+          <div class="navbar weaklink">
+            <div class="normal_nav">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+		
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	  
+ 
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+  </li
+ 
+  
+ <li>
+
+      </ul>
+	  
+      <div style="inline-block;float:right;margin-top:1em">
+        <form id="gridea-search-form" data-update="1578893743252" action="/search/index.html">
+          <input class="search-input" autocomplete="on" spellcheck="false" name="q" placeholder="Search...">
+        </form>
+      </div>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+            </div>
+			
+			<div class="hamberger"><i class="fa fa-bars"></i>
+<i class="fa fa-times"></i>
+
+			</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="hidden_nav animated fadeInDown">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+
+  </li>
+
+
+
+
+      </ul>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+      </div>
+
+    </div>
+
+
+
+
+
+    <div class="main" id="pjax-container">
+      <div class="main-inner">
+<div class="content">
+<div class="post_page" >
+<div class="post">
+  <div class="post_title sm_margin">
+    <h2><a>Python-scrapy学习</a>
+    </h2>
+  </div>
+<script>
+function lan(){
+	if (document.getElementById("lan").innerText == "繁"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_tw.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "简"
+	}
+	else if(document.getElementById("lan").innerText == "簡"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_cn.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "繁"
+		}
+}
+
+function change(){	
+    var rand = Math.random()*1+1;
+    var num = window.getComputedStyle(document.getElementsByName("show")[0],undefined).fontSize;
+	num = num.slice(0,-2); 
+    document.getElementById("show").style.fontSize = num - rand +'px';
+}
+</script>
+  <div class="post_details">
+    <div class="info"><i class="fa fa-calendar"></i>
+<span class="date_info">2020-03-06</span>
+<i class="fa fa-eye"></i>
+<span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
+<i class="fa fa-bookmark-o"></i>
+<span class="tags_info weaklink">
+	
+	<a href="https://gaoliujiadi.github.io/blog/tag/python/" class="tag">Python</a>
+
+</span>
+<i class="fa fa-anchor"></i>
+<span style="margin-right:15px">
+1575字
+</span>
+<i class="fa fa-clock-o"></i>
+<span style="margin-right:15px">
+7 min read
+</span>
+<span style="margin-right:15px">
+<i class="fa fa-share"></i>
+<a title="QR code" target="_blank" href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/"><i class="fa fa-qrcode"></i></a>
+<a title="qq share" target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/&sharesource=qzone&title=Python-scrapy学习&pics=https://blog.blinkstar.cn/images/avatar.png&summary="><i class="fa fa-qq"></i></a>
+<a title="weibo share" target="_blank" href="https://service.weibo.com/share/share.php?url=https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/&sharesource=weibo&title=Python-scrapy学习 + " - " + &pic="https://blog.blinkstar.cn/images/avatar.png"><i class="fa fa-weibo"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="daxiao" href="javascript:void(0);" onclick="change();" title="调整字体大小"><i class="fa fa-font"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="lan" href="javascript:void(0);" onclick="lan();" title="调整简繁体">繁</a>
+</span>
+</div>
+  </div>
+
+    <div class="post_content markdown">
+	
+	<img id="mememe" alt="featureimg" src="//source.unsplash.com/800x400/?arts,weather">
+	
+    <div name="show" id="show">
+	<p class="md_block"><span class="md_line md_line_start md_line_end"><h2 id="scrapy爬虫框架结构">Scrapy爬虫框架结构</h2>
+<p>Scrapy不是一个函数功能库，而是一个爬虫框架。</p>
+<ul>
+<li>
+<p>分布式，“5+2”结构</p>
+<figure data-type="image" tabindex="1"><img src="WS10-Scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6.jpg" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>数据流的三个路径</p>
+<p>一、</p>
+<ul>
+<li>Engine从Spider处获得爬取请求(Request)</li>
+<li>Engine将爬取请求转发给Scheduler,用于调度</li>
+</ul>
+<p>二、</p>
+<ul>
+<li>Engine从Scheduler处获得下一个要爬取的请求</li>
+<li>Engine将爬取请求通过中间件发送给Downloader</li>
+<li>爬取网页后，Downloader形成响应(Response)通过中间件发给Engine</li>
+<li>Engine将收到的响应通过中间件发送给Spider处理</li>
+</ul>
+<p>三、</p>
+<ul>
+<li>Spider处理响应后产生爬取项(scraped Item)和新的爬取请求(Requests)给Engine</li>
+<li>Engine将爬取项发送给Item Pipeline(框架出口)</li>
+<li>Engine将爬取请求发送给Scheduler</li>
+</ul>
+<p>数据流的出入口</p>
+<ul>
+<li>Engine控制各模块数据流，不间断从Scheduler处获得爬取请求，直至请求为空</li>
+<li>框架入口：Spider的初始爬取请求</li>
+<li>框架出口：Item Pipeline</li>
+</ul>
+</li>
+<li>
+<p>用户编写(配置)：Spiders、Item Pipelines</p>
+</li>
+<li>
+<p>已有实现：Engine、Downloader、Scheduler</p>
+</li>
+</ul>
+<h2 id="scrapy爬虫框架解析">Scrapy爬虫框架解析</h2>
+<ul>
+<li>
+<p>Engine(不需要用户修改)</p>
+<ul>
+<li>控制所有模块之间的数据流</li>
+<li>根据条件触发事件</li>
+</ul>
+</li>
+<li>
+<p>Downloader(不需要用户修改)</p>
+<ul>
+<li>根据请求下载网页</li>
+</ul>
+</li>
+<li>
+<p>Scheduler(不需要用户修改)</p>
+<ul>
+<li>对所有爬取请求进行调度管理</li>
+</ul>
+</li>
+<li>
+<p>Sownloader Middleware(用户可以编写配置代码)</p>
+<ul>
+<li>目的：实施Engine、Scheduler和Downloader之间进行用户可配置的控制</li>
+<li>功能：修改、丢弃、新增请求或响应</li>
+</ul>
+</li>
+<li>
+<p>Spider(需要用户编写配置代码)</p>
+<ul>
+<li>解析Downloader返回的响应(Response)</li>
+<li>产生爬取项(scraped  item)</li>
+<li>产生额外的爬取请求(Request)</li>
+</ul>
+</li>
+<li>
+<p>Item Pipelines(需要用户编写配置代码)</p>
+<ul>
+<li>以流水线方式处理Spider产生的爬取项</li>
+<li>由一组操作顺序组成，类似流水线，每个操作是一个Item Pipeline类型</li>
+<li>可能操作包括：清理、检验和查重爬取项中的HTML数据、将数据存储到数据库</li>
+</ul>
+</li>
+<li>
+<p>Spider Middleware(用户可以编写配置代码)</p>
+<ul>
+<li>目的：对请求和爬取项的再处理</li>
+<li>功能：修改、丢弃、新增请求或爬取项</li>
+</ul>
+</li>
+</ul>
+<h2 id="scrapy爬虫常用命令">Scrapy爬虫常用命令</h2>
+<p><em>Scrapy使用命令行</em></p>
+<p><code>&gt;scrapy &lt;command&gt; [options] [args]</code></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>startproject</strong></td>
+<td>创建一个新工程</td>
+<td><code>scrapy startproject &lt;name&gt; [dir]</code></td>
+</tr>
+<tr>
+<td><strong>genspider</strong></td>
+<td>创建一个爬虫</td>
+<td><code>scrapy genspidr [options] &lt;name&gt; &lt;domain&gt;</code></td>
+</tr>
+<tr>
+<td>settings</td>
+<td>获得爬虫配置信息</td>
+<td><code>scrapy settings [options]</code></td>
+</tr>
+<tr>
+<td><strong>crawl</strong></td>
+<td>运行一个爬虫</td>
+<td><code>scrapy crawl &lt;spidr&gt;</code></td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出工程中所以爬虫</td>
+<td><code>scrapy list</code></td>
+</tr>
+<tr>
+<td>shell</td>
+<td>启动URL调试命令行</td>
+<td><code>scrapy shell [url]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="scrapy爬虫基本使用">Scrapy爬虫基本使用</h2>
+<h3 id="实例">实例</h3>
+<p>地址：<code>http://python123.io/ws/demo.html</code></p>
+<h4 id="步骤一">步骤一</h4>
+<p>建立一个Scrapy爬虫工程，选取一个目录，然后执行命令：</p>
+<p><code>scrapy startproject python123demo</code></p>
+<ul>
+<li>生成的工程目录：
+<ul>
+<li><code>python123demo/</code>	--&gt;	外层目录
+<ul>
+<li><code>scrapy.cfg</code>	--&gt;	部署Scrapy爬虫的配置文件
+<ul>
+<li><code>python123demo/</code>	--&gt;	Scrapy框架的用户自定义Python代码</li>
+<li><code>_init_.py</code>	--&gt;	初始化脚本</li>
+<li><code>items.py</code>	--&gt;	Items代码模板（继承类）</li>
+<li><code>middlewares.py</code>	--&gt;	Middlewares代码模板（继承类）</li>
+<li><code>pipelines.py</code>	--&gt;	Pipelines代码模板（继承类）</li>
+<li><code>settings.py</code>	--&gt;	Scrapy爬虫的配置文件</li>
+<li><code>spiders/</code>	--&gt;	Spiders代码模板目录（继承类）
+<ul>
+<li><code>_init_.py</code>	--&gt;	初始文件，无需修改</li>
+<li><code>_pycache_/</code>	--&gt;	缓存目录，无需修改</li>
+</ul>
+</li>
+<li><code>_pycache_/</code>	--&gt;	缓存目录，无需修改</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="步骤二">步骤二</h4>
+<p>在工程中产生一个Scrapy爬虫，进入工程目录，然后执行命令：</p>
+<p><code>scrapy genspider demo python123.io</code></p>
+<ul>
+<li>
+<p>该命令作用：</p>
+<ul>
+<li>生成一个名称为demo的spider</li>
+<li>在spiders目录下增加代码文件demo.py(<em>该命令仅用于生成demo.py，该文件也可以手工生成</em>)</li>
+</ul>
+</li>
+<li>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import scrapy
+
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+    allowed_domains = ['python123.io']
+    start_urls = ['http://python123.io/']
+
+    def parse(self, response):#parse()用于处理响应，解析内容形成字典，发现新的URL爬取请求
+        pass
+
+</code></pre>
+</li>
+</ul>
+<h4 id="步骤三">步骤三</h4>
+<p>配置产生的spider爬虫</p>
+<p>配置：</p>
+<ul>
+<li>
+<p>初始URL地址</p>
+</li>
+<li>
+<p>获取页面后的解析方式</p>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import scrapy
+
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+#    allowed_domains = ['python123.io']#可选
+    start_urls = ['http://python123.io/ws/demo.html']
+
+    def parse(self, response):
+        fname = response.url.split('/')[-1]
+        with open(fname,'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s.'% fname)
+        pass
+
+</code></pre>
+</li>
+</ul>
+<h4 id="步骤四">步骤四</h4>
+<p>运行爬虫，获取网页，在命令行下，执行命令：</p>
+<p><code>scrapy crawl demo</code></p>
+<p>demo爬虫被执行，捕获页面存储在demo.html</p>
+<h4 id="demopy代码完整版本"><code>demo.py</code>代码完整版本</h4>
+<pre><code class="language-python">import scrapy
+
+class DemoSpider(scrapy.Spider):
+    name = 'demo'
+#    allowed_domains = ['python123.io']#可选
+    urls = [
+        'http://python123.io/ws/demo.html'
+    		]
+    for url in urls:
+        yield scrapy.Request(url=url,callback=self.parse)
+        #yield关键词
+
+    def parse(self, response):
+        fname = response.url.split('/')[-1]
+        with open(fname,'wb') as f:
+            f.write(response.body)
+        self.log('Saved file %s.'% fname)
+</code></pre>
+<h2 id="生成器">生成器</h2>
+<ul>
+<li>
+<p>包含yield语句的函数是一个生成器</p>
+</li>
+<li>
+<p>生成器每次产生一个值（yield语句），函数被冻结，被唤醒后再产生一个值</p>
+</li>
+<li>
+<p>生成器是一个不断产生值的函数</p>
+</li>
+</ul>
+<h3 id="实例求一组数的平方值">实例：求一组数的平方值</h3>
+<ul>
+<li>
+<p>生成器：</p>
+<pre><code class="language-python">&gt;&gt;&gt; def gen(n):
+	for i in range(n):
+		yield i**2
+
+		
+&gt;&gt;&gt; for i in gen(5):
+	print(i,' ',end=&quot;&quot;)
+
+	
+0  1  4  9  16 
+</code></pre>
+</li>
+<li>
+<p>普通：</p>
+<pre><code class="language-python">&gt;&gt;&gt; def square(n):
+	ls = [i**2 for i in range(n)]
+	return ls
+
+&gt;&gt;&gt; for i in square(5):
+	print(i,' ',end='')
+
+	
+0  1  4  9  16 
+</code></pre>
+</li>
+<li>
+<p>生成器相比一次列出所有内容的优势：</p>
+<ul>
+<li>更节省存储空间</li>
+<li>响应更迅速</li>
+<li>使用更灵活</li>
+</ul>
+</li>
+</ul>
+<h2 id="scrapy爬虫的数据类型">Scrapy爬虫的数据类型</h2>
+<ul>
+<li>
+<p>Request类</p>
+<p><code>class scrapy.http.Requests()</code></p>
+<p>Request对象表示一个HTTP请求由Spider生成，由Downloader执行</p>
+<table>
+<thead>
+<tr>
+<th>属性或方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.url</code></td>
+<td>Request对应的请求URL地址</td>
+</tr>
+<tr>
+<td><code>.method</code></td>
+<td>对应的请求方法，'GET' 'POST'等</td>
+</tr>
+<tr>
+<td><code>.headers</code></td>
+<td>字典类型风格的请求头</td>
+</tr>
+<tr>
+<td><code>.body</code></td>
+<td>请求内容主体，字符串类型</td>
+</tr>
+<tr>
+<td><code>.meta</code></td>
+<td>用户添加的扩展信息，在Scrapy内部模块间传递信息使用</td>
+</tr>
+<tr>
+<td><code>.copy()</code></td>
+<td>复制该请求</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Response类</p>
+<p><code>class scrapy.http.Response()</code></p>
+<p>Response对象表示一个HTTP响应由Downloader生成，由Spider处理</p>
+<table>
+<thead>
+<tr>
+<th>属性或方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.url</code></td>
+<td>Response对应的URL地址</td>
+</tr>
+<tr>
+<td><code>.status</code></td>
+<td>HTTP状态码，默认是200</td>
+</tr>
+<tr>
+<td><code>.header</code></td>
+<td>Response对应的头部信息</td>
+</tr>
+<tr>
+<td><code>.body</code></td>
+<td>Response对应的内容信息，字符串类型</td>
+</tr>
+<tr>
+<td><code>.flags</code></td>
+<td>一组标记</td>
+</tr>
+<tr>
+<td><code>.request</code></td>
+<td>产生Response类型对应的Request对象</td>
+</tr>
+<tr>
+<td><code>.copy()</code></td>
+<td>复制该响应</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Item类</p>
+<p><code>class scrapy.item.Item()</code></p>
+<p>Item对象表示一个从HTML页面中提取的信息内容由Spider生成，由Item Pipeline处Item类似字典类型，可以按照字典类型操作</p>
+</li>
+</ul>
+<h2 id="scrapy爬虫提取信息的方法">Scrapy爬虫提取信息的方法</h2>
+<p>Scrapy爬虫支持多种HTML信息提取方法：</p>
+<ul>
+<li>Beautiful Soup</li>
+<li>lxml</li>
+<li>re</li>
+<li>XPath Selector</li>
+<li><strong>CSS Selector</strong>
+<ul>
+<li><code>&lt;HTML&gt;.css('a::attr(href)').extract()</code><em>'a'为标签名称，'href'为标签属性</em></li>
+</ul>
+</li>
+</ul>
+</span></p></div><div id = "warn"></div>
+	<br>
+	<hr>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-user"></i>本文由<a rel="license" href="/">履冰&#39;blog</a>创作</div>	
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-cc"></i>该文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。转载请注明出处！</div>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-clock-o"></i>发布时间为：2020-03-06</div>    
+<div class="reward"><div class="reward-button">赏 <span class="reward-code"> <span class="alipay-code"> <img class="alipay-img" alt = "support" src="https://gaoliujiadi.github.io/blog//media/images/alipay.png"><b>支付宝扫码打赏</b> </span> <span class="wechat-code"> <img alt ="support" class="wechat-img" src="https://gaoliujiadi.github.io/blog//media/images/wechat.png"><b>微信打赏</b> </span> </span></div></div>
+<div style="text-align:center;color: #ccc;font-size:14px;">如果觉得这篇文章对您有帮助，可以请作者喝一杯饮料哦🥤</div>    
+</div>
+</div>
+
+<style type="text/css">
+#mememe {
+	border:3px;
+	border-radius:5px;
+    background-repeat: no-repeat;
+    height: 100%;
+	width: 100%;
+	display: inline-block;
+	border-radius:5px; 
+}
+</style>
+
+<div style="width:100%;overflow:hidden">
+
+          <div style="float:right;text-align:right;color:#ccc;font-size:18px;width:50%;">
+            下一篇
+            <a href="https://gaoliujiadi.github.io/blog/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/">
+              <p class="post-title">
+                <b>Python3爬取晋江非VIP章节</b>
+              </p>
+            </a>
+          </div>
+
+
+
+</div>
+
+<div class="doc_comments">
+
+          
+			<div id="gitalk-container"></div>
+            <link href="https://cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css" rel="stylesheet">
+<script>
+  var gitalk = new Gitalk({
+    clientID: '1e4b683b5d2047ab4a97',
+    clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
+    repo: 'blog',
+    owner: 'gaoliujiadi',
+    admin: ['gaoliujiadi'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+          
+			  
+          
+        
+</div>
+<script>
+var link="";$("img").each((i,o)=>{var o=$(o);if(o.attr("src").indexOf("sinaimg")>0||o.attr("src").indexOf("qpic")>0||o.attr("src").indexOf("baidu")>0||o.attr("src").indexOf("sinaimg")>0){o.attr("referrerpolicy","no-referrer");link=o.attr("src");o.attr("src",link);}});
+imgList = document.querySelectorAll('.md_block img')
+imgList.forEach(img => {
+  if (img.alt !== "logo" && img.alt !== "featureimg"){
+  let div1 = document.createElement('div')
+  let div = document.createElement('div')
+  div.className='back';
+  div.setAttribute("data-src",img.src)
+  var figuration = document.createElement("figcaption")
+  figuration.innerHTML = '<a href="' + img.src + '">' + img.alt + '</a>'
+  img.replaceWith(div1)
+  div1.appendChild(div)
+  div.appendChild(img)
+  div1.appendChild(figuration)}
+})
+$('img').on('error',function(){$(this).prop('src','https://gaoliujiadi.github.io/blog//media/images/broken.jpg')});$(".md_block a").attr("rel","external nofollow");$("a[rel='external nofollow']").attr("target","_blank");$("a[href^='#']").removeAttr("target");$("a.ex").removeAttr("rel");$("a.ex").removeAttr("target");
+content="<div class='warn'>本文最后更新于2020-03-06，已超过 1 年没有更新，涉及的内容可能已经失效！</div>";var date1="2020-03-06 21:37:51";date1=date1.replace("-","/");var date2=new Date();var date3=date2.getTime()-new Date(date1).getTime();var days=Math.floor(date3/(24*3600*1000));if(days>=365){document.getElementById("warn").innerHTML=content};
+$('#pjax-container').lightGallery({
+    selector: '.back'
+});
+</script>
+  </div>
+</div>
+
+
+      </div>
+<div class="toc">
+<ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84">Scrapy爬虫框架结构</a></li>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E8%A7%A3%E6%9E%90">Scrapy爬虫框架解析</a></li>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">Scrapy爬虫常用命令</a></li>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">Scrapy爬虫基本使用</a>
+<ul>
+<li><a href="#%E5%AE%9E%E4%BE%8B">实例</a>
+<ul>
+<li><a href="#%E6%AD%A5%E9%AA%A4%E4%B8%80">步骤一</a></li>
+<li><a href="#%E6%AD%A5%E9%AA%A4%E4%BA%8C">步骤二</a></li>
+<li><a href="#%E6%AD%A5%E9%AA%A4%E4%B8%89">步骤三</a></li>
+<li><a href="#%E6%AD%A5%E9%AA%A4%E5%9B%9B">步骤四</a></li>
+<li><a href="#demopy%E4%BB%A3%E7%A0%81%E5%AE%8C%E6%95%B4%E7%89%88%E6%9C%AC"><code>demo.py</code>代码完整版本</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%94%9F%E6%88%90%E5%99%A8">生成器</a>
+<ul>
+<li><a href="#%E5%AE%9E%E4%BE%8B%E6%B1%82%E4%B8%80%E7%BB%84%E6%95%B0%E7%9A%84%E5%B9%B3%E6%96%B9%E5%80%BC">实例：求一组数的平方值</a></li>
+</ul>
+</li>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">Scrapy爬虫的数据类型</a></li>
+<li><a href="#scrapy%E7%88%AC%E8%99%AB%E6%8F%90%E5%8F%96%E4%BF%A1%E6%81%AF%E7%9A%84%E6%96%B9%E6%B3%95">Scrapy爬虫提取信息的方法</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+    </div>
+	
+   <div class="footer">
+<div class="site_footer_wrap"><div class="site_footer">
+
+      <div class="mysocials"><div class="my_socials">
+		   
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+</div>
+      </div>
+
+      <div class="copyright" id="copyright">
+	  <script>
+		var date=new Date;
+		var year=date.getFullYear(); 
+		document.write("Copyright © "+year+" " + "履冰&#39;blog. ");
+		</script>
+		Powered by Gridea.
+		<br>
+		本站已稳定运行了
+		<strong><script type="text/javascript">
+		var urodz= new Date("11/11/2019");
+		var now = new Date();
+		var ile = now.getTime() - urodz.getTime();
+		var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+		document.write(+dni)
+		</script>
+		</strong>天
+		<br>
+		本站总访问量为 <strong><span id="busuanzi_value_site_uv"></span></strong> 次
+	  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+      </div>
+	  <img src="https://gaoliujiadi.github.io/blog//media/images/font.svg">
+
+    </div>
+
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/darkmode.js"></script>
+<script>
+new Darkmode({label: '🌓',backgroundColor: '#f7f7f7',time: '0.5s'}).showWidget();
+console.clear();
+console.log("\n %c \u26a1Theme: Bitcron-pro Author's Blog:https://blog.blinkstar.cn  Writen By Serence  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;", );
+</script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+
+
+</body>
+
+</html>

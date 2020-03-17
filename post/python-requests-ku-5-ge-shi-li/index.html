@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+  <head lang="zh">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta name="renderer" content="webkit">
+<meta name="description" content="如履薄冰，如临深渊。">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+
+<title>Python-requests库5个实例 | 履冰&#39;blog</title>
+<link href="https://gaoliujiadi.github.io/blog//styles/main.css" type="text/css" rel="stylesheet"/>
+<link rel="stylesheet" href="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.css"/>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.js"></script>
+<script src="//cdn.bootcss.com/KaTeX/0.10.2/contrib/auto-render.min.js"></script>
+<script src="//cdn.bootcss.com/mermaid/8.3.1/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/jquery.pjax.min.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/basic.js"></script>
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/search.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script async type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/lightgallery/1.6.12/js/lightgallery.min.js"></script>
+<script src="https://cdn.bootcss.com/tocbot/4.8.1/tocbot.js"></script>
+
+  </head>
+  <body>
+     <div class="header">
+      <div class="logo_title">
+		  
+        <div class="title animated fadeInDown"><img id="img1" alt="logo" style="display:inline-block;" src="https://gaoliujiadi.github.io/blog//images/avatar.png"/>
+<script>
+var r = 0;
+    window.onload = function(){
+        var current = 0;
+        document.getElementById('img1').onclick = function(){
+            current = (current+90)%360;
+            this.style.transform = 'rotate('+current+'deg)';
+        }
+    };
+</script>
+
+          <h1 title="履冰&#39;blog" class="weaklink"><a  href="/">履冰&#39;blog</a>
+
+          </h1>
+	  
+
+          <div class="navbar weaklink">
+            <div class="normal_nav">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+		
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	  
+ 
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+  </li
+ 
+  
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+  </li
+ 
+  
+ <li>
+
+      </ul>
+	  
+      <div style="inline-block;float:right;margin-top:1em">
+        <form id="gridea-search-form" data-update="1578893743252" action="/search/index.html">
+          <input class="search-input" autocomplete="on" spellcheck="false" name="q" placeholder="Search...">
+        </form>
+      </div>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+            </div>
+			
+			<div class="hamberger"><i class="fa fa-bars"></i>
+<i class="fa fa-times"></i>
+
+			</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="hidden_nav animated fadeInDown">
+
+<div class="bitcron_nav_container">
+
+
+  <div class="bitcron_nav">
+    <div class="mixed_site_nav_wrap site_nav_wrap">
+      <ul class="mixed_site_nav site_nav sm sm-base">
+	
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog" class="selected active current nav__item" >首页</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/archives" class="selected active current nav__item" >归档</a>
+
+  </li>
+
+
+  <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="/blog/tags" class="selected active current nav__item" >标签</a>
+
+  </li>
+
+
+
+
+      </ul>
+
+      <div class="clear clear_nav_inline_end"></div>
+    </div>
+
+  </div>
+
+
+
+  <div class="clear clear_nav_end"></div>
+
+</div>
+
+      </div>
+
+    </div>
+
+
+
+
+
+    <div class="main" id="pjax-container">
+      <div class="main-inner">
+<div class="content">
+<div class="post_page" >
+<div class="post">
+  <div class="post_title sm_margin">
+    <h2><a>Python-requests库5个实例</a>
+    </h2>
+  </div>
+<script>
+function lan(){
+	if (document.getElementById("lan").innerText == "繁"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_tw.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "简"
+	}
+	else if(document.getElementById("lan").innerText == "簡"){
+		var s=document.getElementById("tongwenlet_cn");
+		if(s != null){
+		document.body.removeChild(s);
+		}
+		var s = document.createElement("script");
+		s.language = "javascript";
+		s.type = "text/javascript";
+		s.src = "https://git.oschina.net/runningcheese/JiathisQR.js/raw/master/bookmarklet_cn.js";
+		s.id = "tongwenlet_cn";
+		document.body.appendChild(s);
+		document.getElementById("lan").innerHTML = "繁"
+		}
+}
+
+function change(){	
+    var rand = Math.random()*1+1;
+    var num = window.getComputedStyle(document.getElementsByName("show")[0],undefined).fontSize;
+	num = num.slice(0,-2); 
+    document.getElementById("show").style.fontSize = num - rand +'px';
+}
+</script>
+  <div class="post_details">
+    <div class="info"><i class="fa fa-calendar"></i>
+<span class="date_info">2020-02-26</span>
+<i class="fa fa-eye"></i>
+<span class="date_info"><span id="busuanzi_value_page_pv"></span> Views</span>
+<i class="fa fa-bookmark-o"></i>
+<span class="tags_info weaklink">
+	
+	<a href="https://gaoliujiadi.github.io/blog/tag/python/" class="tag">Python</a>
+
+</span>
+<i class="fa fa-anchor"></i>
+<span style="margin-right:15px">
+2270字
+</span>
+<i class="fa fa-clock-o"></i>
+<span style="margin-right:15px">
+14 min read
+</span>
+<span style="margin-right:15px">
+<i class="fa fa-share"></i>
+<a title="QR code" target="_blank" href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/"><i class="fa fa-qrcode"></i></a>
+<a title="qq share" target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/&sharesource=qzone&title=Python-requests库5个实例&pics=https://blog.blinkstar.cn/images/avatar.png&summary="><i class="fa fa-qq"></i></a>
+<a title="weibo share" target="_blank" href="https://service.weibo.com/share/share.php?url=https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/&sharesource=weibo&title=Python-requests库5个实例 + " - " + &pic="https://blog.blinkstar.cn/images/avatar.png"><i class="fa fa-weibo"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="daxiao" href="javascript:void(0);" onclick="change();" title="调整字体大小"><i class="fa fa-font"></i></a>
+</span>
+<span style="margin-right:15px">
+<a id="lan" href="javascript:void(0);" onclick="lan();" title="调整简繁体">繁</a>
+</span>
+</div>
+  </div>
+
+    <div class="post_content markdown">
+	
+	<img id="mememe" alt="featureimg" src="//source.unsplash.com/800x400/?arts,weather">
+	
+    <div name="show" id="show">
+	<p class="md_block"><span class="md_line md_line_start md_line_end"><h2 id="实例1京东商品页面的爬取">实例1：京东商品页面的爬取</h2>
+<ul>
+<li>
+<p>https://item.jd.com/2967929.html</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;https://item.jd.com/2967929.html&quot;)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.encoding
+'gbk'
+&gt;&gt;&gt; r.text[:1000]
+'&lt;!DOCTYPE HTML&gt;\n&lt;html lang=&quot;zh-CN&quot;&gt;\n&lt;head&gt;\n    &lt;!-- shouji --&gt;\n    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gbk&quot; /&gt;\n    &lt;title&gt;【华为荣耀8】荣耀8 4GB+64GB 全网通4G手机 魅海蓝【行情 报价 价格 评测】-京东&lt;/title&gt;\n    &lt;meta name=&quot;keywords&quot; content=&quot;HUAWEI荣耀8,华为荣耀8,华为荣耀8报价,HUAWEI荣耀8报价&quot;/&gt;\n    &lt;meta name=&quot;description&quot; content=&quot;【华为荣耀8】京东JD.COM提供华为荣耀8正品行货，并包括HUAWEI荣耀8网购指南，以及华为荣耀8图片、荣耀8参数、荣耀8评论、荣耀8心得、荣耀8技巧等信息，网购华为荣耀8上京东,放心又轻松&quot; /&gt;\n    &lt;meta name=&quot;format-detection&quot; content=&quot;telephone=no&quot;&gt;\n    &lt;meta http-equiv=&quot;mobile-agent&quot; content=&quot;format=xhtml; url=//item.m.jd.com/product/2967929.html&quot;&gt;\n    &lt;meta http-equiv=&quot;mobile-agent&quot; content=&quot;format=html5; url=//item.m.jd.com/product/2967929.html&quot;&gt;\n    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge&quot;&gt;\n    &lt;link rel=&quot;canonical&quot; href=&quot;//item.jd.com/2967929.html&quot;/&gt;\n        &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//misc.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//static.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//img10.360buyimg.com&quot;/&gt;\n    &lt;link rel=&quot;dns'
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+url = &quot;https://item.jd.com/2967929.html&quot;
+try:
+    r = requests.get(url)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[:1000])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例2亚马逊商品页面的爬取">实例2：亚马逊商品页面的爬取</h2>
+<ul>
+<li>
+<p>https://www.amazon.cn/gp/product/B01M8L5Z3Y</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; r = requests.get(&quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;)
+&gt;&gt;&gt; r.status_code
+503
+&gt;&gt;&gt; r.encoding
+'ISO-8859-1'
+&gt;&gt;&gt; r.encoding = r.apparent_encoding
+&gt;&gt;&gt; r.text[2000:4000]
+'     &lt;i class=&quot;a-icon a-icon-alert&quot;&gt;&lt;/i&gt;\n                &lt;h4&gt;请输入您在下方看到的字符&lt;/h4&gt;\n                &lt;p class=&quot;a-last&quot;&gt;抱歉，我们只是想确认一下当前访问者并非自动程序。为了达到最佳效果，请确保您浏览器上的 Cookie 已启用。&lt;/p&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n\n            &lt;div class=&quot;a-section&quot;&gt;\n\n                &lt;div class=&quot;a-box a-color-offset-background&quot;&gt;\n                    &lt;div class=&quot;a-box-inner a-padding-extra-large&quot;&gt;\n\n                        &lt;form method=&quot;get&quot; action=&quot;/errors/validateCaptcha&quot; name=&quot;&quot;&gt;\n                            &lt;input type=hidden name=&quot;amzn&quot; value=&quot;NXqI635zDoDHEcNtYuDg/A==&quot; /&gt;&lt;input type=hidden name=&quot;amzn-r&quot; value=&quot;&amp;#047;gp&amp;#047;product&amp;#047;B01M8L5Z3Y&quot; /&gt;\n                            &lt;div class=&quot;a-row a-spacing-large&quot;&gt;\n                                &lt;div class=&quot;a-box&quot;&gt;\n                                    &lt;div class=&quot;a-box-inner&quot;&gt;\n                                        &lt;h4&gt;请输入您在这个图片中看到的字符：&lt;/h4&gt;\n                                        &lt;div class=&quot;a-row a-text-center&quot;&gt;\n                                            &lt;img src=&quot;https://images-na.ssl-images-amazon.com/captcha/kwizfixk/Captcha_rowfabxzxk.jpg&quot;&gt;\n                                        &lt;/div&gt;\n                                        &lt;div class=&quot;a-row a-spacing-base&quot;&gt;\n                                            &lt;div class=&quot;a-row&quot;&gt;\n                                                &lt;div class=&quot;a-column a-span6&quot;&gt;\n                                                    &lt;label for=&quot;captchacharacters&quot;&gt;输入字符&lt;/label&gt;\n                                                &lt;/div&gt;\n                                                &lt;div class=&quot;a-column a-span6 a-span-last a-text-right&quot;&gt;\n                                                    &lt;a onclick=&quot;window.location.reload()&quot;&gt;换一张图&lt;/a&gt;\n                                                &lt;/div&gt;\n                                            &lt;/div&gt;\n                                            &lt;input autocomplete=&quot;off&quot; spellcheck=&quot;false&quot; id=&quot;captchacharacters&quot; name=&quot;field-keywords&quot; class=&quot;a-span12&quot; autocapitalize=&quot;off&quot; autoc'
+&gt;&gt;&gt; r.request.headers
+{'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+&gt;&gt;&gt; kv = {'User-Agent':'Mozilla/5.0'}
+&gt;&gt;&gt; url = &quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;
+&gt;&gt;&gt; r = requests.get(url,headers = kv)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.request.headers
+{'User-Agent': 'Mozilla/5.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+&gt;&gt;&gt; r.encoding = r.apparent_encoding
+&gt;&gt;&gt; r.text[5000:8000]
+'mall a-size-mini&quot;&gt;\n            &lt;a href=&quot;https://www.amazon.cn/gp/help/customer/display.html/ref=footer_claim?ie=UTF8&amp;nodeId=200347160&quot;&gt;使用条件&lt;/a&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;span class=&quot;a-letter-space&quot;&gt;&lt;/span&gt;\n            &lt;a href=&quot;https://www.amazon.cn/gp/help/customer/display.html/ref=footer_privacy?ie=UTF8&amp;nodeId=200347130&quot;&gt;隐私声明&lt;/a&gt;\n        &lt;/div&gt;\n\n        &lt;div class=&quot;a-text-center a-size-mini a-color-secondary&quot;&gt;\n          &amp;copy; 1996-2015, Amazon.com, Inc. or its affiliates\n          &lt;script&gt;\n           if (true === true) {\n             document.write(\'&lt;img src=&quot;https://fls-cn.amaz\'+\'on.cn/\'+\'1/oc-csi/1/OP/requestId=K1C54EGF6KEV9G4R3MCY&amp;js=1&quot; /&gt;\');\n           };\n          &lt;/script&gt;\n          &lt;noscript&gt;\n            &lt;img src=&quot;https://fls-cn.amazon.cn/1/oc-csi/1/OP/requestId=K1C54EGF6KEV9G4R3MCY&amp;js=0&quot; /&gt;\n          &lt;/noscript&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;script&gt;\n    if (true === true) {\n        var elem = document.createElement(&quot;script&quot;);\n        elem.src = &quot;https://images-cn.ssl-images-amazon.com/images/G/01/csminstrumentation/csm-captcha-instrumentation.min._V&quot; + (+ new Date()) + &quot;_.js&quot;;\n        document.getElementsByTagName(\'head\')[0].appendChild(elem);\n    }\n    &lt;/script&gt;\n&lt;/body&gt;&lt;/html&gt;\n'
+</code></pre>
+</li>
+<li>
+<p>全代码</p>
+<pre><code class="language-python">import requests
+url = &quot;https://www.amazon.cn/gp/product/B01M8L5Z3Y&quot;
+try:
+    kv = {'User-Agent':'Mozilla/5.0'}
+    r= requests.get(url,headers=kv)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[5000:8000])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例3百度360搜索关键字提交">实例3：百度/360搜索关键字提交</h2>
+<ul>
+<li>
+<p>百度:http://www.baidu.com</p>
+<ul>
+<li>
+<p>关键词提交接口:http://www.baidu.com/s?wd=keyword</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; url = &quot;https://baidu.com/s&quot;
+&gt;&gt;&gt; kv = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+&gt;&gt;&gt; r = requests.get(url,params={'wd':'python'},headers=kv)
+&gt;&gt;&gt; r.request.url
+'https://www.baidu.com/s?wd=python'
+&gt;&gt;&gt; len(r.text)
+442673
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+keyword = &quot;python&quot;
+try:
+    kv = {'wd':keyword}
+    header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+    r = requests.get(&quot;https://www.baidu.com/s&quot;,params=kv,headers=header)
+    print(r.request.url)
+    r.raise_for_status()
+    print(len(r.text))
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+<p><strong>算了我太菜了，百度总是出现“百度安全验证”，我搞不定，以后再说吧</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>360:http://www.so.com</p>
+<ul>
+<li>
+<p>关键词提交接口:http://www.so.com/s?q=keyword</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; kv = {'q':'python'}
+&gt;&gt;&gt; r = requests.get(&quot;https://www.so.com/s&quot;,params=kv)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.request.url
+'https://www.so.com/s?q=python'
+&gt;&gt;&gt; len(r.text)
+306321
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+keyword = &quot;python&quot;
+try:
+    kv = {'q':keyword}
+    r = requests.get(&quot;https://www.so.com/s&quot;,params=kv)
+    print(r.request.url)
+    r.raise_for_status()
+    print(len(r.text))
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实例4网络图片的爬取和存储">实例4：网络图片的爬取和存储</h2>
+<ul>
+<li>
+<p>图片地址:http://image.ngchina.com.cn/userpic/108164/2020/02201212391081641822.jpeg</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; path = &quot;F://photo//national_geographic//test.jpg&quot;
+&gt;&gt;&gt; url = &quot;http://image.ngchina.com.cn/userpic/108164/2020/02201212391081641822.jpeg&quot;
+&gt;&gt;&gt; r = requests.get(url)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; with open(path,'wb') as f:
+	f.write(r.content)
+984200
+&gt;&gt;&gt; f.close()
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+import os
+url = &quot;http://image.ngchina.com.cn/userpic/99679/2019/0615110031996794986.jpeg&quot;
+root = &quot;F://photo//scenery//&quot;
+path = root + url.split('/')[-1]
+try:
+    if not os.path.exists(root):
+        os.mkdir(root)
+    if not os.path.exists(path):
+        r = requests.get(url)
+        with open(path,'wb') as f:
+            f.write(r.content)
+            f.close()
+            print(&quot;文件保存成功&quot;)
+    else:
+        print(&quot;文件已存在&quot;)
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+<h2 id="实例5ip地址归属地的自动查询">实例5：IP地址归属地的自动查询</h2>
+<ul>
+<li>
+<p>http://m.ip138.com/ip.asp?ip=ipaddress</p>
+</li>
+<li>
+<p>IDLE:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import requests
+&gt;&gt;&gt; header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+&gt;&gt;&gt; url = &quot;http://m.ip138.com/ip.asp?ip=&quot;
+&gt;&gt;&gt; r = requests.get(url+'202.204.80.112',headers=header)
+&gt;&gt;&gt; r.status_code
+200
+&gt;&gt;&gt; r.text[-500:]
+'alue=&quot;查询&quot; class=&quot;form-btn&quot; /&gt;\r\n\t\t\t\t\t&lt;/form&gt;\r\n\t\t\t\t&lt;/div&gt;\r\n\t\t\t\t&lt;div class=&quot;query-hd&quot;&gt;ip138.com IP查询(搜索IP地址的地理位置)&lt;/div&gt;\r\n\t\t\t\t&lt;h1 class=&quot;query&quot;&gt;您查询的IP：202.204.80.112&lt;/h1&gt;&lt;p class=&quot;result&quot;&gt;本站主数据：北京市海淀区 北京理工大学 教育网&lt;/p&gt;&lt;p class=&quot;result&quot;&gt;参考数据一：北京理工大学 网络中心&lt;/p&gt;\r\n\r\n\t\t\t&lt;/div&gt;\r\n\t\t&lt;/div&gt;\r\n\r\n\t\t&lt;div class=&quot;footer&quot;&gt;\r\n\t\t\t&lt;a href=&quot;http://www.miitbeian.gov.cn/&quot; rel=&quot;nofollow&quot; target=&quot;_blank&quot;&gt;沪ICP备10013467号-1&lt;/a&gt;\r\n\t\t&lt;/div&gt;\r\n\t&lt;/div&gt;\r\n\r\n\t&lt;script type=&quot;text/javascript&quot; src=&quot;/script/common.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;\r\n&lt;/html&gt;\r\n'
+</code></pre>
+</li>
+<li>
+<p>全代码:</p>
+<pre><code class="language-python">import requests
+header = {&quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134&quot;}
+url = &quot;http://m.ip138.com/ip.asp?ip=&quot;
+try:
+    r = requests.get(url+&quot;202.204.80.112&quot;,headers=header)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    print(r.text[-500:])
+except:
+    print(&quot;爬取失败&quot;)
+</code></pre>
+</li>
+</ul>
+</span></p></div><div id = "warn"></div>
+	<br>
+	<hr>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-user"></i>本文由<a rel="license" href="/">履冰&#39;blog</a>创作</div>	
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-cc"></i>该文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。转载请注明出处！</div>
+<div style="color: #ccc;font-size:14px;"><i class="fa fa-clock-o"></i>发布时间为：2020-02-26</div>    
+<div class="reward"><div class="reward-button">赏 <span class="reward-code"> <span class="alipay-code"> <img class="alipay-img" alt = "support" src="https://gaoliujiadi.github.io/blog//media/images/alipay.png"><b>支付宝扫码打赏</b> </span> <span class="wechat-code"> <img alt ="support" class="wechat-img" src="https://gaoliujiadi.github.io/blog//media/images/wechat.png"><b>微信打赏</b> </span> </span></div></div>
+<div style="text-align:center;color: #ccc;font-size:14px;">如果觉得这篇文章对您有帮助，可以请作者喝一杯饮料哦🥤</div>    
+</div>
+</div>
+
+<style type="text/css">
+#mememe {
+	border:3px;
+	border-radius:5px;
+    background-repeat: no-repeat;
+    height: 100%;
+	width: 100%;
+	display: inline-block;
+	border-radius:5px; 
+}
+</style>
+
+<div style="width:100%;overflow:hidden">
+
+          <div style="float:right;text-align:right;color:#ccc;font-size:18px;width:50%;">
+            下一篇
+            <a href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-ru-men/">
+              <p class="post-title">
+                <b>Python-requests库入门</b>
+              </p>
+            </a>
+          </div>
+
+
+
+          <div style="float:left;text-align:left;color:#ccc;font-size:18px;width:50%;">
+            上一篇
+            <a href="https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/">
+              <p class="post-title">
+                <b>Python-beautiful soup库入门</b>
+              </p>
+            </a>
+          </div>
+
+</div>
+
+<div class="doc_comments">
+
+          
+			<div id="gitalk-container"></div>
+            <link href="https://cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css" rel="stylesheet">
+<script>
+  var gitalk = new Gitalk({
+    clientID: '1e4b683b5d2047ab4a97',
+    clientSecret: 'a91cd6c2e23697b19b058eb06fa5320b8cef5977',
+    repo: 'blog',
+    owner: 'gaoliujiadi',
+    admin: ['gaoliujiadi'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+          
+			  
+          
+        
+</div>
+<script>
+var link="";$("img").each((i,o)=>{var o=$(o);if(o.attr("src").indexOf("sinaimg")>0||o.attr("src").indexOf("qpic")>0||o.attr("src").indexOf("baidu")>0||o.attr("src").indexOf("sinaimg")>0){o.attr("referrerpolicy","no-referrer");link=o.attr("src");o.attr("src",link);}});
+imgList = document.querySelectorAll('.md_block img')
+imgList.forEach(img => {
+  if (img.alt !== "logo" && img.alt !== "featureimg"){
+  let div1 = document.createElement('div')
+  let div = document.createElement('div')
+  div.className='back';
+  div.setAttribute("data-src",img.src)
+  var figuration = document.createElement("figcaption")
+  figuration.innerHTML = '<a href="' + img.src + '">' + img.alt + '</a>'
+  img.replaceWith(div1)
+  div1.appendChild(div)
+  div.appendChild(img)
+  div1.appendChild(figuration)}
+})
+$('img').on('error',function(){$(this).prop('src','https://gaoliujiadi.github.io/blog//media/images/broken.jpg')});$(".md_block a").attr("rel","external nofollow");$("a[rel='external nofollow']").attr("target","_blank");$("a[href^='#']").removeAttr("target");$("a.ex").removeAttr("rel");$("a.ex").removeAttr("target");
+content="<div class='warn'>本文最后更新于2020-02-26，已超过 1 年没有更新，涉及的内容可能已经失效！</div>";var date1="2020-02-26 21:46:20";date1=date1.replace("-","/");var date2=new Date();var date3=date2.getTime()-new Date(date1).getTime();var days=Math.floor(date3/(24*3600*1000));if(days>=365){document.getElementById("warn").innerHTML=content};
+$('#pjax-container').lightGallery({
+    selector: '.back'
+});
+</script>
+  </div>
+</div>
+
+
+      </div>
+<div class="toc">
+<ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%9E%E4%BE%8B1%E4%BA%AC%E4%B8%9C%E5%95%86%E5%93%81%E9%A1%B5%E9%9D%A2%E7%9A%84%E7%88%AC%E5%8F%96">实例1：京东商品页面的爬取</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B2%E4%BA%9A%E9%A9%AC%E9%80%8A%E5%95%86%E5%93%81%E9%A1%B5%E9%9D%A2%E7%9A%84%E7%88%AC%E5%8F%96">实例2：亚马逊商品页面的爬取</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B3%E7%99%BE%E5%BA%A6360%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E5%AD%97%E6%8F%90%E4%BA%A4">实例3：百度/360搜索关键字提交</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B4%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87%E7%9A%84%E7%88%AC%E5%8F%96%E5%92%8C%E5%AD%98%E5%82%A8">实例4：网络图片的爬取和存储</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B5ip%E5%9C%B0%E5%9D%80%E5%BD%92%E5%B1%9E%E5%9C%B0%E7%9A%84%E8%87%AA%E5%8A%A8%E6%9F%A5%E8%AF%A2">实例5：IP地址归属地的自动查询</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+    </div>
+	
+   <div class="footer">
+<div class="site_footer_wrap"><div class="site_footer">
+
+      <div class="mysocials"><div class="my_socials">
+		   
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+			   
+    
+</div>
+      </div>
+
+      <div class="copyright" id="copyright">
+	  <script>
+		var date=new Date;
+		var year=date.getFullYear(); 
+		document.write("Copyright © "+year+" " + "履冰&#39;blog. ");
+		</script>
+		Powered by Gridea.
+		<br>
+		本站已稳定运行了
+		<strong><script type="text/javascript">
+		var urodz= new Date("11/11/2019");
+		var now = new Date();
+		var ile = now.getTime() - urodz.getTime();
+		var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+		document.write(+dni)
+		</script>
+		</strong>天
+		<br>
+		本站总访问量为 <strong><span id="busuanzi_value_site_uv"></span></strong> 次
+	  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+      </div>
+	  <img src="https://gaoliujiadi.github.io/blog//media/images/font.svg">
+
+    </div>
+
+<script type="text/javascript" src="https://gaoliujiadi.github.io/blog//media/scripts/darkmode.js"></script>
+<script>
+new Darkmode({label: '🌓',backgroundColor: '#f7f7f7',time: '0.5s'}).showWidget();
+console.clear();
+console.log("\n %c \u26a1Theme: Bitcron-pro Author's Blog:https://blog.blinkstar.cn  Writen By Serence  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;", );
+</script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+
+
+</body>
+
+</html>
