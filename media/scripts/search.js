@@ -1,130 +1,212 @@
-// 获取搜索框、搜索按钮、清空搜索、结果输出对应的元素
-var searchBtn = document.querySelector('.search-start');
-var searchClear = document.querySelector('.search-clear');
-var searchInput = document.querySelector('.search-input');
-var searchResults = document.querySelector('.search-results');
+//获取url参数
+function getParam(url, param) {
+    if (url.indexOf('?') > -1) {
+        var urlSearch = url.split('?');
+        var paramList = urlSearch[1].split('&');
+        for (var i = paramList.length - 1; i >= 0; i--) {
+            var tep = paramList[i].split('=');
+            if (tep[0] == param) {
+                return tep[1];
+            }
+        }
+    }
+};
 
-// 申明保存文章的标题、链接、内容的数组变量
-var searchValue = '',
-    arrItems = [],
-    arrContents = [],
-    arrLinks = [],
-    arrTitles = [],
-    arrResults = [],
-    indexItem = [];
-var tmpDiv = document.createElement('div');
-tmpDiv.className = 'result-item';
-
-// ajax 的兼容写法
-var xhr = new XMLHttpRequest() || new ActiveXObject('Microsoft.XMLHTTP');
-xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        xml = xhr.responseXML;
-        arrItems = xml.getElementsByTagName('entry');
-        
-        // 遍历并保存所有文章对应的标题、链接、内容到对应的数组中
-        for (i = 0; i < arrItems.length; i++) {
-            arrContents[i] = arrItems[i].getElementsByTagName('content)[0].childNodes[0].nodeValue;
-            arrLinks[i] = arrItems[i].getElementsByTagName('id')[0].childNodes[0].nodeValue.replace(/\s+/g, '');
-            arrTitles[i] = arrItems[i].getElementsByTagName('title')[0].childNodes[0].nodeValue;
+//原生js Ajax 异步GET请求
+function ajax(obj) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', obj.url, true);
+    xhr.send(null);
+    xhr.onreadystatechange = function () {
+        //异步请求：响应状态为4，数据加载完毕
+        if (xhr.readyState == 4)
+            callback();
+    }
+    function callback() {
+        if (xhr.status == 200) {
+            obj.success(xhr.responseText);
+        } else {
+            obj.error(xhr.status);
         }
     }
 }
 
-// 开始获取根目录下 atom.xml 文件内的数据
-xhr.open('get', '你的网站/atom.xml', true);
-xhr.send();
-
-searchBtn.onclick = searchConfirm;
-
-// 清空按钮点击函数
-searchClear.onclick = function(){
-    searchInput.value = '';
-    searchResults.style.display = 'none';
-    searchClear.style.display = 'none';
+//模糊搜索
+function fuzzySearch(data, phrase) {
+    var options = {
+        shouldSort: true,
+        includeMatches: true,
+        threshold: 0.5,
+        location: 0,
+        distance: 1000,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+            'title',
+            'content'
+        ]
+    };
+    var fuse = new Fuse(data, options);
+    var fuzzyResult = fuse.search(phrase);
+    return fuzzyResult;
 }
 
-// 输入框内容变化后就开始匹配，可以不用点按钮
-searchInput.onkeydown = function () {
-    setTimeout(searchConfirm, 0);
-}
-searchInput.onfocus = function () {
-    searchResults.style.display = 'block';
+//检查缓存是否最新
+function checkCache() {
+    var infosCache = JSON.parse(localStorage.getItem('InfosCache'));
+    var contentsCache = JSON.parse(localStorage.getItem('ContentsCache'));
+    if (infosCache && contentsCache) {
+        var cachedTime = infosCache.utils.now.toString();
+        var updateTime = document.getElementById('gridea-search-form').getAttribute('data-update');
+        if (cachedTime === updateTime) {
+            return true;
+        }
+    }
+    localStorage.removeItem('InfosCache');
+    localStorage.removeItem('ContentsCache');
+    return false;
 }
 
-function searchConfirm() {
-    if (searchInput.value == '') {
-        searchResults.style.display = 'none';
-        searchClear.style.display = 'none';
-    } else if (searchInput.value.search(/^\s+$/) >= 0) {
-    
-        // 检测输入值全是空白的情况
-        searchInit();
-        var itemDiv = tmpDiv.cloneNode(true);
-        itemDiv.innerText = '请输入有效内容...';
-        searchResults.appendChild(itemDiv);
+//获取博客全文api
+function getContents(callback) {
+    if (checkCache()) {
+        var contentsCache = JSON.parse(localStorage.getItem('ContentsCache'));
+        callback(contentsCache);
+    }
+    else {
+        ajax({
+            url: '/api-content/index.html',
+            success: function (data) {
+                callback(JSON.parse(data));
+                localStorage.setItem('ContentsCache', data);
+            }
+        });
+    }
+}
+
+//获取博客信息api
+function getInfos(callback) {
+    if (checkCache()) {
+        var infosCache = JSON.parse(localStorage.getItem('InfosCache'));
+        callback(infosCache);
+    }
+    else {
+        ajax({
+            url: '/api-info/index.html',
+            success: function (data) {
+                callback(JSON.parse(data));
+                localStorage.setItem('InfosCache', data);
+            }
+        });
+    }
+}
+
+//根据一段文本调用模糊搜索
+function searchBy(phrase, callback) {
+    var result = '';
+    var getFuzzyResult = function (data) {
+        result = fuzzySearch(data.posts, phrase);
+        callback(result);
+    }
+    //根据全文内容获取搜索结果
+    getContents(getFuzzyResult);
+}
+
+//显示无搜索结果
+function showNoResult() {
+    var resultDIV = document.getElementById('gridea-search-result');
+    var noResult = resultDIV.getElementsByClassName('no-result')[0];
+    noResult.style.display = 'block';
+    resultDIV.innerHTML = noResult.outerHTML;
+}
+
+//根据URL参数执行搜索
+function searchByParam(resultHandler) {
+    var phrase = getParam(window.location.href, 'q');
+    if (phrase === '' || typeof (phrase) === 'undefined') {
+        showNoResult();
     } else {
-    
-        // 合法输入值的情况
-        searchInit();
-        searchValue = searchInput.value;
-        searchMatching(arrContents, searchValue);
+        searchBy(decodeURI(phrase), resultHandler);
     }
 }
 
-// 每次搜索完成后的初始化
-function searchInit() {
-    arrResults = [];
-    indexItem = [];
-    searchResults.innerHTML = '';
-    searchResults.style.display = 'block';
-    searchClear.style.display = 'block';
-}
-
-function searchMatching(arr, input) {
-
-    // 在所有文章内容中匹配查询值
-    for (i = 0; i < arr.length; i++) {
-        if (arr[i].search(input) != -1) {
-            indexItem.push(i);
-            var indexContent = arr[i].search(input);
-            var l = input.length;
-            var step = 10;
-            
-            // 将匹配到内容的地方进行黄色标记，并包括周围一定数量的文本
-            arrResults.push(arr[i].slice(indexContent - step, indexContent) +
-                '<mark>' + arr[i].slice(indexContent, indexContent + l) + '</mark>' +
-                arr[i].slice(indexContent + l, indexContent + l + step));
+//获取搜索结果列表模板的URL
+function getTemplateURL() {
+    var scripts = document.getElementsByTagName('script');
+    var templateURL = '';
+    for (var i = 0; i < scripts.length; i++) {
+        if (scripts[i].type === 'text/ejs') {
+            templateURL = scripts[i].src;
+            return templateURL;
         }
     }
+}
 
-    // 输出总共匹配到的数目
-    var totalDiv = tmpDiv.cloneNode(true);
-    totalDiv.innerHTML = '总匹配：<b>' + indexItem.length + '</b> 项';
-    searchResults.appendChild(totalDiv);
-
-    // 未匹配到内容的情况
-    if (indexItem.length == 0) {
-        var itemDiv = tmpDiv.cloneNode(true);
-        itemDiv.innerText = '未匹配到内容...';
-        searchResults.appendChild(itemDiv);
-    }
-
-    // 将所有匹配内容进行组合
-    for (i = 0; i < arrResults.length; i++) {
-        var itemDiv = tmpDiv.cloneNode(true);
-        itemDiv.innerHTML = '<b>《' + arrTitles[indexItem[i]] +
-            '》</b><hr />' + arrResults[i];
-        itemDiv.setAttribute('onclick', 'changeHref(arrLinks[indexItem[' + i + ']])');
-        searchResults.appendChild(itemDiv);
+//渲染搜索结果列表
+function renderResult(searchedInfos) {
+    if (searchedInfos.posts.length > 0) {
+        ajax({
+            url: getTemplateURL(),
+            success: function (data) {
+                var resultDIV = document.getElementById('gridea-search-result');
+                resultDIV.innerHTML = ejs.compile(data)(searchedInfos);
+            }
+        });
+    } else {
+        showNoResult();
     }
 }
 
-function changeHref(href) {
+//搜索结果关键字高亮
+function keywordsHighlight(searchedContent) {
+    var searchedPostContent = searchedContent.item.content;//搜索结果内容预览
+    var preview = '';
+    for (var i = 0; i < searchedContent.matches.length; i++) {
+        if (searchedContent.matches[i].key === 'content') {//如果匹配到文章内容，截取关键字
+            var indices = searchedContent.matches[i].indices[0];
+            var beforeKeyword = searchedPostContent.substring(indices[0] - 10, indices[0]);//关键字前20字
+            var keyword = searchedPostContent.substring(indices[0], indices[1] + 1);//关键字
+            var afterKeyword = searchedPostContent.substring(indices[1] + 1, indices[1] + 70);//关键字后80字
+            preview = beforeKeyword + '<span class="searched-keyword">'
+                + keyword + '</span>' + afterKeyword;
+        } else {//没有匹配到文章内容，则是标题
+            preview = searchedPostContent.substring(0, 80);
+        }
+    }
+    return preview + '...';
+}
 
-    // 在当前页面点开链接的情况
-    location.href = href;
+//循环匹配搜索到的内容与展示信息
+function getResult(infos, searchedContents) {
+    var searchedInfos = JSON.parse(JSON.stringify(infos));//对象深拷贝
+    searchedInfos.posts = [];
+    for (var i = 0; i < infos.posts.length; i++) {
+        for (var j = 0; j < searchedContents.length; j++) {
+            if (searchedContents[j].item.link === infos.posts[i].link) {
+                infos.posts[i].searchedPreview = keywordsHighlight(searchedContents[j]);//预览关键字高亮
+                infos.posts[i].content = searchedContents[j].item.content;//content注入
+                searchedInfos.posts.push(infos.posts[i]);//push到所需结果中
+            }
+        }
+    }
+    return searchedInfos;
+}
 
-    // 在新标签页面打开链接的代码，与上面二者只能取一个，自行决定
-    // window.open(href);
+//主方法
+function grideaSearch() {
+    //搜索结果回调
+    var resultHandler = function (searchedContents) {
+        getInfos(function (infos) {
+            //console.log(infos);
+            //console.log(searchedContents);
+            var searchedInfos = getResult(infos, searchedContents);
+            renderResult(searchedInfos);
+        });
+    }
+    searchByParam(resultHandler);
+}
+
+//页面加载完执行
+window.onload = function () {
+    grideaSearch();
 }
