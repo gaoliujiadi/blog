@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://gaoliujiadi.github.io/blog/</id>
+    <id>https://lvbing.xyz</id>
     <title>履冰&apos;blog</title>
-    <updated>2020-03-17T04:45:06.285Z</updated>
+    <updated>2020-03-17T04:47:48.548Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://gaoliujiadi.github.io/blog/"/>
-    <link rel="self" href="https://gaoliujiadi.github.io/blog/atom.xml"/>
+    <link rel="alternate" href="https://lvbing.xyz"/>
+    <link rel="self" href="https://lvbing.xyz/atom.xml"/>
     <subtitle>如履薄冰，如临深渊。</subtitle>
-    <logo>https://gaoliujiadi.github.io/blog/images/avatar.png</logo>
-    <icon>https://gaoliujiadi.github.io/blog/favicon.ico</icon>
+    <logo>https://lvbing.xyz/images/avatar.png</logo>
+    <icon>https://lvbing.xyz/favicon.ico</icon>
     <rights>All rights reserved 2020, 履冰&apos;blog</rights>
     <entry>
         <title type="html"><![CDATA[Python-scrapy学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-scrapy-xue-xi/">
+        <id>https://lvbing.xyz/post/python-scrapy-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-scrapy-xue-xi/">
         </link>
         <updated>2020-03-06T13:37:51.000Z</updated>
         <content type="html"><![CDATA[<h2 id="scrapy爬虫框架结构">Scrapy爬虫框架结构</h2>
@@ -421,8 +421,8 @@ class DemoSpider(scrapy.Spider):
     </entry>
     <entry>
         <title type="html"><![CDATA[Python3爬取晋江非VIP章节]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/">
+        <id>https://lvbing.xyz/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/</id>
+        <link href="https://lvbing.xyz/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/">
         </link>
         <updated>2020-03-02T23:53:05.000Z</updated>
         <content type="html"><![CDATA[<p>思路是这样的：<br>
@@ -534,8 +534,8 @@ main()
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-Re库入门]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/zheng-ze-ru-men/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/zheng-ze-ru-men/">
+        <id>https://lvbing.xyz/post/zheng-ze-ru-men/</id>
+        <link href="https://lvbing.xyz/post/zheng-ze-ru-men/">
         </link>
         <updated>2020-02-29T11:11:07.000Z</updated>
         <content type="html"><![CDATA[<p>regular expression, regex, RE</p>
@@ -914,7 +914,7 @@ AttributeError: 'NoneType' object has no attribute 'group'
 </code></pre>
 </li>
 </ul>
-<figure data-type="image" tabindex="1"><img src="https://gaoliujiadi.github.io/blog//post-images/1582974773100.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://lvbing.xyz/post-images/1582974773100.png" alt="" loading="lazy"></figure>
 <h5 id="regex-recompilepatternflags0"><code>regex = re.compile(pattern,flags=0)</code></h5>
 <ul>
 <li>pattern：正则表达式的字符串或原生字符串表示</li>
@@ -1081,8 +1081,8 @@ https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md</
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-beautiful soup库入门]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-beautiful-soup-ku-ru-men/">
+        <id>https://lvbing.xyz/post/python-beautiful-soup-ku-ru-men/</id>
+        <link href="https://lvbing.xyz/post/python-beautiful-soup-ku-ru-men/">
         </link>
         <updated>2020-02-27T14:38:34.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -1650,8 +1650,8 @@ b
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-requests库5个实例]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-5-ge-shi-li/">
+        <id>https://lvbing.xyz/post/python-requests-ku-5-ge-shi-li/</id>
+        <link href="https://lvbing.xyz/post/python-requests-ku-5-ge-shi-li/">
         </link>
         <updated>2020-02-26T13:46:20.000Z</updated>
         <content type="html"><![CDATA[<h2 id="实例1京东商品页面的爬取">实例1：京东商品页面的爬取</h2>
@@ -1882,8 +1882,8 @@ except:
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-requests库入门]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-requests-ku-ru-men/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-requests-ku-ru-men/">
+        <id>https://lvbing.xyz/post/python-requests-ku-ru-men/</id>
+        <link href="https://lvbing.xyz/post/python-requests-ku-ru-men/">
         </link>
         <updated>2020-02-25T15:08:52.000Z</updated>
         <content type="html"><![CDATA[<h2 id="http协议">HTTP协议</h2>
@@ -2237,8 +2237,8 @@ if _name_ == &quot;_main_&quot;:
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-os库初学]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/os-ku-chu-xue/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/os-ku-chu-xue/">
+        <id>https://lvbing.xyz/post/os-ku-chu-xue/</id>
+        <link href="https://lvbing.xyz/post/os-ku-chu-xue/">
         </link>
         <updated>2020-02-22T13:51:21.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -2367,8 +2367,8 @@ os.system(&quot;C:\\Windows\\System32\\calc.exe&quot;)
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-wordcloud库]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-wordcloud-ku/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-wordcloud-ku/">
+        <id>https://lvbing.xyz/post/python-wordcloud-ku/</id>
+        <link href="https://lvbing.xyz/post/python-wordcloud-ku/">
         </link>
         <updated>2020-02-15T07:55:05.000Z</updated>
         <content type="html"><![CDATA[<h2 id="基本使用">基本使用</h2>
@@ -2451,8 +2451,8 @@ c.to_file(&quot;pywordcloud.png&quot;)	#输出词云文件
     </entry>
     <entry>
         <title type="html"><![CDATA[Python关于文件的学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-guan-yu-wen-jian-de-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-guan-yu-wen-jian-de-xue-xi/">
+        <id>https://lvbing.xyz/post/python-guan-yu-wen-jian-de-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-guan-yu-wen-jian-de-xue-xi/">
         </link>
         <updated>2020-02-15T06:51:35.000Z</updated>
         <content type="html"><![CDATA[<h2 id="文件的打开">文件的打开</h2>
@@ -2624,8 +2624,8 @@ fo.close()
     </entry>
     <entry>
         <title type="html"><![CDATA[局外观]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/ju-wai-guan/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/ju-wai-guan/">
+        <id>https://lvbing.xyz/post/ju-wai-guan/</id>
+        <link href="https://lvbing.xyz/post/ju-wai-guan/">
         </link>
         <updated>2020-02-07T09:04:29.000Z</updated>
         <content type="html"><![CDATA[<p>古人云：“不识庐山真面目，只缘身在此山中。”</p>
@@ -2646,8 +2646,8 @@ fo.close()
     </entry>
     <entry>
         <title type="html"><![CDATA[使命]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/shi-ming/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/shi-ming/">
+        <id>https://lvbing.xyz/post/shi-ming/</id>
+        <link href="https://lvbing.xyz/post/shi-ming/">
         </link>
         <updated>2020-01-30T08:35:33.000Z</updated>
         <content type="html"><![CDATA[<p>而创造这中国历史上未曾有过的第三样时代，则是现在的青年的使命！</p>
@@ -2675,8 +2675,8 @@ fo.close()
     </entry>
     <entry>
         <title type="html"><![CDATA[Python组合数据学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-zu-he-shu-ju-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-zu-he-shu-ju-xue-xi/">
+        <id>https://lvbing.xyz/post/python-zu-he-shu-ju-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-zu-he-shu-ju-xue-xi/">
         </link>
         <updated>2020-01-26T14:11:23.000Z</updated>
         <content type="html"><![CDATA[<h2 id="集合">集合</h2>
@@ -3330,8 +3330,8 @@ dict_values(['北京', '华盛顿', '巴黎'])
     </entry>
     <entry>
         <title type="html"><![CDATA[花谢香犹在]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/hua-xie-xiang-you-zai/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/hua-xie-xiang-you-zai/">
+        <id>https://lvbing.xyz/post/hua-xie-xiang-you-zai/</id>
+        <link href="https://lvbing.xyz/post/hua-xie-xiang-you-zai/">
         </link>
         <updated>2020-01-23T15:15:11.000Z</updated>
         <content type="html"><![CDATA[<p><em>瞎写完成任务的</em></p>
@@ -3361,8 +3361,8 @@ dict_values(['北京', '华盛顿', '巴黎'])
     </entry>
     <entry>
         <title type="html"><![CDATA[Python函数初学]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-han-shu-chu-xue/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-han-shu-chu-xue/">
+        <id>https://lvbing.xyz/post/python-han-shu-chu-xue/</id>
+        <link href="https://lvbing.xyz/post/python-han-shu-chu-xue/">
         </link>
         <updated>2020-01-20T11:34:59.000Z</updated>
         <content type="html"><![CDATA[<h2 id="函数的定义">函数的定义</h2>
@@ -3460,8 +3460,8 @@ dict_values(['北京', '华盛顿', '巴黎'])
     </entry>
     <entry>
         <title type="html"><![CDATA[Python运算符整理]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-yun-suan-fu-zheng-li/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-yun-suan-fu-zheng-li/">
+        <id>https://lvbing.xyz/post/python-yun-suan-fu-zheng-li/</id>
+        <link href="https://lvbing.xyz/post/python-yun-suan-fu-zheng-li/">
         </link>
         <updated>2020-01-19T08:43:49.000Z</updated>
         <content type="html"><![CDATA[<h2 id="算术运算符">算术运算符</h2>
@@ -3820,8 +3820,8 @@ Shell
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-random库学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-random-ku-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-random-ku-xue-xi/">
+        <id>https://lvbing.xyz/post/python-random-ku-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-random-ku-xue-xi/">
         </link>
         <updated>2020-01-19T06:18:20.000Z</updated>
         <content type="html"><![CDATA[<h2 id="基本随机数函数">基本随机数函数</h2>
@@ -3903,8 +3903,8 @@ Shell
     </entry>
     <entry>
         <title type="html"><![CDATA[Python-time库学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-time-ku-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-time-ku-xue-xi/">
+        <id>https://lvbing.xyz/post/python-time-ku-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-time-ku-xue-xi/">
         </link>
         <updated>2020-01-18T11:47:44.000Z</updated>
         <content type="html"><![CDATA[<h2 id="time库-三类函数">time库 三类函数</h2>
@@ -4056,8 +4056,8 @@ Shell
     </entry>
     <entry>
         <title type="html"><![CDATA[Python字符串学习]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/python-zi-fu-chuan-xue-xi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/python-zi-fu-chuan-xue-xi/">
+        <id>https://lvbing.xyz/post/python-zi-fu-chuan-xue-xi/</id>
+        <link href="https://lvbing.xyz/post/python-zi-fu-chuan-xue-xi/">
         </link>
         <updated>2020-01-18T10:56:18.000Z</updated>
         <content type="html"><![CDATA[<h2 id="字符串处理函数">字符串处理函数</h2>
@@ -4182,8 +4182,8 @@ Shell
     </entry>
     <entry>
         <title type="html"><![CDATA[学习心得]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/xue-xi-xin-de/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/xue-xi-xin-de/">
+        <id>https://lvbing.xyz/post/xue-xi-xin-de/</id>
+        <link href="https://lvbing.xyz/post/xue-xi-xin-de/">
         </link>
         <updated>2019-12-22T04:33:41.000Z</updated>
         <content type="html"><![CDATA[<p>今年是2019年，也是五四运动一百周年。这几天，我学习了“习近平在纪念五四运动100周年大会上的讲话”，尤其是其中习近平总书记对于青年的六点希望，让人受益匪浅。<br>
@@ -4213,8 +4213,8 @@ Shell
     </entry>
     <entry>
         <title type="html"><![CDATA[给自己的小tips]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/gei-zi-ji-de-xiao-tips/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/gei-zi-ji-de-xiao-tips/">
+        <id>https://lvbing.xyz/post/gei-zi-ji-de-xiao-tips/</id>
+        <link href="https://lvbing.xyz/post/gei-zi-ji-de-xiao-tips/">
         </link>
         <updated>2019-12-15T03:50:11.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -4239,8 +4239,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[爱，家庭，生活]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/guan-yu-jie-ji/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/guan-yu-jie-ji/">
+        <id>https://lvbing.xyz/post/guan-yu-jie-ji/</id>
+        <link href="https://lvbing.xyz/post/guan-yu-jie-ji/">
         </link>
         <updated>2019-11-30T14:49:33.000Z</updated>
         <content type="html"><![CDATA[<p align="right">——观《天堂的孩子》有感</p>
@@ -4262,8 +4262,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[记本次搭建博客]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/ji-ben-ci-pei-zhi-bo-ke/">
+        <id>https://lvbing.xyz/post/ji-ben-ci-pei-zhi-bo-ke/</id>
+        <link href="https://lvbing.xyz/post/ji-ben-ci-pei-zhi-bo-ke/">
         </link>
         <updated>2019-11-10T03:44:47.000Z</updated>
         <content type="html"><![CDATA[<p>经过曲折，我终于把个人博客给搭建起来了——尽管很粗糙。<br>
@@ -4276,8 +4276,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[读《狂人日记》有感]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/">
+        <id>https://lvbing.xyz/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/</id>
+        <link href="https://lvbing.xyz/post/du-lesslesskuang-ren-ri-ji-greatergreater-you-gan/">
         </link>
         <updated>2019-10-20T10:23:11.000Z</updated>
         <content type="html"><![CDATA[<p>——凡事总须研究，才会明白。古来时常吃人，我也还记得，可是不甚清楚。我翻开历史一查，这历史没有年代，歪歪斜斜的每页上都写着“仁义道德”几个字。我横竖睡不着，仔细看了半夜，才从字缝里看出字来，满本都写着两个字是“吃人”！<br>
@@ -4304,8 +4304,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[清风不识字]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/qing-feng-bu-shi-zi/">
+        <id>https://lvbing.xyz/post/qing-feng-bu-shi-zi/</id>
+        <link href="https://lvbing.xyz/post/qing-feng-bu-shi-zi/">
         </link>
         <updated>2019-07-22T06:25:05.000Z</updated>
         <content type="html"><![CDATA[<p>这时候是乾隆爷的天下。可谓是四海升平，万民归矣。乾隆爷的百姓中，总有那么一些人爱到酒馆里边儿，听听那说书的讲故事。<br>
@@ -4342,8 +4342,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[焚书令]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/fen-shu-ling/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/fen-shu-ling/">
+        <id>https://lvbing.xyz/post/fen-shu-ling/</id>
+        <link href="https://lvbing.xyz/post/fen-shu-ling/">
         </link>
         <updated>2019-06-16T08:26:40.000Z</updated>
         <content type="html"><![CDATA[<p>嬴政看着底下，群臣坐在两列各自交谈或者对饮。他对这副景况很满意，战乱不休的七国在自己的手上统一多年，自己就是这个天下唯一的皇帝，他就忍不住地高兴。于是他站了起来，对着臣子们朗声地笑：“好！朕敬各位一杯！”<br>
@@ -4368,8 +4368,8 @@ https://pypi.hustunique.com/                # 华中科技大学
     </entry>
     <entry>
         <title type="html"><![CDATA[娜塔莎的悲壮]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/nuo-ta-sha-de-bei-zhuang/">
+        <id>https://lvbing.xyz/post/nuo-ta-sha-de-bei-zhuang/</id>
+        <link href="https://lvbing.xyz/post/nuo-ta-sha-de-bei-zhuang/">
         </link>
         <updated>2019-05-25T06:24:14.000Z</updated>
         <content type="html"><![CDATA[<p>娜塔莎·罗曼诺夫（Natasha Romanoff），黑寡妇，初代复仇者之一，前苏联特工。<br>
@@ -4397,8 +4397,8 @@ I love you three thousand.</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[五四！五四！]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/wu-si-wu-si/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/wu-si-wu-si/">
+        <id>https://lvbing.xyz/post/wu-si-wu-si/</id>
+        <link href="https://lvbing.xyz/post/wu-si-wu-si/">
         </link>
         <updated>2019-05-03T06:22:31.000Z</updated>
         <content type="html"><![CDATA[<p>愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光，就令萤火一般，也可以在黑暗里发一点光，不必等候炬火。此后如竟没有炬火：我便是唯一的光。<br>
@@ -4428,8 +4428,8 @@ I love you three thousand.</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[浅侃“人类的本质是复读机”]]></title>
-        <id>https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/</id>
-        <link href="https://gaoliujiadi.github.io/blog/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/">
+        <id>https://lvbing.xyz/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/</id>
+        <link href="https://lvbing.xyz/post/qian-kan-ren-lei-de-ben-zhi-shi-fu-du-ji/">
         </link>
         <updated>2019-03-24T06:16:33.000Z</updated>
         <content type="html"><![CDATA[<p>众所周知，人类的本质是复读机。<br>
