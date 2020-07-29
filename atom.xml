@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lvbing.xyz</id>
     <title>履冰&apos;blog</title>
-    <updated>2020-03-17T14:54:01.801Z</updated>
+    <updated>2020-07-29T15:42:40.661Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lvbing.xyz"/>
     <link rel="self" href="https://lvbing.xyz/atom.xml"/>
@@ -10,6 +10,152 @@
     <logo>https://lvbing.xyz/images/avatar.png</logo>
     <icon>https://lvbing.xyz/favicon.ico</icon>
     <rights>All rights reserved 2020, 履冰&apos;blog</rights>
+    <entry>
+        <title type="html"><![CDATA[ Python-类的学习笔记]]></title>
+        <id>https://lvbing.xyz/post/python-lei-de-xue-xi-bi-ji/</id>
+        <link href="https://lvbing.xyz/post/python-lei-de-xue-xi-bi-ji/">
+        </link>
+        <updated>2020-03-11T07:12:10.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>
+<p>example:</p>
+<pre><code class="language-python">class dog():
+    #一次模拟小狗的简单尝试
+    def __init__(self,name,color):
+        #初始化属性name和color,设定age的默认值
+        self.name = name
+        self.color = color
+        self.age = 0
+    def sit(self):
+        #模拟小狗被命令时蹲下
+        print(self.name + &quot; is now sitting.&quot;)
+    def roll_over(self):
+        #模拟小狗被命令时打滚
+        print(self.name.title() + &quot; rolled over!&quot;)
+    #'self.name'在这里等价于'self.name.title()'
+
+</code></pre>
+<ul>
+<li>
+<p>方法</p>
+<p>类中的函数称为方法 ：</p>
+<p><code>__init__()</code>、<code>sit()</code>、<code>roll_over</code></p>
+<p><em><code>__init__()</code> 是一个特殊的方法，每当你根据<code>Dog</code> 类创建新实例时，Python都会自动运行它。在这个方法的名称中，开头和末尾各有两个下划线，这是一种约定，旨在避免Python默认方法与普通方法发生名称冲突。</em></p>
+</li>
+<li>
+<p>默认值</p>
+<p>类中的每个属性都必须有初始值，哪怕这个值是0或空字符串。在有些情况下，如设置默认值时，在方法<code>__init__()</code> 内指定这种初始值是可行的，如：</p>
+<p><code>self.age = 0</code></p>
+</li>
+<li>
+<p>修改属性的值</p>
+<ul>
+<li>
+<p>直接通过实例访问</p>
+<pre><code class="language-python">&gt;&gt;&gt; aDog = dog('John','White')
+&gt;&gt;&gt; aDog.age
+0
+&gt;&gt;&gt; aDog.age = 13
+&gt;&gt;&gt; aDog.age
+13
+</code></pre>
+</li>
+<li>
+<p>通过方法修改属性的值</p>
+<p>无需直接访问属性，而可将值传递给一个方法，由它在内部进行更新。</p>
+<pre><code class="language-python">class dog():
+    --snip--
+    
+    def updateAge(self,age):
+        #更新年龄
+        self.age = age
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; aDog = dog('John','White')
+&gt;&gt;&gt; aDog.age
+0
+&gt;&gt;&gt; aDog.updataAge(13)
+&gt;&gt;&gt; aDog.age
+13
+</code></pre>
+<p>可对方法<code>updateAge</code> 进行扩展,禁止任何人将年龄改小</p>
+<pre><code class="language-python">class dog():
+    --snip--
+    
+    def updateAge(self,age):
+        #更新年龄,并禁止任何人将年龄改小
+        if age &gt;= self.age:
+            self.age = age
+        else:
+            print('不可改小')
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; aDog = dog('John','White')
+&gt;&gt;&gt; aDog.age
+0
+&gt;&gt;&gt; aDog.uptadeAge(13)
+&gt;&gt;&gt; aDog.age
+13
+&gt;&gt;&gt; aDog.updateAge(10)
+no
+</code></pre>
+</li>
+<li>
+<p>通过方法对属性的值进行递增</p>
+<p>有时候需要将属性值递增特定的量，而不是将其设置为全新的值。假设狗一开始卖来到目前增加了5岁。‘</p>
+<pre><code class="language-python">class Car():
+    --snip--
+    
+    def updateAge(self, mileage):
+        --snip--
+    def incrementAge(self,incre):
+        self.age += incre
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; aDog = dog('John','White')
+&gt;&gt;&gt; aDog.age
+0
+&gt;&gt;&gt; aDog.updateAge(13)
+&gt;&gt;&gt; aDog.age
+13
+&gt;&gt;&gt; aDog.incrementAge(5)
+&gt;&gt;&gt; aDog.age
+18
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="继承">继承</h2>
+<p>如果要编写的类是另一个现成类的特殊版本，可使用继承 。</p>
+<ul>
+<li>一个类继承 另一个类时，它将自动获得另一个类的所有属性和方法。</li>
+<li>原有的类称为父类 ，而新类称为子类 。</li>
+<li>子类继承了其父类的所有属性和方法，同时还可以定义自己的属性和方法。</li>
+</ul>
+<pre><code class="language-python">class Samoyed(dog):#萨摩耶
+	def __init__(self,name,color,sup):#先继承，再重构
+		dog.__init__(self,name,color)#继承父类
+		self.sup = sup
+	def sup(self):
+		print(self.sup)
+</code></pre>
+<h3 id="将实例作属性">将实例作属性</h3>
+<p>使用代码模拟实物时，可能会发现给类添加的细节越来越多。在这种情况下，可能需要将类的一部分作为一个独立的类提取出来。可以将大型类拆分成多个协同工作的小类。</p>
+<pre><code class="language-python">class SamoyedSuper():
+    def __init__(self,sup1=1,sup2=2):
+        self.sup1 = sup1
+        self.sup2 = sup2
+    def desSup(self):
+        print(self.sup1,self.sup2)
+        
+class Samoyed(dog):
+    def __init__(self,name,color):
+        dog.__init__(self,name,color)
+        self.sup = SamoyedSuper()
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Python-scrapy学习]]></title>
         <id>https://lvbing.xyz/post/python-scrapy-xue-xi/</id>
@@ -425,7 +571,13 @@ class DemoSpider(scrapy.Spider):
         <link href="https://lvbing.xyz/post/python3-pa-qu-jin-jiang-fei-vip-zhang-jie/">
         </link>
         <updated>2020-03-02T23:53:05.000Z</updated>
-        <content type="html"><![CDATA[<p>思路是这样的：<br>
+        <content type="html"><![CDATA[<p>7.29.2020更新<br>
+突然想到这里还有这篇文<br>
+后来我重新设计了一下，可以导出<code>.epub</code>和<code>.txt</code>两种格式，GitHub地址：<a href="https://github.com/gaoliujiadi/jjwxcSpider">jjwxcSpider</a><br>
+文案的问题也解决了。<br>
+但又因为有<code>.epub</code>格式，如果遇到锁章，会由于转义符的问题无法打开，目前还没有什么方向。</p>
+<hr>
+<p>思路是这样的：<br>
 先将小说文章基本界面爬下来，获得文章的标题与链接，并输出字典。<br>
 再将一些基本信息比如书名、作者、文案等，但因为水平不够，爬下的文案必须是纯文本的。<br>
 接下来我本想通过爬下来的链接进入每一章并获得正文，但主站的设计使我很难完美的爬下不同格式的任意一本书。于是我将选择从手机端入手，成功获取正文内容。<br>
@@ -1085,7 +1237,8 @@ https://github.com/ziishaned/learn-regex/blob/master/translations/README-cn.md</
         <link href="https://lvbing.xyz/post/python-beautiful-soup-ku-ru-men/">
         </link>
         <updated>2020-02-27T14:38:34.000Z</updated>
-        <content type="html"><![CDATA[<ul>
+        <content type="html"><![CDATA[<p>[TOC]</p>
+<ul>
 <li>
 <p>演示HTML页面地址：http://python123.io/ws/demo.html</p>
 <pre><code class="language-python">&gt;&gt;&gt; import requests

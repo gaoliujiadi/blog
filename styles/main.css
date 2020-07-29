@@ -1622,6 +1622,9 @@ figcaption {
 .fa-th-list:before {
   content: "\f00b";
 }
+.fa-telegram:before {
+  content: "\f2c6";
+}
 .fa-check:before {
   content: "\f00c";
 }
@@ -4576,47 +4579,4 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -moz-transition: left 1s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.1s ease 0s;
   -o-transition: left 1s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.1s ease 0s;
   transition: left 1s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.1s ease 0s;
-}
-.search-input {
-  position: relative;
-  top: -3px;
-  left: -2px;
-  width: 160px;
-  height: 26px;
-  padding: 0 0 2px 27px;
-  font-size: 16px;
-  background: #fafafa url(https://i.loli.net/2020/01/12/X3cnLxGjo7Wb8Jk.png) 6px 3px no-repeat;
-  background-size: 20px;
-  border: none;
-  border-radius: 15px;
-  border-bottom-color: currentcolor;
-  border-bottom-style: none;
-  border-bottom-width: medium;
-  outline: none;
-  color: #424242;
-  border-bottom: 1px solid #beb1b1;
-  transition: border-color 0.2s;
-}
-input {
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: -internal-light-dark-color(black, white);
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: start;
-  -webkit-appearance: textfield;
-  background-color: -internal-light-dark-color(white, black);
-  -webkit-rtl-ordering: logical;
-  cursor: text;
-  margin: 0em;
-  font: 400 13.3333px Arial;
-  padding: 1px 0px;
-  border-width: 2px;
-  border-style: inset;
-  border-color: initial;
-  border-image: initial;
 }

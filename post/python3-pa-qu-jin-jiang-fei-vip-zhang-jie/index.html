@@ -14,12 +14,9 @@
 <link rel="stylesheet" href="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.css"/>
 <script src="//cdn.bootcss.com/KaTeX/0.10.2/katex.min.js"></script>
 <script src="//cdn.bootcss.com/KaTeX/0.10.2/contrib/auto-render.min.js"></script>
-<script src="//cdn.bootcss.com/mermaid/8.3.1/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
 <script type="text/javascript" src="https://lvbing.xyz/media/scripts/jquery.js"></script>
 <script type="text/javascript" src="https://lvbing.xyz/media/scripts/jquery.pjax.min.js"></script>
 <script type="text/javascript" src="https://lvbing.xyz/media/scripts/basic.js"></script>
-<script type="text/javascript" src="https://lvbing.xyz/media/scripts/search.js"></script>
 <script type="text/javascript" src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
 <script src="//cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
 <script async type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -61,26 +58,21 @@ var r = 0;
 	  
  
   <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://lvbing.xyz" class="selected active current nav__item" >首页</a>
-  </li
- 
+  </li>
   
+ 
   <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://lvbing.xyz/archives" class="selected active current nav__item" >归档</a>
-  </li
- 
+  </li>
   
+ 
   <li><a id="d2ef19af68cc211e98f8a0242ac110003" href="https://lvbing.xyz/tags" class="selected active current nav__item" >标签</a>
-  </li
- 
+  </li>
   
+ 
  <li>
 
       </ul>
 	  
-      <div style="inline-block;float:right;margin-top:1em">
-        <form id="gridea-search-form" data-update="1578893743252" action="/search/index.html">
-          <input class="search-input" autocomplete="on" spellcheck="false" name="q" placeholder="Search...">
-        </form>
-      </div>
 
       <div class="clear clear_nav_inline_end"></div>
     </div>
@@ -152,7 +144,6 @@ var r = 0;
 
 
 
-
     <div class="main" id="pjax-container">
       <div class="main-inner">
 <div class="content">
@@ -212,7 +203,7 @@ function change(){
 </span>
 <i class="fa fa-anchor"></i>
 <span style="margin-right:15px">
-659字
+745字
 </span>
 <i class="fa fa-clock-o"></i>
 <span style="margin-right:15px">
@@ -238,7 +229,13 @@ function change(){
 	<img id="mememe" alt="featureimg" src="//source.unsplash.com/800x400/?arts,weather">
 	
     <div name="show" id="show">
-	<p class="md_block"><span class="md_line md_line_start md_line_end"><p>思路是这样的：<br>
+	<p class="md_block"><span class="md_line md_line_start md_line_end"><p>7.29.2020更新<br>
+突然想到这里还有这篇文<br>
+后来我重新设计了一下，可以导出<code>.epub</code>和<code>.txt</code>两种格式，GitHub地址：<a href="https://github.com/gaoliujiadi/jjwxcSpider">jjwxcSpider</a><br>
+文案的问题也解决了。<br>
+但又因为有<code>.epub</code>格式，如果遇到锁章，会由于转义符的问题无法打开，目前还没有什么方向。</p>
+<hr>
+<p>思路是这样的：<br>
 先将小说文章基本界面爬下来，获得文章的标题与链接，并输出字典。<br>
 再将一些基本信息比如书名、作者、文案等，但因为水平不够，爬下的文案必须是纯文本的。<br>
 接下来我本想通过爬下来的链接进入每一章并获得正文，但主站的设计使我很难完美的爬下不同格式的任意一本书。于是我将选择从手机端入手，成功获取正文内容。<br>
@@ -491,6 +488,7 @@ $('#pjax-container').lightGallery({
 
     </div>
 
+<script type="text/javascript" src="https://lvbing.xyz/media/scripts/love.js"></script>
 <script type="text/javascript" src="https://lvbing.xyz/media/scripts/darkmode.js"></script>
 <script>
 new Darkmode({label: '🌓',backgroundColor: '#f7f7f7',time: '0.5s'}).showWidget();
